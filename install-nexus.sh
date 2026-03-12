@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+# install-nexus.sh — Install Nexus SDLC agents into a Claude Code project or personal config
+#
+# Agent source files are LLM-agnostic markdown. This script injects the
+# platform-specific frontmatter (name, description, model, color) at install time.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+AGENTS_SRC="$SCRIPT_DIR/agents"
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+usage() {
+    cat <<EOF
+Usage: install-nexus.sh --claude [--personal | <project-dir>]
+
+Install Nexus SDLC agents as Claude Code subagents.
+
+Options:
+  --claude --personal      Install agents globally to ~/.claude/agents/
+                           (available in every Claude Code session)
+  --claude <project-dir>   Install agents into <project-dir>/.claude/agents/
+                           (available only when running claude inside that project)
+
+Examples:
+  ./install-nexus.sh --claude ~/my-project
+  ./install-nexus.sh --claude --personal
+  ./install-nexus.sh --claude .
+
+Agents installed:
+  nexus-methodologist  Configure the swarm for a new project (start here)
+  nexus-orchestrator   Control plane — determines what happens next
+  nexus-analyst        Ingestion phase — turns goals into requirements
+  nexus-auditor        Reviews requirements for completeness and consistency
+  nexus-architect      Architecture — ADRs and fitness functions
+  nexus-planner        Decomposition — ordered Task Plan
+  nexus-builder        Execution — implements one task at a time
+  nexus-verifier       Verification — tests implementation against criteria
+  nexus-integrator     Assembly — prepares deliverable for Nexus Merge
+EOF
+}
+
+die() { echo "error: $*" >&2; exit 1; }
+
+# Returns "name|description|model|color" for a given filename, empty string if unknown.
+claude_meta() {
+    case "$1" in
+        analyst.md)
+            echo 'nexus-analyst|Nexus SDLC — Analyst: Turns project goals and context into a structured, numbered requirements list. Invoke at the start of ingestion phase or when incorporating Nexus feedback after an Auditor review.|opus|blue'
+            ;;
+        architect.md)
+            echo 'nexus-architect|Nexus SDLC — Architect: Defines system structure, produces ADRs and fitness functions. Invoke after the Requirements Gate is approved, before the Plan Gate. Also consult during execution when tasks surface architectural decisions.|opus|purple'
+            ;;
+        auditor.md)
+            echo 'nexus-auditor|Nexus SDLC — Auditor: Reviews the Analyst Requirements List for completeness, consistency, and traceability. Invoke after every Analyst output. Also runs regression checks when new requirements arrive after a demo.|opus|red'
+            ;;
+        builder.md)
+            echo 'nexus-builder|Nexus SDLC — Builder: Implements a single atomic task from the Task Plan. Invoke with one task at a time. Does not plan, architect, or verify — pure implementation.|sonnet|green'
+            ;;
+        integrator.md)
+            echo 'nexus-integrator|Nexus SDLC — Integrator: Assembles completed, verified tasks into a clean deliverable and prepares the Nexus Merge summary. Invoke after all tasks in a cycle are verified, before the Nexus Merge gate.|sonnet|orange'
+            ;;
+        methodologist.md)
+            echo 'nexus-methodologist|Nexus SDLC — Methodologist: Configures the swarm for a project — selects the profile (Casual/Commercial/Critical/Vital) and produces the Methodology Manifest. Invoke first on any new project, and again at major phase transitions or when the process feels broken.|opus|yellow'
+            ;;
+        orchestrator.md)
+            echo 'nexus-orchestrator|Nexus SDLC — Orchestrator: Operational control plane. Knows current project state, determines which agent to invoke next, manages the iterate loop, and escalates to the Nexus. Invoke when you want the swarm to determine what happens next.|opus|orange'
+            ;;
+        planner.md)
+            echo 'nexus-planner|Nexus SDLC — Planner: Turns approved Requirements List and Architect output into an ordered Task Plan. Invoke after the Requirements Gate. Also handles plan revisions after demo feedback, spike findings, or Nexus-invoked release map reviews.|opus|blue'
+            ;;
+        verifier.md)
+            echo 'nexus-verifier|Nexus SDLC — Verifier: Verifies a Builder implementation against task acceptance criteria and the requirement Definition of Done. Invoke after each Builder output. Writes and runs tests, produces a structured verification report.|sonnet|cyan'
+            ;;
+        *)
+            echo ''
+            ;;
+    esac
+}
+
+install_claude() {
+    local src_file="$1"
+    local dest_dir="$2"
+    local filename
+    filename="$(basename "$src_file")"
+
+    local meta
+    meta="$(claude_meta "$filename")"
+
+    if [[ -z "$meta" ]]; then
+        echo "  ! $filename (no Claude metadata — skipping)"
+        return
+    fi
+
+    local name description model color
+    name="${meta%%|*}";          meta="${meta#*|}"
+    description="${meta%%|*}";   meta="${meta#*|}"
+    model="${meta%%|*}";         color="${meta#*|}"
+
+    {
+        printf -- '---\n'
+        printf 'name: %s\n' "$name"
+        printf 'description: "%s"\n' "$description"
+        printf 'model: %s\n' "$model"
+        printf 'color: %s\n' "$color"
+        printf -- '---\n\n'
+        cat "$src_file"
+    } > "$dest_dir/$filename"
+
+    echo "  ✓ $filename → $name"
+}
+
+# ── Argument parsing ──────────────────────────────────────────────────────────
+
+MODE=""
+TARGET_DIR=""
+PERSONAL=false
+
+if [[ $# -eq 0 ]]; then
+    usage
+    exit 1
+fi
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --claude)
+            MODE="claude"
+            shift
+            ;;
+        --personal)
+            PERSONAL=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -*)
+            die "unknown option: $1"
+            ;;
+        *)
+            TARGET_DIR="$1"
+            shift
+            ;;
+    esac
+done
+
+[[ -n "$MODE" ]] || die "specify a mode: --claude"
+
+# ── Determine install destination ─────────────────────────────────────────────
+
+if [[ "$MODE" == "claude" ]]; then
+    if $PERSONAL; then
+        DEST_DIR="${HOME}/.claude/agents"
+    elif [[ -n "$TARGET_DIR" ]]; then
+        TARGET_DIR="${TARGET_DIR%/}"
+        TARGET_DIR="$(cd "$TARGET_DIR" 2>/dev/null && pwd)" || die "directory not found: $TARGET_DIR"
+        DEST_DIR="$TARGET_DIR/.claude/agents"
+    else
+        die "specify --personal or a project directory"
+    fi
+fi
+
+# ── Install ───────────────────────────────────────────────────────────────────
+
+echo "Installing Nexus SDLC agents to: $DEST_DIR"
+mkdir -p "$DEST_DIR"
+
+INSTALLED=0
+for agent_file in "$AGENTS_SRC"/*.md; do
+    install_claude "$agent_file" "$DEST_DIR"
+    INSTALLED=$((INSTALLED + 1))
+done
+
+echo ""
+echo "Installed $INSTALLED agents."
+
+# ── Post-install hints ────────────────────────────────────────────────────────
+
+if [[ "$MODE" == "claude" ]]; then
+    echo ""
+    if $PERSONAL; then
+        echo "Agents are now available globally in all Claude Code sessions."
+        echo "Run 'claude' in any project and use @nexus-methodologist to start."
+    else
+        echo "Next steps:"
+        echo "  cd $TARGET_DIR"
+        echo "  claude"
+        echo ""
+        echo "Then: @nexus-methodologist to configure the swarm for your project."
+    fi
+fi
