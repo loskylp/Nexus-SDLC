@@ -53,13 +53,8 @@ Last updated: 2026-03-12
 | ID | Title | Status | Summary |
 |---|---|---|---|
 | [OQ-0007](OQ-0007-evaluation-harness.md) | Evaluation Harness Design | Open | Metrics, benchmarks, and test scenarios for measuring framework effectiveness |
-
-### Medium Priority
-
-| ID | Title | Status | Summary |
-|---|---|---|---|
-| [OQ-0007](OQ-0007-evaluation-harness.md) | Evaluation Harness Design | Open | Metrics, benchmarks, and test scenarios for measuring framework effectiveness |
 | [OQ-0009](OQ-0009-retrospective-by-profile.md) | Retrospective by Profile | Open | What a Methodologist retrospective looks like in each profile — Casual through Vital. Deliberately deferred; will differ significantly per profile. |
+| [OQ-0010](OQ-0010-builder-session-definition.md) | Builder Session Definition | Open (Deferred) | What constitutes a single "Builder session" for LLM-based agents? Deferred to implementation phase — resolve before first pilot. |
 
 ### Low Priority
 
