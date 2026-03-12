@@ -20,6 +20,42 @@ The framework is built on the principle of **Managed Autonomy**. Rather than a s
 * **The Swarm (Agents):** Specialized autonomous units capable of task decomposition, implementation, and rigorous validation.
 * **Dynamic Orchestration:** A coordination layer that manages state, handles agent hand-offs, and maintains a unified context across the entire lifecycle.
 
+```mermaid
+flowchart TD
+    classDef nexus    fill:#c9b8e8,stroke:#6b3fa0,color:#1a0a2e,font-weight:bold
+    classDef orch     fill:#e8d4b8,stroke:#9e6b2d,color:#2e1a0a,font-weight:bold
+    classDef swarm    fill:#b8d4e8,stroke:#2d6b9e,color:#0a1a2e,font-weight:bold
+    classDef artifact fill:#b8e8c9,stroke:#2d9e5a,color:#0a1e0a,font-weight:bold
+
+    N["👤 The Nexus<br/>─<br/>Sets goals · Approves plans<br/>Resolves ambiguity · Merges"]:::nexus
+
+    subgraph OL["Dynamic Orchestration Layer"]
+        direction LR
+        ME["Methodologist<br/>─<br/>Configures the swarm"]:::orch
+        OR["Orchestrator<br/>─<br/>Routes work · Manages state"]:::orch
+    end
+
+    subgraph SW["The Swarm"]
+        direction LR
+        AN["Analyst"]:::swarm
+        AU["Auditor"]:::swarm
+        PL["Planner"]:::swarm
+        BU["Builder"]:::swarm
+        VE["Verifier"]:::swarm
+        IN["Integrator"]:::swarm
+    end
+
+    PR["📦 Pull Request<br/>─<br/>Tested · Verified · Ready to merge"]:::artifact
+
+    N      -->|"High-level goal"| ME
+    ME     -->|"Methodology Manifest"| OR
+    OR    <-->|"Task routing · Escalation"| SW
+    OR     -->|"Nexus Check · Demo briefing"| N
+    N      -->|"Approval · Feedback · Changes"| OR
+    IN     -->|"Integration Summary"| OR
+    N      -->|"Nexus Merge"| PR
+```
+
 ---
 
 ## How It Works
@@ -30,6 +66,36 @@ The framework is built on the principle of **Managed Autonomy**. Rather than a s
 4.  **Verification Loop:** Agents perform continuous validation (testing, linting, security scanning). If failures occur, the swarm iterates autonomously to resolve them.
 5.  **Integration:** After internal verification, the Nexus receives a summarized report and a clean Pull Request for final merging.
 
+```mermaid
+flowchart TD
+    classDef nexus fill:#c9b8e8,stroke:#6b3fa0,color:#1a0a2e,font-weight:bold
+    classDef phase fill:#b8d4e8,stroke:#2d6b9e,color:#0a1a2e,font-weight:bold
+    classDef gate  fill:#e8d4b8,stroke:#9e6b2d,color:#2e1a0a,font-weight:bold
+    classDef loop  fill:#b8e8c9,stroke:#2d9e5a,color:#0a1e0a,font-weight:bold
+
+    DEFINE["👤 DEFINE<br/>─<br/>Nexus states the goal"]:::nexus
+    INGEST["INGEST<br/>─<br/>Analyst · Auditor"]:::phase
+    NC["⬡ NEXUS CHECK<br/>─<br/>Human approves the plan"]:::gate
+    EXECUTE["EXECUTE<br/>─<br/>Builder"]:::phase
+    VERIFY["VERIFY<br/>─<br/>Verifier"]:::phase
+    ITERATE["↺ ITERATE<br/>─<br/>Autonomous correction loop"]:::loop
+    INTEGRATE["INTEGRATE<br/>─<br/>Integrator assembles"]:::phase
+    DEMO["👤 DEMO<br/>─<br/>Nexus explores the software"]:::nexus
+    NM["⬡ NEXUS MERGE<br/>─<br/>Human merges to production"]:::gate
+
+    DEFINE    --> INGEST
+    INGEST    --> NC
+    NC        -->|"Approved"| EXECUTE
+    NC        -->|"Amendments"| INGEST
+    EXECUTE   --> VERIFY
+    VERIFY    -->|"Pass"| INTEGRATE
+    VERIFY    -->|"Fail"| ITERATE
+    ITERATE   --> VERIFY
+    INTEGRATE --> DEMO
+    DEMO      -->|"No changes"| NM
+    DEMO      -->|"New requirements"| INGEST
+```
+
 ---
 
 ## Key Objectives
@@ -38,6 +104,32 @@ The framework is built on the principle of **Managed Autonomy**. Rather than a s
 * **Autonomous Iteration:** Agents self-correct based on technical feedback loops without constant human prompting.
 * **Traceable Reasoning:** Every decision made by the agentic collective is logged, providing a transparent audit trail of the development process.
 * **Safety by Design:** Critical checkpoints ensure that AI agents cannot execute high-risk operations without Nexus approval.
+
+---
+
+## Documentation
+
+| Document | Description |
+|---|---|
+| [RATIONALE.md](RATIONALE.md) | Design rationale — the why, the reasoning, and the process model behind an agentic SDLC |
+| [REFERENCES.md](REFERENCES.md) | Full bibliographic reference library: SDLC methodologies, agentic AI research, and foundational theory |
+| [process/INDEX.md](process/INDEX.md) | Architecture decisions (DEC) and open questions (OQ) — the living design record |
+| [guidelines/diagram-guidelines.md](guidelines/diagram-guidelines.md) | Mermaid diagram standards for all agents that produce visual output |
+
+## Agent Definitions
+
+Loadable agent files in [`/agents/`](agents/):
+
+| Agent | Role |
+|---|---|
+| [methodologist.md](agents/methodologist.md) | Configures the swarm; runs retrospectives; versions the Methodology Manifest |
+| [analyst.md](agents/analyst.md) | Produces the Brief and Requirements List |
+| [auditor.md](agents/auditor.md) | Validates requirements; runs regression checks; asks Nexus clarifying questions |
+| [orchestrator.md](agents/orchestrator.md) | Routes work; manages lifecycle state; prepares Nexus gate briefings |
+| [planner.md](agents/planner.md) | Decomposes requirements into atomic tasks with acceptance criteria |
+| [builder.md](agents/builder.md) | Implements one task at a time |
+| [verifier.md](agents/verifier.md) | Tests against acceptance criteria; produces failure reports for iteration |
+| [integrator.md](agents/integrator.md) | Assembles verified work; produces the Integration Summary for Nexus Merge |
 
 ---
 
