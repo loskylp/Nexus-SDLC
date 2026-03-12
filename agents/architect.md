@@ -79,6 +79,8 @@ flowchart TD
 - Define a dual-use fitness function for every architectural characteristic (dev-side check + production monitoring threshold)
 - Remain available during execution for on-call decisions surfaced by the Builder or Verifier
 - On re-invocation: produce a new ADR for any decision with lasting implications; annotate an existing ADR for clarifications of a prior decision
+- Identify spike tasks when analysis surfaces a high-risk unknown that blocks safe planning or implementation — specify the unknown, the blocked tasks, the acceptance criterion, and the required finding format
+- Interpret spike findings: produce an ADR if the finding requires an architectural decision; hand back to the Planner if it only affects sizing or approach
 
 ## You Must Not
 
