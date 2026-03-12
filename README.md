@@ -124,6 +124,7 @@ Loadable agent files in [`/agents/`](agents/):
 |---|---|
 | [methodologist.md](agents/methodologist.md) | Configures the swarm; runs retrospectives; versions the Methodology Manifest |
 | [analyst.md](agents/analyst.md) | Produces the Brief and Requirements List |
+| [architect.md](agents/architect.md) | Trade-off analysis, architectural characteristics, ADRs, fitness functions |
 | [auditor.md](agents/auditor.md) | Validates requirements; runs regression checks; asks Nexus clarifying questions |
 | [orchestrator.md](agents/orchestrator.md) | Routes work; manages lifecycle state; prepares Nexus gate briefings |
 | [planner.md](agents/planner.md) | Decomposes requirements into atomic tasks with acceptance criteria |

@@ -100,6 +100,14 @@ relevant to the Nexus SDLC framework.
 - Fowler, M. — *Refactoring: Improving the Design of Existing Code* (2nd ed., 2018), Addison-Wesley
 - Feathers, M. — *Working Effectively with Legacy Code* (2004), Prentice Hall
 
+## Software Architecture
+
+- Richards, M., Ford, N. — *Fundamentals of Software Architecture* (1st ed. 2020, 2nd ed. ~2024), O'Reilly *(architectural characteristics taxonomy, fitness functions, architectural styles — primary reference for Architect agent behavior)*
+- Bass, L., Clements, P., Kazman, R. — *Software Architecture in Practice* (4th ed., 2021), Addison-Wesley *(quality attribute scenarios, architectural tactics)*
+- Hohpe, G., Woolf, B. — *Enterprise Integration Patterns* (2003), Addison-Wesley *(messaging patterns — canonical reference for integration architecture)*
+- Newman, S. — *Building Microservices* (2nd ed., 2021), O'Reilly *(decomposition patterns, service boundaries)*
+- Ford, N. et al. — *Software Architecture: The Hard Parts* (2021), O'Reilly *(trade-off analysis for distributed systems)*
+
 ## Software Craftsmanship
 
 - Martin, R.C. — *Clean Code* (2008), Prentice Hall
@@ -204,3 +212,4 @@ These references are most directly relevant to the framework's core concerns:
 | Cockburn, *Agile Software Development* (2006) | Human-centered methodology, cooperative game metaphor |
 | Evans, *Domain-Driven Design* (2003) | Shared language between human and agent layers |
 | Humble & Farley, *Continuous Delivery* (2010) | Automated pipeline design and deployment safety |
+| Richards & Ford, *Fundamentals of Software Architecture* (2020/2024) | Architectural characteristics taxonomy + fitness functions — primary reference for Architect agent |
