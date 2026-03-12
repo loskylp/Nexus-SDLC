@@ -68,6 +68,12 @@ relevant to the Nexus SDLC framework.
 - Poppendieck, M. & T. — *Implementing Lean Software Development* (2006), Addison-Wesley
 - Womack, J., Jones, D. — *Lean Thinking* (1996), Simon & Schuster *(manufacturing origin)*
 
+## Lean Startup & Hypothesis-Driven Development
+
+- Ries, E. — *The Lean Startup* (2011), Crown Business *(Build-Measure-Learn loop; MVP as experiment, not minimum product; feature value as hypothesis validated by usage)*
+- Gothelf, J., Seiden, J. — *Lean UX* (3rd ed., 2021), O'Reilly *(hypothesis-driven design; outcomes over outputs)*
+- Torres, T. — *Continuous Discovery Habits* (2021), Product Talk *(continuous feedback loops between product teams and users)*
+
 ## Kanban (Software)
 
 - Anderson, D.J. — *Kanban: Successful Evolutionary Change for Your Technology Business* (2010), Blue Hole Press
