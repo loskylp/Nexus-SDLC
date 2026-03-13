@@ -624,36 +624,53 @@ The Nexus has approved the plan with changes at the Plan Gate.
                                   "unchanged" if not.
 ```
 
-### Hotfix Injection
+### Bug Injection
 
-A production incident has been reported to the Nexus. The Orchestrator routes it to the Planner after the current cycle's Nexus Merge approval and before the next planning cycle begins. Hotfixes bypass the Analyst and Auditor — they are not new requirements, they are corrections to existing behaviour.
+A production incident has been reported to the Nexus. The Orchestrator routes it to the Planner. Bugs bypass the Analyst and Auditor — they are not new requirements, they are defects against existing ones. A bug is a violated expectation: it traces to the requirement whose behaviour is not being satisfied.
 
-**When:** After a production incident is confirmed by the Nexus. The Orchestrator delivers the incident description and routes directly to the Planner.
+**When:** After a production incident is confirmed by the Nexus. The Orchestrator delivers the incident description and the Nexus's decision on track: next-cycle or immediate hotfix release.
 
-**What the Planner does:**
+**Two tracks — Nexus decides:**
 
 ```
-1. Create a HOTFIX-NNN task     — from the incident description; no REQ-NNN
-   using the hotfix format         traceability required
+Next-cycle track    — bug is serious but not critical; added to the next
+                      planning cycle as a P1 task before all other work;
+                      resolved within the normal build-verify flow
+
+Hotfix release      — bug is critical; fixed and deployed to production
+                      immediately outside the normal cycle; no plan gate;
+                      Orchestrator routes directly: Verifier → Builder →
+                      Verifier → DevOps (deploy) → Nexus sign-off
+```
+
+**What the Planner does (next-cycle track):**
+
+```
+1. Create a BUG-NNN task        — from the incident description; traces to
+   using the bug format            the REQ-NNN whose behaviour is violated
 2. Assign P1 priority           — production is broken; this takes precedence
    unconditionally                 over all other pending tasks
 3. Schedule Verifier first      — the Verifier writes a reproducing test before
                                    the Builder touches any code; the reproducing
                                    test is the red step; the fix is the green step
-4. Issue Plan Version N+1       — delta notes the hotfix injection and which
+4. Issue Plan Version N+1       — delta notes the bug injection and which
                                    planned tasks were displaced
-5. Release Map is unaffected    — hotfixes do not change requirements or release
+5. Release Map is unaffected    — bugs do not change requirements or release
                                    scope; note "Release Map v[N] unchanged"
 ```
 
-#### Hotfix Task Format
+For the hotfix release track, the Planner records the BUG-NNN task after the fact as a closed item in the plan delta.
+
+#### Bug Task Format
 
 ```markdown
-### HOTFIX-[NNN]: [Short description of the defect]
+### BUG-[NNN]: [Short description of the defect]
 **Reported:** [date]
+**Requirement violated:** REQ-NNN — [requirement title]
 **Environment:** [production | staging — where it was observed]
 **Observed:** [What the system is doing — specific and reproducible]
-**Expected:** [What it should do instead]
+**Expected:** [What it should do — as stated in REQ-NNN]
+**Track:** [Next-cycle | Hotfix release]
 **Acceptance Criterion:** The reproducing test written by the Verifier passes; no regression in the existing test suite
 **Depends on:** Verifier reproducing test (must exist before Builder begins)
 **Risk:** High — production behaviour is incorrect
@@ -661,7 +678,7 @@ A production incident has been reported to the Nexus. The Orchestrator routes it
 **Status:** [Pending | In Progress | Done]
 ```
 
-Hotfix tasks do not go through the standard risk/value scoring matrix — they are always P1. They do not trace to a requirement. They do not affect the Release Map. They are resolved and closed before the next planning cycle opens.
+Bug tasks do not go through the standard risk/value scoring matrix — they are always P1. They do not affect the Release Map. They are resolved and closed before the next planning cycle opens.
 
 ### Nexus-Invoked Release Map Review
 
