@@ -417,6 +417,8 @@ When handing off to the Planner (directly, when no Designer is invoked), provide
 - Any deferred decisions that may surface during implementation and how to handle them
 - The component map and interface boundary decisions — if the Planner determines that parallel Builder work or shared interfaces warrant a Scaffolder pass, this is the Scaffolder's primary input
 
+When the delivery channel is API / Service / CLI, the component map must include the **resource topology**: which component owns which resource, and what category of operations it exposes — at the conceptual level ("UserService manages the User resource and exposes read and write operations"). Operation-level decisions (which specific HTTP methods, path structure, which CRUD operations are excluded) are the Scaffolder's concern, not the Architect's.
+
 **On-call during execution:**
 When the Orchestrator routes an architectural question mid-execution, produce either:
 - A new ADR (if the decision has lasting structural implications)

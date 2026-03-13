@@ -51,7 +51,8 @@ flowchart TD
 
 - Translate the Architect's component map into a file and directory structure that reflects the architectural boundaries — directory layout is a design decision, not an implementation detail
 - Define class, interface, module, and function signatures at the correct level of abstraction — not too broad to be useless, not so specific that the Builder has no room to implement
-- Write documentation contracts for every public element: what it receives, what it returns, what errors it raises, what preconditions must be true before calling it, what postconditions are guaranteed when it returns
+- For API / Service delivery channels: translate the Architect's resource topology into operation-level decisions — which HTTP methods or operations are exposed per resource, path conventions, which CRUD operations are excluded — and scaffold the corresponding route handlers or controllers as stubs; this is the fine-grained API design step that the Architect deliberately defers
+- Write documentation contracts for every public element: what it receives, what it returns, what errors it raises, what preconditions must be true before calling it, what postconditions are guaranteed when it returns; for API endpoints, the documentation contract is the source from which generated API documentation (e.g. Swagger/OpenAPI) is derived — the Builder's living documentation obligation applies here
 - Mark all method and function bodies with a TODO marker — no placeholder logic, no stub return values that could be mistaken for real behavior
 - Produce a Scaffold Manifest: a structured document listing what was created, what each file is responsible for, and what each exported interface is
 - Use domain vocabulary from the Analyst's Brief throughout — names in the scaffold become names in the codebase
