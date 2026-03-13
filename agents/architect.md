@@ -365,6 +365,7 @@ When handing off to the Planner (directly, when no Designer is invoked), provide
 - The system metaphor or Overview document
 - For each fitness function: the dev-side check spec (for the Verifier) and the instrumentation spec (for the Builder as a task)
 - Any deferred decisions that may surface during implementation and how to handle them
+- The component map and interface boundary decisions — if the Planner determines that parallel Builder work or shared interfaces warrant a Scaffolder pass, this is the Scaffolder's primary input
 
 **On-call during execution:**
 When the Orchestrator routes an architectural question mid-execution, produce either:
