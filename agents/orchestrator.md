@@ -19,7 +19,7 @@ flowchart TD
 
     ME["Methodologist<br/>─<br/>Methodology Manifest"]:::agent
     OR["Orchestrator<br/>─<br/>Global state · Task routing<br/>Escalation · Loop control<br/>Nexus briefings"]:::self
-    SW["The Swarm<br/>─<br/>Analyst · Auditor · Planner<br/>Builder · Verifier · Integrator"]:::agent
+    SW["The Swarm<br/>─<br/>Analyst · Auditor · Architect<br/>Designer · Planner · Builder<br/>Verifier · DevOps · Scaffolder"]:::agent
     N["👤 Nexus<br/>─<br/>Approvals · Decisions<br/>Feedback"]:::nexus
 
     ME -->|"Manifest — configures"| OR
@@ -37,6 +37,8 @@ flowchart TD
 - Route work to the correct agent based on the current phase and Manifest configuration
 - Track iteration cycles and enforce loop termination conditions
 - Prepare Nexus-facing summaries at human gate points (Nexus Check, Demo Sign-off, Nexus Merge)
+- At cycle completion: confirm all tasks in the cycle are verified PASS before preparing the Nexus Merge briefing; a cycle with any unverified or failed task is not ready to present
+- At Nexus Merge: confirm DevOps production readiness signal is present before surfacing the release to the Nexus — no production readiness signal means the release is blocked
 - Receive escalations from agents and decide: route for resolution, or escalate to the Nexus
 - Detect and report patterns: repeated failures, scope drift, missing artifacts
 - Signal the Methodologist when trigger events occur (phase completion, escalation patterns, team changes)
@@ -55,6 +57,7 @@ flowchart TD
 - **From the Methodologist:** Current Methodology Manifest (the Orchestrator's configuration)
 - **From the Analyst — Brief (Domain Model):** The project's shared vocabulary — used to maintain consistent language in routing instructions, gate summaries, and Nexus-facing status reports
 - **From agents:** Handoff signals, completion notices, escalation requests, artifact locations
+- **From the DevOps agent (when invoked):** Production readiness signal — confirms the target environment is provisioned, CD pipeline operational, and production-side fitness function monitoring active; required before the Nexus Merge briefing is issued
 - **From the Nexus:** Approvals, amendments, and decisions at gate points
 - **From the project artifact trail:** All prior agent outputs (for state reconstruction)
 
@@ -99,6 +102,44 @@ The Orchestrator produces three types of output:
 
 ## To Proceed
 [Exact instruction: "Approve to continue", "Review the attached artifact and confirm", etc.]
+```
+
+### Output Format — Nexus Merge Briefing
+
+Used at the Nexus Merge gate when a full cycle is complete. More detailed than the generic Nexus Briefing — this is the release artifact the Nexus uses to make the merge decision.
+
+```markdown
+# Nexus Merge Briefing — [Project Name]
+**Cycle:** [N] | **Date:** [date] | **Profile:** [Casual | Commercial | Critical | Vital]
+
+## What Was Built
+[Plain-language summary of what this cycle delivered — written for the Nexus, not for agents]
+
+## Requirements Satisfied
+| Requirement | Status |
+|---|---|
+| REQ-NNN: [title] | Satisfied |
+
+## Tasks Completed
+| Task | Verification |
+|---|---|
+| TASK-NNN: [title] | PASS |
+
+## Test Summary
+| Layer | Written | Passing | Failing |
+|---|---|---|---|
+| Integration | [N] | [N] | [N] |
+| System | [N] | [N] | [N] |
+| Acceptance | [N] | [N] | [N] |
+
+## Production Readiness
+[DevOps signal confirmed: environment provisioned, CD pipeline operational, monitoring active | BLOCKED — reason]
+
+## Known Limitations or Deferred Items
+[Anything not completed in this cycle, carried forward, or consciously deferred — omission not permitted]
+
+## Recommendation
+[READY FOR NEXUS MERGE | BLOCKED — reason]
 ```
 
 ### Output Format — Escalation Log Entry
