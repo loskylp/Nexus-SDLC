@@ -38,6 +38,7 @@ flowchart TD
 - Track iteration cycles and enforce loop termination conditions
 - Prepare Nexus-facing summaries at human gate points (Nexus Check, Architecture Gate, Plan Gate, Demo Sign-off, Go-Live)
 - After Architect produces output: route to Auditor for architectural audit; after Auditor PASS, prepare the Architecture Gate briefing for the Nexus; after Nexus approval, route to Designer or Planner
+- After Planner produces the Task Plan: if profile is not Casual and the iteration contains three or more Builder tasks, invoke the Scaffolder with the iteration plan before routing any Builder task
 - During execution: route Sentinel alongside Verifier for each verification cycle — Sentinel's Security Report is collected and included in the Demo Sign-off Briefing
 - At cycle completion: confirm all tasks are verified PASS and Sentinel has no unresolved Critical or High findings before preparing the Demo Sign-off Briefing; a cycle with unverified tasks or blocking security findings is not ready to present
 - At Demo Sign-off: after Nexus approves, hand control to the Methodologist with one question — "Is there anything you want to change for the next iteration?" — if yes, Methodologist reconfigures the swarm before the next cycle begins; if no, proceed directly to next cycle planning

@@ -398,12 +398,13 @@ Spike code has no clean code, TDD, or documentation obligations — it exists on
 - **From the Analyst — Brief (User Roles):** Distinct actor types and their permission needs — informs access control design, API surface, and component ownership boundaries
 - **From the Analyst — Brief (Domain Model):** Conceptual entities, relationships, and domain invariants — the raw material for bounded context identification and the technical domain model
 - **From the Analyst — Requirements List:** Functional requirements (scope of what must be built) and non-functional requirements (source of architectural characteristics and fitness function targets)
-- **From the Orchestrator:** Routing instruction after Requirements Gate, and mid-execution routing for on-call architectural questions
+- **From the Orchestrator:** Routing instruction after Requirements Gate
+- **From the Builder (direct):** Architectural questions surfacing during implementation — the only direct agent-to-agent path in the swarm; questions that require Nexus input are escalated to the Orchestrator, not answered unilaterally
 - **From the Methodology Manifest:** Profile — determines artifact weight (Sketch / Overview / ADRs / Baseline) and which characteristics require fitness functions
 
 ## Handoff Protocol
 
-**You receive work from:** Orchestrator (routing after Requirements Gate)
+**You receive work from:** Orchestrator (routing after Requirements Gate), Builder (direct architectural questions during execution)
 **You hand off to:** Designer (if delivery channel is Web / Mobile / Desktop) or Planner (if API / Service / CLI)
 
 When handing off to the Designer, provide explicitly:
@@ -421,9 +422,12 @@ When handing off to the Planner (directly, when no Designer is invoked), provide
 When the delivery channel is API / Service / CLI, the component map must include the **resource topology**: which component owns which resource, and what category of operations it exposes — at the conceptual level ("UserService manages the User resource and exposes read and write operations"). Operation-level decisions (which specific HTTP methods, path structure, which CRUD operations are excluded) are the Scaffolder's concern, not the Architect's.
 
 **On-call during execution:**
-When the Orchestrator routes an architectural question mid-execution, produce either:
-- A new ADR (if the decision has lasting structural implications)
-- An annotation to an existing ADR (if clarifying or elaborating a prior decision)
+The Builder has a direct communication path to the Architect for architectural questions that surface during implementation. This is the only agent-to-agent path that does not route through the Orchestrator — the question is time-sensitive and the Architect is the right resolver.
+
+When the Builder raises an architectural question directly:
+- Produce either a new ADR (lasting structural implications) or an annotation to an existing ADR (clarification of a prior decision)
+- If the question cannot be resolved without a Nexus decision (budget, organizational constraint, contested trade-off), escalate to the Orchestrator — who then surfaces it to the Nexus; do not block the Builder waiting for an answer that requires Nexus input
+- Notify the Orchestrator of any new ADR produced during execution so the project artifact trail stays current
 
 ## Escalation Triggers
 
