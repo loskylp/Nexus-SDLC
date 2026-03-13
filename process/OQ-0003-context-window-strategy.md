@@ -1,55 +1,55 @@
-# OQ-0003: Context Window Management — Summarization and Retrieval Strategy
+# OQ-0003: Context Loading — What Artifacts Should the Human Load for Each Agent Invocation?
 
-**Status:** Open
-**Date:** 2026-03-12
+**Status:** Open (Reframed)
+**Date:** 2026-03-12 (reframed 2026-03-13)
 **Priority:** High
 
 ## Question
 
-DEC-0004 defines context slicing as the approach for managing context window limits. But the slicing strategy itself is under-specified: how does the Orchestrator decide what goes into a slice? What summarization strategy preserves critical information while fitting within token limits? How is retrieval handled when an agent needs historical context not in its current slice?
+The framework's runtime is the human loading agent definition files into LLM sessions. Each agent's Input Contract declares what artifacts it needs — but the human must decide what to actually include in the context window for each invocation. How does the Nexus know what to load, and how much is enough?
 
 ## Why It Matters
 
-Context management is the technical bottleneck that will determine whether the framework works for non-trivial projects. A project with 50 atomic tasks, 3 iterations each, produces hundreds of reasoning traces, verification reports, and artifact records. No current LLM context window can hold all of this simultaneously.
+Context loading is the practical bottleneck of a human-runtime framework. A project with 50 tasks across multiple cycles produces dozens of artifacts — briefs, requirements, ADRs, task plans, handoff notes, verification reports, escalation logs. No single LLM session can hold all of them, and the human should not have to guess which ones matter for a given agent invocation.
 
-Poor context slicing leads to:
-- Agents repeating work because they lack context about prior attempts
-- Inconsistent decisions because agents lack access to architectural decisions made in earlier tasks
-- Escalations that could have been avoided with better context
+Poor context loading leads to:
+- Agents repeating work because they lack context about prior decisions
+- Inconsistent outputs because agents miss architectural constraints or domain vocabulary
+- Wasted Nexus time re-providing information that should have been loaded upfront
 
 ## Options Being Considered
 
-**Option A — Template-based slicing:**
-Each agent role has a fixed template that defines what context sections are included. The Orchestrator populates the template from the Project Context. Templates are hand-designed per role.
+**Option A — Input Contracts are sufficient:**
+Each agent's Input Contract already declares exactly what it needs. The Orchestrator's Routing Instruction includes a "Load these artifacts" field listing the specific files. The human follows this list. No additional guidance needed.
 
-*Trade-offs:* Predictable and debuggable. But rigid — does not adapt to task-specific needs. A Coder working on a task that depends heavily on a prior task's output needs different context than one working on an independent task.
+*Partial address:* The orchestrator.md Routing Instruction format already includes this field. If the human is acting as the Orchestrator (loading the Orchestrator prompt and following its instructions), the Routing Instruction tells them what to load for the next agent.
 
-**Option B — Relevance-scored retrieval (RAG):**
-The Project Context is indexed. When an agent is invoked, the Orchestrator retrieves the most relevant context entries based on the current task description. This uses embedding-based similarity search.
+*Trade-offs:* Works well when the Orchestrator is invoked faithfully and the artifact trail is well-organized. Breaks down if the human skips the Orchestrator step and invokes agents directly, or if the artifact trail has grown large enough that the "Load these artifacts" list exceeds the context window.
 
-*Trade-offs:* Adaptive to task specifics. But introduces a retrieval system as a dependency, adds latency, and retrieval quality depends on embedding model quality. May retrieve irrelevant context or miss critical context.
+**Option B — Agent definition files include a "Context Loading Guide":**
+Add a new section to each agent definition file that provides a prioritized list: "Always load," "Load if relevant," "Load if the project has N+ cycles." This gives the human a quick reference even when not using the full Orchestrator routing.
 
-**Option C — Hierarchical summarization:**
-The Orchestrator maintains summaries at multiple granularity levels: full detail (recent tasks), summarized (older tasks), and high-level (project-level architectural decisions). The context slice includes full detail for the current task and its dependencies, summaries for related tasks, and high-level context for everything else.
+*Trade-offs:* More self-contained per agent. But adds maintenance burden to agent files and may become stale as the artifact trail model evolves.
 
-*Trade-offs:* Good balance of detail and breadth. But summarization itself is an LLM operation that may lose critical details. Requires a summarization protocol that preserves the right information.
+**Option C — A standalone context loading reference document:**
+A single reference document that maps each agent invocation to its required and optional context, organized by lifecycle phase. The Nexus consults this when setting up an LLM session.
 
-**Option D — Hybrid (template + summarization):**
-Use templates as the base structure, populate them with full detail for current/dependent tasks, and fill remaining context budget with hierarchical summaries of broader project context.
+*Trade-offs:* Single source of truth, easy to update. But one more document to maintain and consult — adds a step to every invocation.
 
-*Trade-offs:* Most flexible but most complex to implement. Requires both template design and summarization logic.
+**Option D — Defer to empirical use:**
+The Input Contracts and Routing Instructions provide the baseline. Let the Nexus discover through practice which invocations need more context and which need less. Document patterns as they emerge.
+
+*Trade-offs:* Lowest upfront effort. Matches the iterative approximation principle. But the Nexus may waste early sessions on under-loaded or over-loaded invocations before calibrating.
 
 ## Information Needed
 
-1. **Typical project context size:** How large does the Project Context object get for projects of 10, 50, 100 tasks? This determines how aggressive context management needs to be.
+1. **Practical context window sizes:** How large do real agent invocations get when all declared Input Contract artifacts are loaded? If they consistently fit, Option A may be sufficient.
 
-2. **Context window trends:** Current frontier models offer 128K-200K token windows. Is this sufficient for most single-task slices without summarization? If so, summarization can be deferred to a later version.
+2. **Usage patterns:** Does the Nexus typically invoke the full Orchestrator flow (which includes routing instructions), or does the Nexus sometimes invoke agents directly?
 
-3. **Summarization quality:** How much critical information is lost when a reasoning trace or verification report is summarized? Empirical testing is needed.
-
-4. **Technology stack decision (OQ-0005):** RAG-based retrieval requires embedding infrastructure. The technology stack choice affects which options are viable in v1.
+3. **Artifact trail growth rate:** How many artifacts does a typical cycle produce, and how quickly does the trail exceed a single context window?
 
 ## Blocking
 
-- DEC-0004 (Project Context) — the context slicing implementation details
-- The Orchestrator agent's implementation — context slice generation is a core responsibility
+- Informs the Orchestrator agent file (whether the Routing Instruction's "Load these artifacts" field needs more structure)
+- May inform whether agent definition files need a Context Loading Guide section (DEC-0010)

@@ -10,20 +10,22 @@ A Methodologist retrospective will mean something different depending on the pro
 
 ## Why It Matters
 
-The Methodologist re-activates at the end of major phases and on trigger events (DEC-0014). When it does, it performs some form of process reflection. But:
+The Methodologist re-activates at every Demo Sign-off (methodologist.md Responsibilities). When it does, the Orchestrator hands control with one question: "Is there anything you want to change for the next iteration?" If yes, the Methodologist runs a focused retrospective with the Nexus and updates the Manifest before the next cycle begins.
 
-- A Casual/Sketch retrospective should not produce a 10-page process audit — that would be self-defeating
-- A Vital/Spec retrospective probably requires formal documentation, stakeholder sign-off, and an auditable record
-- The middle profiles (Commercial/Draft, Critical/Blueprint) need definitions that are neither too light nor too heavy
+But:
 
-Until this is defined, the Methodologist agent definition file cannot specify what to produce when re-invoked.
+- A Casual retrospective should not produce a 10-page process audit — that would be self-defeating
+- A Vital retrospective probably requires formal documentation, stakeholder sign-off, and an auditable record
+- The middle profiles (Commercial, Critical) need definitions that are neither too light nor too heavy
+
+The current methodologist.md describes the retrospective trigger and general behavior but does not specify what the Methodologist produces at each profile level when re-activated. The Manifest output format is profile-weighted ("a Casual project's Manifest is a Sketch; a Vital project's Manifest is a Spec"), but the retrospective observation and analysis step that precedes the Manifest update is not specified per profile.
 
 ## Options Being Considered
 
-- **Casual:** A few informal bullet points — what worked, what to change, no formal artifact
-- **Commercial:** A short structured note appended to the Manifest — key observations, any profile change recommendation
-- **Critical:** A dedicated retrospective document with process metrics, escalation pattern analysis, and swarm configuration recommendations
-- **Vital:** A formal process audit artifact — structured, signed off by the Nexus, archived alongside the Manifest version history
+- **Casual:** The Nexus answers the Orchestrator's question ("anything to change?"). If yes, a brief conversation with the Methodologist — a few bullet points on what to adjust. Updated Manifest Sketch. No standalone retrospective artifact.
+- **Commercial:** A short structured retrospective note appended to the Manifest change log — key observations from the cycle, any profile change recommendation, iterate-loop efficiency observations.
+- **Critical:** A dedicated retrospective section in the Manifest update — process metrics (iteration counts, escalation frequency, gate pass rates), escalation pattern analysis, swarm configuration recommendations for the next cycle.
+- **Vital:** A formal retrospective artifact — structured, signed off by the Nexus, archived alongside the Manifest version history. Includes all of Critical plus compliance-relevant process observations and audit trail completeness verification.
 
 ## Information Needed
 
@@ -33,5 +35,5 @@ Until this is defined, the Methodologist agent definition file cannot specify wh
 
 ## Blocking
 
-- Methodologist agent definition file (cannot be fully written until retrospective behavior is specified)
+- The methodologist.md Responsibilities section describes retrospective triggers but not per-profile output format — this OQ fills that gap
 - DEC-0014 retrospective section (currently deferred by design)

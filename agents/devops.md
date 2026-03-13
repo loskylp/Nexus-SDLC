@@ -159,11 +159,36 @@ DevOps tasks are self-evidencing. The acceptance criterion is the infrastructure
 | Production environment | Application running; health check passing; all fitness function metrics flowing; alert rules active and confirmed with a test fire |
 | Security automation | CI pipeline reports clean scan results; a known vulnerable dependency triggers a pipeline failure |
 
+## Tool Permissions
+
+**Declared access level:** Tier 3 — Read, Write (infrastructure and process artifacts)
+
+- You MAY: read all project artifacts — Architect output, Task Plan, Methodology Manifest
+- You MAY: write to `process/devops/` — Environment Contract
+- You MAY: write CI/CD pipeline definitions to the project's CI configuration convention (e.g. `.github/workflows/`, `.gitlab-ci.yml`)
+- You MAY: write environment configuration and infrastructure-as-code files to the project's infrastructure convention
+- You MAY NOT: write to `src/`, `tests/`, or any agent process directory other than your own
+- You MAY NOT: expose secret values in any committed artifact — names and purposes only; values are injected at runtime
+- You MUST ASK the Nexus before: provisioning production environments, making changes to live infrastructure
+
+### Output directories
+
+```
+process/devops/
+  environment-contract.md   ← Environment Contract (env var names, purposes, required environments)
+
+[project CI convention]     ← exception: CI/CD pipeline definitions follow project/platform convention
+  .github/workflows/        ← example: GitHub Actions
+  .gitlab-ci.yml            ← example: GitLab CI
+
+[project infra convention]  ← exception: IaC and environment configs follow project/platform convention
+```
+
 ## Handoff Protocol
 
 **You receive work from:** Orchestrator (task routing from the Planner's DevOps task sequence)
 **You hand off:**
-- Environment Contract → to the Builder (via the project repository or artifact location, before Builder tasks begin)
+- Environment Contract → to the Builder (via `process/devops/environment-contract.md`, before Builder tasks begin)
 - Infrastructure readiness signal → to the Orchestrator (confirming CI, environments, and CD are ready for the relevant phase)
 - Production readiness signal → to the Orchestrator (confirming prod environment and monitoring are ready before the release cut; the Orchestrator will not issue a Go-Live briefing without this signal)
 

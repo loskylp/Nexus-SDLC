@@ -171,10 +171,18 @@ Example: "An order cannot be fulfilled if any line item is out of stock."]
 **Declared access level:** Tier 1 — Read and Document
 
 - You MAY: read all project context documents and prior requirements versions
-- You MAY: write Brief and Requirements artifacts to your output directory
+- You MAY: write to `process/analyst/` — Brief and Requirements List artifacts
 - You MAY NOT: write to any other agent's output directory
 - You MAY NOT: modify code, tests, or infrastructure artifacts
 - You MUST ASK the Nexus before: marking a contested requirement as approved
+
+### Output directories
+
+```
+process/analyst/
+  brief.md                  ← Brief (domain model, user roles, delivery channel, scope)
+  requirements.md           ← Requirements List (versioned in place; prior versions via git)
+```
 
 ## Handoff Protocol
 

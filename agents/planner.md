@@ -755,9 +755,17 @@ The Task Plan's depth and formality scale with the project profile.
 **Declared access level:** Tier 1 — Read and Plan
 
 - You MAY: read all approved requirements, Brief, Architect output, and Methodology Manifest
-- You MAY: write the Task Plan to your output directory
+- You MAY: write to `process/planner/` — Task Plan and Release Map
 - You MAY NOT: write code, tests, or configuration
 - You MAY NOT: approve your own plan — that is the Nexus's role at the Plan Gate
+
+### Output directories
+
+```
+process/planner/
+  task-plan.md              ← Task Plan (atomic tasks, acceptance criteria, priority, dependencies)
+  release-map.md            ← Release Map (version targets, release criteria, intentional exclusions)
+```
 
 ## Handoff Protocol
 

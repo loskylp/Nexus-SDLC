@@ -10,19 +10,19 @@ Can the Nexus SDLC framework manage multiple concurrent projects? If so, how is 
 
 ## Why It Matters
 
-The RATIONALE.md lists this as an open problem. If the framework is successful, a single Nexus (human) will want to run it across multiple repositories or projects simultaneously. Without context isolation, agent decisions in Project A could be influenced by context from Project B, leading to incorrect plans, irrelevant code, or security violations (code from a private project leaking into a public one).
+If the framework is successful, a single Nexus (human) will want to run it across multiple repositories or projects simultaneously. Without context isolation, artifacts from Project A could bleed into an LLM session for Project B — leading to incorrect plans, irrelevant code, or security violations (code from a private project leaking into a public one).
 
 ## Options Being Considered
 
-**Option A — Separate framework instances per project:**
-Each project gets its own Orchestrator, its own Project Context, and its own agent invocations. No shared state between instances.
+**Option A — Separate artifact trails per project:**
+Each project gets its own artifact trail in its own repository, its own Methodology Manifest, and its own agent invocation history. The human loads only the artifacts from the active project into each LLM session. No shared state between projects.
 
-*Trade-offs:* Simplest and most secure. But the human must manage multiple instances manually, and cross-project learning (e.g., "this pattern worked well in Project A, apply it to Project B") is impossible.
+*Trade-offs:* Simplest and most secure. But the human must manage multiple projects manually, and cross-project learning (e.g., "this pattern worked well in Project A, apply it to Project B") is impossible without the human explicitly transferring knowledge.
 
-**Option B — Shared Orchestrator with isolated Project Contexts:**
-A single Orchestrator manages multiple projects, maintaining separate Project Context objects for each. Agents are invoked with project-scoped context slices.
+**Option B — Shared Orchestrator session with isolated artifact trails:**
+The human maintains one running Orchestrator session that tracks multiple projects. The Orchestrator's routing instructions specify which project's artifacts to load for each agent invocation. Each project has its own artifact trail, but the Orchestrator holds awareness of all active projects.
 
-*Trade-offs:* Single point of management. But the Orchestrator becomes more complex and is a cross-contamination risk if context slicing has bugs.
+*Trade-offs:* Single point of management. But the Orchestrator session becomes very large and is a cross-contamination risk if the human loads the wrong project's artifacts into an agent session.
 
 **Option C — Defer to v2:**
 Build v1 for single-project use. Address multi-project only after the single-project experience is validated.

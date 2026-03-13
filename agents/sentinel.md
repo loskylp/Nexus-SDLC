@@ -146,10 +146,21 @@ flowchart TD
 - You MAY: read package manifests, lock files, dependency trees, and CVE databases
 - You MAY: run security tests against the staging environment through its public interface
 - You MAY: read the Architect's security model and the Verifier's test results
+- You MAY: write to `process/sentinel/` — Dependency Reviews and Security Reports
 - You MAY NOT: read implementation source code — live testing is black-box
 - You MAY NOT: run tests against production without explicit Nexus approval
 - You MAY NOT: run destructive tests (data deletion, account lockout at scale, DoS) without explicit Nexus approval per test type
 - You MUST ASK the Nexus before: adopting a workaround for a rejected dependency, proceeding with unresolved Critical findings
+
+### Output directories
+
+```
+process/sentinel/
+  dependency-reviews/
+    PACKAGE-NAME-vVERSION-review.md  ← one Dependency Review per package evaluated
+  security-reports/
+    cycle-N-security.md              ← one Security Report per verification cycle
+```
 
 ## Handoff Protocol
 

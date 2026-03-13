@@ -8,7 +8,7 @@
 
 **Nexus SDLC** transforms the traditional, manual Software Development Lifecycle into a dynamic, multi-agent collaboration. By placing a **Human-in-the-Middle (HITM)** at the architectural "Nexus," the system ensures that AI-driven velocity never diverges from human-defined quality, security, and architectural standards.
 
-The framework operates as a synchronized collective of specialized agents that reason, execute, and self-correct. The human remains the central node of the process—providing high-level intent, resolving ambiguity, and validating critical pivots before code enters production.
+The framework operates as a synchronized collective of specialized agents that reason, execute, and self-correct. The human remains the central node of the process — providing high-level intent, resolving ambiguity, and validating critical pivots before code enters production.
 
 ---
 
@@ -27,7 +27,7 @@ flowchart TD
     classDef swarm    fill:#b8d4e8,stroke:#2d6b9e,color:#0a1a2e,font-weight:bold
     classDef artifact fill:#b8e8c9,stroke:#2d9e5a,color:#0a1e0a,font-weight:bold
 
-    N["👤 The Nexus<br/>─<br/>Sets goals · Approves plans<br/>Resolves ambiguity · Merges"]:::nexus
+    N["👤 The Nexus<br/>─<br/>Sets goals · Approves plans<br/>Resolves ambiguity · Signs off"]:::nexus
 
     subgraph OL["Dynamic Orchestration Layer"]
         direction LR
@@ -39,32 +39,37 @@ flowchart TD
         direction LR
         AN["Analyst"]:::swarm
         AU["Auditor"]:::swarm
+        AR["Architect"]:::swarm
+        DE["Designer ◦"]:::swarm
+        SC["Scaffolder ◦"]:::swarm
         PL["Planner"]:::swarm
         BU["Builder"]:::swarm
         VE["Verifier"]:::swarm
-        IN["Integrator"]:::swarm
+        SE["Sentinel"]:::swarm
+        DO["DevOps"]:::swarm
+        SR["Scribe"]:::swarm
     end
-
-    PR["📦 Pull Request<br/>─<br/>Tested · Verified · Ready to merge"]:::artifact
 
     N      -->|"High-level goal"| ME
     ME     -->|"Methodology Manifest"| OR
     OR    <-->|"Task routing · Escalation"| SW
-    OR     -->|"Nexus Check · Demo briefing"| N
+    OR     -->|"Gate briefings · Demo briefing"| N
     N      -->|"Approval · Feedback · Changes"| OR
-    IN     -->|"Integration Summary"| OR
-    N      -->|"Nexus Merge"| PR
 ```
+
+*◦ optional — invoked when the project profile and delivery channel require it*
 
 ---
 
 ## How It Works
 
-1.  **Ingestion:** The Human defines a high-level goal or requirement at the Nexus.
-2.  **Decomposition:** The Orchestrator dispatches specialized agents to break the goal into atomic tasks and technical specifications.
-3.  **The Nexus Check:** The Human reviews the proposed plan. Once approved, the agentic swarm begins execution.
-4.  **Verification Loop:** Agents perform continuous validation (testing, linting, security scanning). If failures occur, the swarm iterates autonomously to resolve them.
-5.  **Integration:** After internal verification, the Nexus receives a summarized report and a clean Pull Request for final merging.
+1. **Define** — The Nexus states the high-level goal and constraints.
+2. **Ingestion** — Analyst elicits requirements; Auditor validates them in a loop with the Nexus resolving ambiguities. Output: the Brief and Requirements List. The Nexus approves at the **Requirements Gate**.
+3. **Decomposition** — Architect produces the architectural approach; Auditor audits it; Planner decomposes into atomic tasks; Designer and Scaffolder are invoked when the project requires them. The Nexus approves at the **Architecture Gate** and **Plan Gate**.
+4. **Execution Cycle** — Builder implements one task at a time under strict TDD.
+5. **Verification Cycle** — Verifier tests against acceptance criteria and Sentinel runs security audits concurrently. Failures feed back into an autonomous iterate loop.
+6. **Demo Sign-off** — The Nexus explores the running software. On approval, the cycle is signed off and the swarm is ready for the next cycle or release.
+7. **Go-Live** — DevOps deploys to production; Scribe publishes documentation and release notes.
 
 ```mermaid
 flowchart TD
@@ -74,26 +79,33 @@ flowchart TD
     classDef loop  fill:#b8e8c9,stroke:#2d9e5a,color:#0a1e0a,font-weight:bold
 
     DEFINE["👤 DEFINE<br/>─<br/>Nexus states the goal"]:::nexus
-    INGEST["INGEST<br/>─<br/>Analyst · Auditor"]:::phase
-    NC["⬡ NEXUS CHECK<br/>─<br/>Human approves the plan"]:::gate
-    EXECUTE["EXECUTE<br/>─<br/>Builder"]:::phase
-    VERIFY["VERIFY<br/>─<br/>Verifier"]:::phase
-    ITERATE["↺ ITERATE<br/>─<br/>Autonomous correction loop"]:::loop
-    INTEGRATE["INTEGRATE<br/>─<br/>Integrator assembles"]:::phase
-    DEMO["👤 DEMO<br/>─<br/>Nexus explores the software"]:::nexus
-    NM["⬡ NEXUS MERGE<br/>─<br/>Human merges to production"]:::gate
+    INGEST["INGESTION<br/>─<br/>Analyst + Auditor loop<br/>Nexus resolves issues"]:::phase
+    RG["⬡ REQUIREMENTS GATE<br/>─<br/>Nexus approves requirements"]:::gate
+    DECOMP["DECOMPOSITION<br/>─<br/>Architect · Auditor · Planner<br/>optional Designer · Scaffolder"]:::phase
+    AG["⬡ ARCHITECTURE GATE<br/>─<br/>Nexus approves architectural approach"]:::gate
+    PG["⬡ PLAN GATE<br/>─<br/>Nexus approves task plan"]:::gate
+    EXEC["EXECUTION CYCLE<br/>─<br/>Builder implements atomic tasks"]:::phase
+    VERIFY["VERIFICATION CYCLE<br/>─<br/>Verifier · Sentinel run concurrently"]:::phase
+    ITERATE["↺ ITERATE<br/>─<br/>Autonomous correction loop<br/>within cycle"]:::loop
+    DS["⬡ DEMO SIGN-OFF<br/>─<br/>Nexus explores running software<br/>Approves cycle · Triggers retrospective"]:::gate
+    GL["⬡ GO-LIVE<br/>─<br/>Release decision<br/>Automatic · On sign-off · Business decision"]:::gate
 
-    DEFINE    --> INGEST
-    INGEST    --> NC
-    NC        -->|"Approved"| EXECUTE
-    NC        -->|"Amendments"| INGEST
-    EXECUTE   --> VERIFY
-    VERIFY    -->|"Pass"| INTEGRATE
-    VERIFY    -->|"Fail"| ITERATE
-    ITERATE   --> VERIFY
-    INTEGRATE --> DEMO
-    DEMO      -->|"No changes"| NM
-    DEMO      -->|"New requirements"| INGEST
+    DEFINE  --> INGEST
+    INGEST  --> RG
+    RG      -->|"Amendments"| INGEST
+    RG      -->|"Approved"| DECOMP
+    DECOMP  --> AG
+    AG      -->|"Amendments"| DECOMP
+    AG      -->|"Approved"| PG
+    PG      -->|"Amendments"| DECOMP
+    PG      -->|"Approved"| EXEC
+    EXEC    --> VERIFY
+    VERIFY  -->|"Failures"| ITERATE
+    ITERATE --> VERIFY
+    VERIFY  -->|"All pass"| DS
+    DS      -->|"New requirements"| INGEST
+    DS      -->|"Next cycle"| EXEC
+    DS      -.->|"CD philosophy"| GL
 ```
 
 ---
@@ -120,17 +132,23 @@ flowchart TD
 
 Loadable agent files in [`/agents/`](agents/):
 
-| Agent | Role |
-|---|---|
-| [methodologist.md](agents/methodologist.md) | Configures the swarm; runs retrospectives; versions the Methodology Manifest |
-| [analyst.md](agents/analyst.md) | Produces the Brief and Requirements List |
-| [architect.md](agents/architect.md) | Trade-off analysis, architectural characteristics, ADRs, fitness functions |
-| [auditor.md](agents/auditor.md) | Validates requirements; runs regression checks; asks Nexus clarifying questions |
-| [orchestrator.md](agents/orchestrator.md) | Routes work; manages lifecycle state; prepares Nexus gate briefings |
-| [planner.md](agents/planner.md) | Decomposes requirements into atomic tasks with acceptance criteria |
-| [builder.md](agents/builder.md) | Implements one task at a time |
-| [verifier.md](agents/verifier.md) | Tests against acceptance criteria; produces failure reports for iteration |
-| [integrator.md](agents/integrator.md) | Assembles verified work; produces the Integration Summary for Nexus Merge |
+| Agent | Plane | Role |
+|---|---|---|
+| [methodologist.md](agents/methodologist.md) | Configuration | Configures the swarm; runs retrospectives; versions the Methodology Manifest |
+| [orchestrator.md](agents/orchestrator.md) | Control | Routes work; manages lifecycle state; prepares Nexus gate briefings |
+| [analyst.md](agents/analyst.md) | Analysis & Planning | Produces the Brief and Requirements List |
+| [auditor.md](agents/auditor.md) | Analysis & Planning | Validates requirements and architectural decisions; enforces traceability |
+| [architect.md](agents/architect.md) | Analysis & Planning | Trade-off analysis, architectural characteristics, ADRs, fitness functions |
+| [designer.md](agents/designer.md) | Design & Structure ◦ | UX/IxD for projects with a UI delivery channel |
+| [scaffolder.md](agents/scaffolder.md) | Design & Structure ◦ | Translates component decisions into code structure before Builder work begins |
+| [planner.md](agents/planner.md) | Analysis & Planning | Decomposes requirements into atomic tasks with acceptance criteria |
+| [builder.md](agents/builder.md) | Execution | Implements one task at a time under strict TDD |
+| [verifier.md](agents/verifier.md) | Verification & Security | Tests against acceptance criteria; produces Verification Reports and Demo Scripts |
+| [sentinel.md](agents/sentinel.md) | Verification & Security | Dependency security audit and live OWASP testing against staging |
+| [devops.md](agents/devops.md) | Delivery | CI/CD pipeline, environment provisioning, deployment |
+| [scribe.md](agents/scribe.md) | Delivery | Documentation transformation at release time; produces release notes and changelog |
+
+*◦ optional — invoked when the project profile and delivery channel require it*
 
 ---
 
