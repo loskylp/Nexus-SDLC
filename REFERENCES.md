@@ -116,11 +116,12 @@ relevant to the Nexus SDLC framework.
 
 ## Software Craftsmanship
 
-- Martin, R.C. — *Clean Code* (2008), Prentice Hall
+- Martin, R.C. — *Clean Code* (2008), Prentice Hall *(SOLID principles, meaningful names, small functions, single responsibility — primary reference for Builder Clean Code discipline)*
 - Martin, R.C. — *The Clean Coder* (2011), Prentice Hall
 - Martin, R.C. — *Clean Architecture* (2017), Prentice Hall
 - McConnell, S. — *Code Complete* (2nd ed., 2004), Microsoft Press
-- Hunt, A., Thomas, D. — *The Pragmatic Programmer* (20th anniversary ed., 2019), Addison-Wesley
+- Hunt, A., Thomas, D. — *The Pragmatic Programmer* (20th anniversary ed., 2019), Addison-Wesley *(Fail Fast, Orthogonality, DRY, YAGNI — applied as always-on Builder practices)*
+- Meyer, B. — *Object-Oriented Software Construction* (2nd ed., 1997), Prentice Hall *(Design by Contract: preconditions, postconditions, invariants — applied at Critical and Vital profiles)*
 
 ## Pair & Mob Programming
 
@@ -242,3 +243,7 @@ These references are most directly relevant to the framework's core concerns:
 | Evans, *Domain-Driven Design* (2003) | Shared language between human and agent layers |
 | Humble & Farley, *Continuous Delivery* (2010) | Automated pipeline design and deployment safety |
 | Richards & Ford, *Fundamentals of Software Architecture* (2020/2024) | Architectural characteristics taxonomy + fitness functions — primary reference for Architect agent |
+| Martin, *Clean Code* (2008) | SOLID, naming, small functions — governs all Builder implementation |
+| Hunt & Thomas, *The Pragmatic Programmer* (2019) | Fail Fast, Orthogonality, YAGNI — always-on Builder practices |
+| Fowler, *Refactoring* (2018) | Named refactoring catalog — governs the refactor step in red/green/refactor |
+| Meyer, *Object-Oriented Software Construction* (1997) | Design by Contract — preconditions, postconditions, invariants at Critical/Vital |
