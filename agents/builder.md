@@ -55,6 +55,7 @@ flowchart LR
 - **From the Analyst — Brief (Domain Model):** The shared vocabulary of the project — naming of functions, types, variables, and modules must follow domain terms, not invented technical names
 - **From the Designer (when invoked):** UX Specification — wireframes and interaction spec for the assigned task; all screen states (default, loading, empty, error) are part of the implementation, not optional additions
 - **From the Scaffolder (when invoked):** Scaffold files — signatures, documentation contracts, and TODO-marked bodies that define what each method must receive, return, and guarantee; the Builder implements against these contracts without redefining them
+- **From the DevOps agent (when invoked):** Environment Contract — the names and purposes of all environment variables the application uses; the Builder programs against these names and must not introduce undeclared environment variables
 - **From the project codebase:** Existing code, conventions, and prior Builder outputs
 
 ## Output Contract

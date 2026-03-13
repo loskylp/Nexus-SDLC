@@ -53,6 +53,7 @@ flowchart TD
 - **From Verifier outputs:** All Verification Reports for the current cycle
 - **From the Planner:** Task Plan (to verify all planned tasks are accounted for)
 - **From the Requirements List:** To confirm integration satisfies the cycle's requirements
+- **From the DevOps agent (when invoked):** Production readiness signal confirming the target environment is provisioned, the CD pipeline is operational, and production-side fitness function monitoring is active; the Integrator does not cut a release without this confirmation
 
 ## Output Contract
 
