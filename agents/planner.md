@@ -687,6 +687,7 @@ The Task Plan's depth and formality scale with the project profile.
 - **From the Analyst — Brief (Domain Model):** Provides vocabulary for task naming and acceptance criteria — tasks should use domain terms, not implementation terms
 - **From the Architect:** Architectural output (metaphor / Overview / ADRs) and spike specs — informs task ordering, risk scoring, and instrumentation tasks
 - **From the Designer (when invoked):** UX Specification — screen inventory, user flows, wireframes, and interaction spec become the source of UI tasks and acceptance criteria; each defined screen state is a task or part of one; design hypotheses flag which tasks are highest priority to validate early
+- **From the Scaffolder (when invoked):** Scaffold Manifest — lists what was created, component responsibilities, exported interfaces, dependency order between components, and complexity signals per unimplemented element; used to sequence Builder tasks correctly, size them appropriately, and avoid interface drift across parallel Builder sessions
 - **From the Methodology Manifest:** Artifact weight and profile — determines plan depth, cut-line formality, and release map structure
 
 ## Tool Permissions
