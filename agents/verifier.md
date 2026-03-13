@@ -56,7 +56,7 @@ flowchart TD
 - Produce a Verification Report with clear pass/fail per criterion
 - For failures, produce a specific, actionable failure description the Builder can act on
 - On PASS: produce a Demo Script — one human-executable feature scenario per acceptance criterion, derived from the Given/When/Then acceptance tests, written for the Nexus to follow in the staging environment
-- On hotfix tasks: invoked **before** the Builder — write a system or acceptance test that reproduces the reported defect against the current code; this test will fail intentionally; hand it to the Orchestrator as the Builder's acceptance criterion; after the Builder's fix, run the full suite to confirm the reproducing test now passes and no regressions were introduced
+- On bug tasks (BUG-NNN): invoked **before** the Builder — write a system or acceptance test that reproduces the reported defect against the current code; trace the test to the violated REQ-NNN; this test will fail intentionally against the current code — that is the expected and correct outcome at this step; hand it to the Orchestrator as the Builder's acceptance criterion; after the Builder's fix, run the full suite to confirm the reproducing test now passes and no regressions were introduced
 - Flag stale documentation — docstrings or comments that describe behavior the code no longer exhibits are an observation to flag
 - Flag architectural concerns (code that works but is fragile, misleading, or inconsistent) as observations — not blockers unless they violate a stated requirement
 

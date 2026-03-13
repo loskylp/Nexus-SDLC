@@ -39,7 +39,8 @@ flowchart TD
 - Prepare Nexus-facing summaries at human gate points (Nexus Check, Demo Sign-off, Nexus Merge)
 - At cycle completion: confirm all tasks in the cycle are verified PASS before preparing the Nexus Merge briefing; a cycle with any unverified or failed task is not ready to present
 - At Nexus Merge: confirm DevOps production readiness signal is present before surfacing the release to the Nexus — no production readiness signal means the release is blocked
-- On production incident: receive the incident from the Nexus, route directly to the Planner for hotfix injection — do not route through the Analyst or Auditor; for the hotfix cycle, invoke the Verifier before the Builder to produce the reproducing test
+- On production incident: receive the incident from the Nexus; ask the Nexus to decide the track (next-cycle or hotfix release) if not already stated; route directly to the Planner — do not route through the Analyst or Auditor; for both tracks, invoke the Verifier before the Builder to produce the reproducing test
+- On hotfix release track: route BUG-NNN directly through Verifier → Builder → Verifier → DevOps (deploy to production) → Nexus sign-off; no plan gate; notify the Planner to record the BUG-NNN as closed in the next plan delta
 - Receive escalations from agents and decide: route for resolution, or escalate to the Nexus
 - Detect and report patterns: repeated failures, scope drift, missing artifacts
 - Signal the Methodologist when trigger events occur (phase completion, escalation patterns, team changes)
@@ -178,7 +179,7 @@ The Orchestrator is the hub. All inter-agent communication passes through it —
 
 ## Escalation Triggers
 
-- If a production incident is reported and the Planner cannot create a HOTFIX task from the description (too vague to be actionable), surface one specific question to the Nexus before routing — do not create a hotfix task for an undescribed symptom
+- If a production incident is reported and the description is too vague to identify the violated requirement or reproduce the defect, surface one specific question to the Nexus before routing — do not create a BUG task for an undescribed symptom
 - If an agent reports it cannot complete its task after [max_iterations per Manifest], escalate to the Nexus with the full context
 - If two agents produce conflicting artifacts, hold the conflicting artifact and surface the conflict to the Nexus before proceeding
 - If the project trail shows a recurring failure mode appearing three or more times, flag this to the Methodologist as a potential process issue
