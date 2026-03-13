@@ -1,152 +1,119 @@
 # DEC-0007: Agent Communication Standards and Artifact Formats
 
-**Status:** Proposed
-**Date:** 2026-03-12
+**Status:** Accepted (revised — programmatic schemas replaced by markdown artifacts)
+**Date:** 2026-03-12 (revised)
 **Deciders:** Nexus Method Architect
 
 ## Context
 
-Agents communicate through structured artifacts, not natural language conversation. The RATIONALE.md draws from MetaGPT's SOP-driven approach and DDD's ubiquitous language concept. We need to define the standard formats for inter-agent communication, human-facing outputs, and internal reasoning traces.
+The initial proposal described typed, schema-validated messages — GoalSpec, TaskPlan, ImplementationArtifact, VerificationReport, ReasoningTrace — as structured objects with typed fields. These were designed for a software runtime and assumed automated schema validation between agents. When OQ-0005 resolved to no software runtime, all inter-agent communication became markdown files. The artifact types are still named and structured — but through markdown section conventions, not programmatic schemas.
 
 ## Decision
 
-### Core Principle: Structured Over Conversational
+### Core Principle: Structured Markdown
 
-All agent-to-agent communication uses typed, schema-validated messages. Natural language is reserved for:
-- Reasoning traces (internal to an agent's output)
-- Human-facing summaries (Nexus Briefings)
-- Escalation question text
+All agent communication uses structured markdown artifacts stored in the repository. Structure comes from section headers, tables, and declared output formats defined in each agent's Output Contract. Natural language is used throughout.
 
-### Standard Artifact Types
+### Actual Artifact Types
 
-**1. Goal Specification (Human -> Orchestrator)**
-```
-GoalSpec {
-  title: string
-  description: string (natural language, may be informal)
-  constraints: string[] (optional — explicit limitations)
-  acceptance_criteria: string[] (optional — how to know it's done)
-  priority: Critical | High | Medium | Low
-}
-```
+**1. Methodology Manifest (Methodologist → Orchestrator)**
+Profile and artifact weight, active agents, documentation requirements, gate configuration, max iterations. File: `manifest/manifest-vN.md`. Versioned.
 
-**2. Task Plan (Planner -> Orchestrator -> Human)**
-```
-TaskPlan {
-  tasks: Task[]
-  dependency_graph: DAG<TaskID>
-  risk_flags: RiskFlag[]
-  estimated_total_effort: EffortEstimate
-}
+**2. Brief (Analyst → all agents)**
+Domain model, delivery channel, vocabulary, stakeholder context. Free-form structured markdown. File: `analyst/brief.md`.
 
-Task {
-  task_id: string
-  title: string
-  description: string
-  acceptance_criteria: string[]
-  risk_level: Low | Medium | High
-  estimated_effort: EffortEstimate
-  required_tools: ToolAccess[]
-}
-```
+**3. Requirements List (Analyst → Auditor → all agents)**
+Numbered requirements (REQ-NNN), each with description, origin, rationale, and acceptance criteria. File: `analyst/requirements.md`.
 
-**3. Implementation Artifact (Coder -> Orchestrator)**
-```
-ImplementationArtifact {
-  task_id: string
-  files_created: FilePath[]
-  files_modified: FilePath[]
-  reasoning_trace: string
-  self_assessment: string (agent's confidence and known limitations)
-}
-```
+**4. Audit Report (Auditor → Orchestrator)**
+Per-requirement or per-component flags using the Auditor's flag vocabulary. PASS overall if no blocking flags remain. File: `auditor/audit-report-[phase]-[N].md`.
 
-**4. Verification Report (QA/Reviewer/Security -> Orchestrator)**
-```
-VerificationReport {
-  task_id: string
-  agent_role: RoleType
-  status: Pass | Fail | Warn
-  findings: Finding[]
-  summary: string
-}
+**5. Architecture Artifacts (Architect → all agents)**
+Profile-calibrated:
+- Casual: Architecture Sketch embedded in Task Plan
+- Commercial: Architecture Overview (`architect/architecture-overview.md`)
+- Critical/Vital: ADRs (`architect/ADR-NNNN-*.md`), optionally Architecture Baseline (`architect/baseline.md`)
 
-Finding {
-  severity: Critical | High | Medium | Low | Info
-  category: string (e.g., "test_failure", "lint_error", "vulnerability")
-  location: FilePath + line range (if applicable)
-  description: string
-  suggested_fix: string (optional)
-}
-```
+Each ADR includes dual-use fitness functions (dev check + production monitoring threshold).
 
-**5. Nexus Strategic Briefing (Orchestrator -> Human)**
+**6. Task Plan (Planner → Orchestrator)**
+Atomic tasks (TASK-NNN) with acceptance criteria, risk/value rating, dependency order. Spike tasks (SPIKE-NNN) with Resolves, Needed before, Finding goes to fields. File: `planner/task-plan.md`.
 
-Used at NEXUS CHECK, NEXUS MERGE, and NEXUS ESCALATION. Format defined in the Nexus Method Architect system prompt — includes status, completed work, in-progress items, blockers, and human decisions required.
+**7. Release Map (Planner → Orchestrator)**
+CD philosophy, version targets, ships-when conditions per release. File: `planner/release-map.md`.
 
-**6. Reasoning Trace (all agents, appended to every output)**
-```
-ReasoningTrace {
-  agent_id: string
-  role: RoleType
-  timestamp: ISO8601
-  task_id: string
-  decision: string (what was decided)
-  reasoning: string (why — the considerations, trade-offs, alternatives rejected)
-  confidence: float (0.0 - 1.0, self-assessed)
-}
-```
+**8. Scaffold Manifest (Scaffolder → Builder)**
+Directory structure, component responsibilities, exported interfaces table, dependency map, Builder task surface. File: `scaffolder/scaffold-manifest.md`.
+
+**9. Routing Instruction (Orchestrator → Agent)**
+Standard format: To, Phase, Task, Load these artifacts, Produce, Iteration, Return to.
+
+**10. Handoff Note (Builder → Orchestrator)**
+Per-task completion. Task completed, unit tests written/passing, deviations from scaffold if any, architectural questions raised with Architect, known limitations.
+
+**11. Verification Report (Verifier → Orchestrator)**
+Per-task, per-layer test results. Test counts (written/passing/failing) per layer. PASS or FAIL overall. File: `verifier/verification-report-[task].md`.
+
+**12. Demo Script (Verifier → Orchestrator)**
+Given/When/Then scenarios per verified task. The Nexus follows these to explore the running software at Demo Sign-off. File: `verifier/demo-script-[task].md`.
+
+**13. Security Report (Sentinel → Orchestrator)**
+Per-cycle. Dependency Review results (APPROVE/CONDITIONAL/REJECT per new dependency) + live security test findings (SEC-NNN entries with severity, evidence, remediation). PASS or FINDINGS overall. File: `sentinel/security-report-[cycle].md`.
+
+**14. Spike Finding (Architect → Architect or Planner)**
+Answer, Evidence, Implications, Routes to. File: `spikes/SPIKE-NNN/finding.md`.
+
+**15. Nexus Briefings (Orchestrator → Nexus)**
+Gate-specific summaries: Requirements Gate Briefing, Architecture Gate Briefing, Plan Gate Briefing, Demo Sign-off Briefing (includes What Was Built, Requirements Satisfied, Tasks Completed, Verification Summary, Security Summary, Demo), Go-Live Briefing.
 
 ### Ubiquitous Language
 
-The following terms have precise definitions across all agent communications:
-
 | Term | Definition |
 |---|---|
-| **Nexus** | The human-in-the-middle; the strategic decision-maker |
-| **Swarm** | The collective of all active agents in a lifecycle |
-| **Orchestrator** | The control-plane agent that routes, manages state, and escalates |
-| **Atomic Task** | The smallest unit of work that produces a verifiable artifact |
-| **Nexus Check** | Human approval gate before execution begins |
-| **Nexus Merge** | Human approval gate before code enters the main branch |
-| **Nexus Escalation** | Conditional human gate triggered by convergence failure or ambiguity |
-| **Iterate** | An autonomous code-verify cycle within the execution phase |
-| **Convergence** | Verification passing after one or more iterate cycles |
-| **Thrashing** | Non-decreasing failure count across consecutive iterations |
-| **Blast Radius** | The scope of potential damage from an agent action |
-| **Context Slice** | The subset of Project Context provided to an agent for a specific task |
+| Nexus | The human-in-the-middle; strategic decision-maker |
+| Swarm | The collective of all active agents in a lifecycle |
+| Orchestrator | Hub agent: routes, manages state, prepares gate briefings |
+| Builder | Implementation agent (replaces original "Coder") |
+| Verifier | Test and verification agent (replaces original "QA") |
+| Sentinel | Security audit agent (replaces original "Security") |
+| Methodologist | Process configuration agent; produces Methodology Manifest |
+| Requirements Gate | First human gate — approves requirements before decomposition |
+| Architecture Gate | Second human gate — approves architectural approach after Auditor review |
+| Plan Gate | Third human gate — approves task plan before execution |
+| Demo Sign-off | Per-cycle gate — approves delivered features; authorizes next cycle |
+| Go-Live | Release gate — decoupled from Demo Sign-off; three trigger modes |
+| Spike | Architect-run investigation to resolve a high-risk unknown |
+| Profile | Project stakes classification: Casual / Commercial / Critical / Vital |
+| Artifact Weight | Documentation rigor: Sketch / Draft / Blueprint / Spec |
+| Fitness Function | Dual-use architectural specification: dev check + production monitoring |
+| Thrashing | Non-decreasing failure count across consecutive iteration cycles |
+| Blast Radius | The scope of potential damage from an agent action |
 
 ## Rationale
 
-**Why structured messages over natural language:** Natural language between agents introduces ambiguity, requires parsing, and makes validation impossible. Structured messages can be schema-validated before delivery, ensuring that receiving agents get well-formed inputs. This is the MetaGPT insight applied rigorously.
+**Why structured markdown over programmatic schemas:** Consistent with OQ-0005 (no runtime). Markdown is human-readable, version-controllable, and directly loadable into LLM prompts. Structured schemas require parsers, validators, and serialization infrastructure that does not exist in this framework.
 
-**Why reasoning traces are mandatory:** The RATIONALE.md identifies "Auditable Reasoning" as a core design goal. If an agent makes a decision, the reasoning must be inspectable post-hoc. This also enables future learning — if a reasoning pattern consistently leads to failures, it can be identified and corrected.
+**Why named artifact types without schemas:** Even without schemas, naming artifact types provides the inter-agent coordination structure. An agent that knows it receives a "Verification Report" knows what sections to look for, even without a schema validator.
 
-**Why self-assessed confidence:** Confidence signals help the Orchestrator make routing decisions. A Coder with low confidence on a security-sensitive task might trigger additional Security review. This is an imperfect signal (LLMs are not well-calibrated), but it provides useful information for escalation thresholds.
-
-**Why a ubiquitous language:** DDD's insight is that shared terminology prevents entire categories of misunderstanding. When the Orchestrator says "thrashing," every agent and the human know exactly what it means. This reduces the noise in escalation messages and makes logs interpretable.
+**Why ubiquitous language:** DDD's insight applied — shared terminology prevents entire categories of misunderstanding. "Builder" not "Coder", "Verifier" not "QA", "Demo Sign-off" not "Nexus Merge." The ubiquitous language is the contract between all agents and the human.
 
 ## Consequences
 
 **Easier:**
-- Agent inputs/outputs are validated against schemas, catching malformed messages before they cause downstream failures
-- Logs are structured and machine-parseable, enabling automated analysis
-- The ubiquitous language reduces ambiguity in all communications
+- Artifact types are discoverable without reading the code
+- The ubiquitous language makes all agent communications interpretable without a glossary lookup
+- New artifact types can be added by defining their format and conventional location
 
 **Harder:**
-- Schema design must happen before agent implementation — this is upfront investment
-- Schema evolution (adding fields, deprecating fields) must be managed carefully
-- Natural language in reasoning traces is still unstructured — automated analysis of reasoning quality requires additional tooling
+- Without schema validation, malformed artifacts are discovered when the receiving agent reads them, not when they are written
+- Schema evolution requires updating all agent definitions that reference the changed artifact
 
 **Newly constrained:**
-- Every agent must produce output conforming to the relevant artifact schema
-- Every agent must include a ReasoningTrace with every output
-- The ubiquitous language terms must be used consistently — agents should not use synonyms
+- Every agent definition file uses the ubiquitous language terms — agents do not use synonyms
+- Artifact locations are conventional, not arbitrary — agents write to declared locations
 
 ## Alternatives Considered
 
-**Natural language conversation between agents (ChatDev style):** Simpler to implement but produces ambiguous, unparseable inter-agent communication. Validation is impossible. Post-hoc analysis requires human reading. Rejected for lack of rigor.
+**Typed schemas with a software runtime (initial proposal):** GoalSpec, TaskPlan, etc. as structured objects. Replaced when OQ-0005 resolved to no runtime.
 
-**Binary protocol (protobuf, etc.):** Maximally efficient but premature optimization. The system is not I/O-bound on inter-agent messages. Human readability of the communication log matters more than serialization efficiency at this stage. Rejected for premature optimization.
-
-**No ubiquitous language (let terms emerge naturally):** Risks semantic drift where different agents or documentation use different terms for the same concept. This is the exact problem DDD's ubiquitous language solves. Rejected for ambiguity risk.
+**Natural language conversation between agents (ChatDev style):** Unstructured, unvalidatable, produces ambiguous handoffs. Rejected.

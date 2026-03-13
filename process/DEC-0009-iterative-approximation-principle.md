@@ -38,11 +38,11 @@ The system must be designed to make forward progress on partial, approximate, am
 
 | Component | How This Principle Applies |
 |---|---|
-| **Planner** | Assumes-and-flags rather than asks-and-waits (OQ-0001 resolution) |
-| **GoalSpec** | Accepts informal, incomplete input. Optional fields, not required fields. |
-| **NEXUS CHECK** | Human reviews a concrete plan with flagged assumptions, not a questionnaire |
-| **Escalation Protocol (DEC-0006)** | Escalations present one question with a default action, not a decision matrix |
+| **Analyst** | Assumes-and-flags when requirements context is incomplete rather than blocking for clarification |
+| **Requirements Gate** | Nexus reviews a concrete requirements list with flagged assumptions, not a questionnaire |
+| **Escalation Protocol (DEC-0006)** | Escalations present one question, not a decision matrix |
 | **Orchestrator** | When facing ambiguity in routing or prioritization, makes a provisional choice and logs it |
+| **Methodologist** | Elicits project context one question at a time, accepting approximate answers |
 | **Method Architect (meta-level)** | Works in iterations with the Nexus, one question at a time, provisional answers welcome |
 
 ### Relationship to Existing Principles
@@ -51,6 +51,16 @@ This principle does not replace Managed Autonomy or Bounded Blast Radius — it 
 - **Managed Autonomy** defines *where* the human intervenes (gates)
 - **Bounded Blast Radius** defines *what* agents are allowed to do (tool access)
 - **Iterative Approximation** defines *how* the system handles the inherent uncertainty of human input and early-stage design
+
+### Embedded in Agent Design
+
+This principle is not advisory — it is implemented in every agent's behavioral instructions. Concrete implementations:
+- The Analyst assumes-and-flags when requirements context is incomplete rather than blocking on questions
+- The Auditor asks one specific, actionable clarification question per issue — never a decision matrix
+- The Planner uses [ASSUMPTION] markers in the task plan for working assumptions not yet confirmed
+- The Orchestrator escalates with one question per escalation (DEC-0006)
+- The Methodologist elicits project context one question at a time, accepting approximate answers
+- Every agent's Escalation Triggers section specifies what specific question to surface — not "escalate on ambiguity" but "ask: [specific question]"
 
 ## Rationale
 
@@ -80,12 +90,11 @@ This principle does not replace Managed Autonomy or Bounded Blast Radius — it 
 **Newly constrained:**
 - No agent, including the Method Architect, may present more than one question to the human at a time during escalation
 - Every working assumption must be flagged with a visible marker in whatever artifact it appears in
-- The GoalSpec schema must accept incomplete input without validation errors
 
 ## Alternatives Considered
 
 **Precision-first (require complete specs before proceeding):** This is the waterfall assumption. It maximizes alignment on paper but blocks progress and assumes humans can provide precise specifications upfront. Decades of SDLC experience demonstrate that they cannot. Rejected as empirically falsified.
 
-**Pure autonomy (agents decide everything, human reviews only at the end):** Eliminates the blocking problem but at the cost of intent alignment. The Planner making assumptions is acceptable because the NEXUS CHECK gate catches bad assumptions before execution. Removing that gate would make unchecked assumptions dangerous. Rejected for safety.
+**Pure autonomy (agents decide everything, human reviews only at the end):** Eliminates the blocking problem but at the cost of intent alignment. The Analyst making assumptions is acceptable because the Requirements Gate catches bad assumptions before decomposition. Removing that gate would make unchecked assumptions dangerous. Rejected for safety.
 
 **Ask-first for high-risk only (tiered elicitation):** A reasonable middle ground but requires the system to reliably classify ambiguities by risk level before asking — which is itself an uncertain judgment. The assume-and-flag approach sidesteps this by flagging everything and letting the human judge risk. Rejected as unnecessarily complex for v1.

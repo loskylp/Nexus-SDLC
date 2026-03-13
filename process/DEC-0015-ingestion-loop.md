@@ -29,7 +29,7 @@ flowchart TD
     AU["Auditor<br/>─<br/>Five-check validation<br/>CONTRADICTION · GAP<br/>AMBIGUOUS · UNTRACED"]:::agent
     DEC{{"Issues<br/>found?"}}:::decision
     NQ["👤 Nexus<br/>─<br/>Receives one specific<br/>clarification question<br/>Provides domain answer"]:::nexus
-    NC["⬡ Nexus Check<br/>─<br/>Human gate"]:::gate
+    NC["⬡ Requirements Gate<br/>─<br/>Human gate"]:::gate
 
     AN  -->|"Requirements v1..N"| AU
     AU  --> DEC
@@ -44,7 +44,7 @@ Each clarification cycle is a full new pass: Analyst incorporates the answer, Au
 
 ### The Demo Discovery Loop
 
-Each execution cycle ends with a demo — a runnable version of the software the Nexus can explore. At demo sign-off, the Nexus may include new requirements or changes of mind.
+Each execution cycle ends with a demo — a runnable version of the software the Nexus can explore. At Demo Sign-off, the Nexus may include new requirements or changes of mind.
 
 When this happens, ingestion re-opens:
 
@@ -62,8 +62,8 @@ flowchart TD
     AU["Auditor<br/>─<br/>REGRESSION CHECK<br/>New reqs vs. all<br/>previously approved reqs"]:::agent
     DEC2{{"REGRESSION<br/>flags found?"}}:::decision
     NQ["👤 Nexus<br/>─<br/>Decides which<br/>requirement prevails"]:::nexus
-    NC["⬡ Nexus Check<br/>─<br/>Human gate<br/>for new increment"]:::gate
-    NM["⬡ Nexus Merge<br/>─<br/>Human gate"]:::gate
+    NC["⬡ Requirements Gate<br/>─<br/>Human gate<br/>for new increment"]:::gate
+    NM["⬡ Go-Live<br/>─<br/>Human gate"]:::gate
 
     DEMO --> DEC1
     DEC1 -->|"No changes"| NM
@@ -98,7 +98,7 @@ This is expected behavior, not process failure. The demo is a discovery mechanis
 
 ## Rationale
 
-**Why the Auditor asks the Nexus directly:** Some contradictions cannot be resolved without domain knowledge the Analyst does not have. Bouncing only to the Analyst creates a false loop where the same issue resurfaces at Nexus Check. Direct Auditor → Nexus questions keep the loop honest.
+**Why the Auditor asks the Nexus directly:** Some contradictions cannot be resolved without domain knowledge the Analyst does not have. Bouncing only to the Analyst creates a false loop where the same issue resurfaces at the Requirements Gate. Direct Auditor → Nexus questions keep the loop honest.
 
 **Why demos trigger ingestion re-entry:** The Nexus cannot always articulate requirements they do not yet know they have. Working software is the most effective requirements elicitation tool. Treating demo feedback as a natural re-entry point — not an exceptional case — makes the process robust to the reality of how requirements evolve.
 

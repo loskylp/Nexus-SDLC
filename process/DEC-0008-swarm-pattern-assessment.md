@@ -1,85 +1,80 @@
 # DEC-0008: Nexus SDLC Swarm Pattern — Hybrid Swarm
 
-**Status:** Proposed
-**Date:** 2026-03-12
+**Status:** Accepted (revised — C0-C3 taxonomy superseded by DEC-0013 profile names)
+**Date:** 2026-03-12 (revised)
 **Deciders:** Nexus Method Architect
 
 ## Context
 
-Before designing any swarm, two dimensions must be assessed:
-- **Criticality (Crystal scale):** What is the cost of failure?
-- **Complexity (RUP scale):** What is the architectural complexity?
-
-Nexus SDLC is not a single project — it is a framework that will be used across projects of varying criticality and complexity. However, the framework itself must be designed to a standard that accounts for its most demanding use cases while remaining right-sized for simpler ones.
+The initial assessment used Crystal's C0-C3 scale for criticality and a Simple/Complex/Highly-Complex scale for architectural complexity. DEC-0013 introduced plain-language profile names (Casual/Commercial/Critical/Vital) that supersede the C0-C3 notation throughout the framework. This document retains the hybrid swarm pattern decision, which remains accurate, and updates the taxonomy references.
 
 ## Decision
 
 ### Framework-Level Assessment
 
-**Criticality: C1 (loss of money) — trending toward C2 for some use cases**
+**Criticality: Commercial to Critical (project-dependent)**
 
-Rationale: Nexus SDLC agents will write, modify, and deploy code in production software projects. Faulty agent behavior can introduce bugs, security vulnerabilities, or architectural degradation that costs money to fix. For projects where the framework manages infrastructure or security-sensitive code, criticality approaches C2 (loss of essential money). The framework does not directly control life-safety systems (C3), though it could theoretically be used in that context — which would require additional safeguards beyond what we design here.
+The framework is used across projects ranging from solo proof-of-concept (Casual) to regulated systems (Vital). The framework itself is designed to handle the full range. Per-project assessment is done by the Methodologist at project start.
 
-**Complexity: Complex (not Highly Complex)**
+**Complexity: Complex**
 
-Rationale: The framework involves multi-agent coordination, persistent state management, human-in-the-loop gates, and tool access control. This is a distributed system with stateful orchestration — clearly beyond "Moderate." However, it does not involve real-time constraints, regulatory compliance requirements, or safety-critical hardware integration that would push it to "Highly Complex."
+Multi-agent coordination, persistent artifact trails, human-in-the-loop gates, tool access control, profile-calibrated behavior — this is a distributed system with stateful orchestration. Not Highly Complex (no real-time constraints, no safety-critical hardware integration in the framework itself).
 
 ### Prescribed Swarm Pattern: Hybrid
 
-- **Agile core:** The inner EXECUTE-VERIFY-ITERATE loop operates with fast feedback, no documentation overhead beyond reasoning traces, and event-driven handoffs (XP/CI influence).
-- **Formal gates:** Phase transitions (DECOMPOSE->NEXUS CHECK, INTEGRATE->NEXUS MERGE) are architecture-gated milestones with explicit quality criteria (RUP influence).
-- **Empirical adaptation:** The Orchestrator monitors swarm health metrics and can trigger methodology adjustments (instantiate new agent roles, adjust iterate bounds, consolidate outputs). This is Scrum's empirical process control applied to an agent swarm.
-- **Human-centric communication:** All human-facing outputs use the Strategic Briefing format, optimized for cognitive efficiency (Crystal influence).
+- **Agile core:** The execution/verification cycle operates with fast feedback, minimal ceremony, and event-driven routing (XP influence).
+- **Formal gates:** Phase transitions use architecture-gated milestones with explicit quality criteria and Nexus approval (RUP influence).
+- **Empirical adaptation:** The Methodologist monitors swarm health and re-configures when trigger events occur (Scrum's empirical process control applied to an agent swarm).
+- **Human-centric communication:** All Nexus-facing outputs use the Nexus Briefing format, optimized for cognitive efficiency (Crystal influence).
 
 ### Dominant Methodology by Phase
 
 | Phase | Dominant Methodology | Rationale |
 |---|---|---|
-| DEFINE | Crystal | Human communication, intent elicitation, cognitive load management |
-| DECOMPOSE | RUP | Architecture-centric decomposition, risk-first prioritization |
-| NEXUS CHECK | Scrum | Empirical review, transparent inspection of proposed plan |
-| EXECUTE | XP | Engineering discipline, tight feedback loops, TDD |
-| VERIFY | XP | Continuous integration, automated verification |
-| ITERATE | XP + Scrum | Fast iteration with empirical bounds checking |
-| INTEGRATE | RUP | Architecture integrity verification, milestone quality gate |
-| NEXUS MERGE | Crystal | Human-centric summary, trust calibration |
+| Ingestion | Crystal | Intent elicitation, cognitive load management |
+| Decomposition | RUP | Architecture-centric, risk-first prioritization |
+| Requirements Gate | Scrum | Transparent inspection of requirements |
+| Architecture Gate | RUP | Architecture integrity verification |
+| Plan Gate | Scrum | Empirical review of proposed plan |
+| Execution Cycle | XP | Engineering discipline, TDD, tight feedback |
+| Verification Cycle | XP | Continuous verification, automated checks |
+| Demo Sign-off | Crystal | Human-centric summary, trust calibration |
+| Go-Live | RUP | Milestone quality gate for production |
 
-### Per-Project Adaptation
+### Per-Project Adaptation (via Methodologist)
 
-When Nexus SDLC is deployed on a specific project, the Orchestrator should assess that project's criticality and complexity and adjust:
-
-- **C0/Simple:** Reduce Tier 4 restrictions, skip Security agent, use shorter Strategic Briefings
-- **C2/Complex:** Add mandatory architecture review at INTEGRATE, increase max_iterations, require dual verification (two independent QA runs)
-- **C3/Highly Complex (if ever):** Add formal verification agent, require human review at EXECUTE (per-task), full audit trail with tamper-evident logging
+| Profile | Adaptation |
+|---|---|
+| **Casual** | Minimal agents (Planner, Builder, Verifier), lighter artifacts, Plan Gate may be informal |
+| **Commercial** | Full agent set minus Designer if no UI, Draft-weight artifacts, all gates active |
+| **Critical** | Full agent set, Blueprint-weight artifacts, strict TDD, fitness functions required |
+| **Vital** | Full agent set, Spec-weight artifacts, formal architecture baseline, signed-off fitness functions |
 
 ## Rationale
 
-**Why Hybrid over pure Agile:** The human gates at NEXUS CHECK and NEXUS MERGE are inherently formal — they require structured artifacts and explicit approval. Pure Agile would underserve these moments. The formality at gates ensures the human gets high-quality information to make decisions.
+**Why hybrid over pure Agile:** The human gates (Requirements Gate, Architecture Gate, Plan Gate, Demo Sign-off, Go-Live) are inherently formal — they require structured artifacts and explicit approval. Pure Agile would underserve these moments.
 
-**Why Hybrid over pure Formal:** The EXECUTE-VERIFY-ITERATE loop benefits from speed and minimal ceremony. Formal gates within this loop would add overhead without value — the agents are already producing structured verification reports. The value of formality is at phase boundaries, not within the execution engine.
+**Why hybrid over pure Formal:** The execution/verification cycle benefits from speed and minimal ceremony. Formal gates within this loop would add overhead without value.
 
-**Why per-project adaptation:** A framework that demands the same rigor for a personal script as for a financial system is over-engineered for the former and appropriately-engineered for the latter. The adaptation rules make the framework viable across the criticality spectrum.
+**Why per-project adaptation via the Methodologist:** The Methodologist is the agent responsible for right-sizing the swarm. The Manifest it produces configures the Orchestrator for the specific project profile. This is not a one-time decision — the Methodologist re-activates when the profile should change.
 
 ## Consequences
 
 **Easier:**
-- The framework can serve projects from C0 to C2 without redesign
+- The framework serves projects from Casual to Vital without redesign
 - Each phase uses the methodology best suited to its nature
-- The Orchestrator has clear guidelines for when to add or reduce rigor
 
 **Harder:**
-- Per-project adaptation requires the Orchestrator to make judgment calls about criticality and complexity
-- The hybrid model is more complex to implement than a pure-style approach
-- Documentation must describe both the default behavior and the adaptation rules
+- The Methodologist must encode enough methodology knowledge to make good profile assessments
+- The hybrid model is more complex to understand than a pure-style approach
 
 **Newly constrained:**
-- The framework's default configuration must target C1/Complex as baseline
-- Any C3 deployment would require explicit extensions beyond the current design
+- C0-C3 and Simple/Complex/Highly-Complex terminology is superseded by DEC-0013 profile names throughout the framework
 
 ## Alternatives Considered
 
-**Pure Agile Swarm:** Lightweight, fast, minimal documentation. Works for C0-C1/Simple but provides insufficient rigor for the framework's intended use cases (production software development with autonomous agents). Rejected for insufficient safety.
+**Pure Agile Swarm:** Insufficient rigor for the gates. Rejected.
 
-**Pure Formal Swarm:** Maximum rigor, mandatory reviews at every stage, full documentation. Appropriate for C3 but adds crushing overhead for typical use cases. The framework would be slower than manual development for small projects. Rejected for excessive overhead.
+**Pure Formal Swarm:** Crushing overhead for Casual and Commercial projects. Rejected.
 
-**Fixed pattern (no per-project adaptation):** Simpler to implement but forces every project into the same mold. A personal utility script does not need Security agent review. A financial application does. Rejected for one-size-fits-all inflexibility.
+**Fixed single pattern:** Does not accommodate the range from Casual to Vital. Rejected.

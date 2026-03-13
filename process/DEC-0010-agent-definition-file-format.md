@@ -1,111 +1,118 @@
 # DEC-0010: Agent Definition File Format
 
-**Status:** Proposed
-**Date:** 2026-03-12
+**Status:** Accepted (revised — section names updated to match actual structure)
+**Date:** 2026-03-12 (revised)
 **Deciders:** Nexus Method Architect
 
 ## Context
 
 With OQ-0005 resolved — the framework's deliverable is the agent definition files, not software — the file format for agent definitions becomes the single most critical design decision. This format is the framework's equivalent of an API: it determines what users see, how agents behave, and how the swarm coordinates.
 
-An agent definition file is a structured prompt document that, when loaded into any capable LLM, causes the LLM to adopt a specific role within the Nexus SDLC swarm. The file must be:
-- **Self-contained**: Everything an LLM needs to play the role is in the file (plus the Project Context when provided)
-- **LLM-agnostic**: Works across providers (Claude, GPT, Gemini, open-source models)
-- **Human-readable**: The Nexus must be able to read, understand, and modify agent definitions
-- **Composable**: Agent definitions reference each other by role name, not by file path or implementation detail
+An agent definition file is a structured prompt document that, when loaded into any capable LLM, causes the LLM to adopt a specific role within the Nexus SDLC swarm.
 
 ## Decision
 
-Each agent definition is a single markdown file with the following canonical structure:
+Each agent definition is a single markdown file. The core design principles remain as originally decided:
+
+- **Self-contained**: Everything an LLM needs to play the role is in the file (plus the artifact files listed in the Routing Instruction when provided).
+- **LLM-agnostic**: Works across providers (Claude, GPT, Gemini, open-source models).
+- **Human-readable**: The Nexus must be able to read, understand, and modify agent definitions.
+- **Composable**: Agent definitions reference each other by role name, not by file path or implementation detail.
 
 ### File Naming Convention
 
-`agents/[role-name].md` — e.g., `agents/orchestrator.md`, `agents/coder.md`, `agents/qa.md`
+`agents/[role-name].md` — e.g., `agents/orchestrator.md`, `agents/builder.md`, `agents/verifier.md`
 
-### Canonical Structure
+### Canonical Structure (as implemented)
 
 ```markdown
 # [Role Name] — Nexus SDLC Agent
 
-> One-line summary of this agent's purpose.
+> One-line tagline summarizing this agent's purpose.
 
 ## Identity
 
-You are the [Role Name] in the Nexus SDLC framework. [2-3 sentences establishing
-the agent's identity, perspective, and core responsibility.]
+[2-3 sentences establishing the agent's identity, perspective, and core responsibility.]
+
+## Flow
+
+[Mermaid flowchart showing this agent's position in the swarm — inputs, outputs, connections to other agents. Present in most agents.]
+
+## When This Agent Is Invoked
+
+[For optional or conditionally-invoked agents: Scaffolder, Sentinel, Scribe. Describes the trigger condition. Omitted for agents that are always part of the active swarm.]
 
 ## Responsibilities
 
-[Bulleted list of what this agent does. Precise and exhaustive. If it is not
-listed here, the agent should not do it.]
+[Bulleted list of what this agent does. Precise and exhaustive.]
 
 ## You Must Not
 
-[Explicit prohibitions. Things this agent must never do, even if asked.
-This is the behavioral constraint section — the blast radius control.]
+[Explicit prohibitions. Behavioral constraints and blast radius control.]
 
 ## Input Contract
 
-What this agent receives at the start of an invocation:
-
-- **From the Nexus (human):** [what the human provides directly]
-- **From the Project Context:** [what sections of the Project Context this agent reads]
-- **From other agents:** [what artifacts from other agent roles this agent consumes]
+[What this agent receives — from which agents, which artifact files to load.]
 
 ## Output Contract
 
-What this agent must produce at the end of an invocation:
+[What this agent produces — one section per output artifact with format template.]
 
-[Structured description of every artifact this agent produces, including format.
-Each output must be concrete — "a list of tasks" not "a plan."]
+### Output Format — [Artifact Name]
 
-### Output Format
-
-[Exact template or schema the agent's output must follow. This section is
-prescriptive, not descriptive. The agent copies this structure.]
+[Prescriptive template the agent fills in. Not a description — a template.]
 
 ## Tool Permissions
 
-**Declared access level:** [Tier 0-4 per DEC-0005]
-
-[List of tools/capabilities this agent may use, written as behavioral
-instructions:]
-- You MAY: [list of permitted actions]
-- You MAY NOT: [list of prohibited actions]
-- You MUST ASK the Nexus before: [list of human-gated actions]
-
-## Working With the Project Context
-
-[Instructions for how this agent reads and updates the Project Context document.
-Which sections to read, which sections to update, what format to use when
-appending entries.]
+**Declared access level:** Tier [N] — [Name]
+- You MAY: [permitted actions]
+- You MAY NOT: [prohibited actions]
+- You MUST ASK the Nexus before: [human-gated actions]
 
 ## Handoff Protocol
 
 **You receive work from:** [role name(s)]
-**You hand off work to:** [role name(s)]
+**You hand off to:** [role name(s)]
 
-[Instructions for how to signal completion and what to include in the handoff.
-References the HandoffEnvelope format from DEC-0003, adapted for markdown.]
+[Instructions for signaling completion and what to include in the handoff.]
 
 ## Escalation Triggers
 
-[Specific conditions under which this agent must stop working and escalate to
-the Orchestrator or directly to the Nexus. Written as concrete if-then rules.]
-
-- If [condition], then [escalation action with specific output format]
+[Specific if-then rules for when to stop and escalate — one question each, per DEC-0009.]
 
 ## Behavioral Principles
 
-[3-7 principles that guide this agent's judgment in ambiguous situations.
-These are the "spirit of the law" behind the specific rules above.]
+[3-7 principles guiding judgment in ambiguous situations.]
+
+## Profile Variants
+
+[Table showing how behavior scales across Casual / Commercial / Critical / Vital.]
 
 ## Example Interaction
 
-[One or two concrete examples showing this agent receiving input and producing
-output in the correct format. These serve as few-shot examples for the LLM
-and as documentation for the human.]
+[One concrete example showing the agent receiving input and producing output. Optional but present where it aids understanding.]
 ```
+
+### What Changed from the Initial Format
+
+**The "Working With the Project Context" section is not used.** It assumed a single PROJECT-CONTEXT.md document, which was replaced by the artifact trail (DEC-0004). Instead, agents declare their artifact dependencies in the Input Contract (which files to load) and their artifact outputs in the Output Contract (where each output file goes).
+
+**The "Profile Variants" section was added** to most agents. This is specific to the Nexus SDLC profile system (DEC-0013) and was not in the initial format. It makes the agent's behavior under each profile explicit rather than leaving it to interpretation.
+
+**The "Flow" section (Mermaid diagram) was added** to most agents to make their position in the swarm immediately visible. This is a documentation convention, not a behavioral instruction.
+
+**The "When This Agent Is Invoked" section was added** for optional and conditionally-invoked agents (Scaffolder, Sentinel, Scribe). Their trigger conditions are important enough to have their own section at the top, not buried in Responsibilities.
+
+Everything else in the initial decision remains accurate and implemented:
+
+- Single file per agent
+- Self-contained
+- LLM-agnostic
+- Cross-references by role name
+- The file IS the prompt
+- Behavioral constraints over access control
+- Prescriptive output templates
+- Few-shot examples where warranted
 
 ### Design Principles for Agent Files
 
@@ -113,48 +120,43 @@ and as documentation for the human.]
 
 2. **Output templates are prescriptive.** The Output Format section is not a description of what the output looks like — it is a template the agent copies and fills in. This reduces format drift across LLM providers.
 
-3. **Few-shot examples are mandatory.** LLMs perform significantly better with concrete examples. Every agent file includes at least one example interaction showing the input-output pattern.
+3. **Few-shot examples where warranted.** LLMs perform significantly better with concrete examples. Agent files include example interactions where the input-output pattern benefits from illustration.
 
-4. **Cross-references by role name, never by file path.** Agent definitions reference "the Orchestrator" or "the QA agent," not `agents/orchestrator.md`. This maintains portability.
+4. **Cross-references by role name, never by file path.** Agent definitions reference "the Orchestrator" or "the Verifier," not `agents/orchestrator.md`. This maintains portability.
 
 5. **The file IS the prompt.** The entire markdown file is designed to be pasted as a system prompt. The markdown formatting serves dual duty: readable by humans and parseable structure for LLMs.
 
 ## Rationale
 
-**Why markdown:** Markdown is human-readable, version-controllable (diffable in git), renderable in any documentation tool, and parseable by every LLM. It does not require special tooling to create, edit, or use. It is the natural format for a text-first, infrastructure-free framework.
+**Why markdown:** human-readable, version-controllable (diffable in git), renderable in any documentation tool, and parseable by every LLM. It does not require special tooling to create, edit, or use.
 
-**Why a single file per agent:** Each agent definition must be self-contained because users load it into an LLM conversation independently. A multi-file agent definition would require assembly before use — which re-introduces tooling and infrastructure.
+**Why a single file per agent:** each agent definition must be self-contained because users load it into an LLM conversation independently. A multi-file agent definition would require assembly before use.
 
-**Why the "You Must Not" section:** Positive instructions ("do X") are necessary but insufficient for boundary enforcement. LLMs respond well to explicit negative instructions, especially for safety-critical constraints. The section acts as a prompt-level ACL.
+**Why the "You Must Not" section:** positive instructions ("do X") are necessary but insufficient for boundary enforcement. LLMs respond well to explicit negative instructions, especially for safety-critical constraints.
 
-**Why prescriptive output templates:** If the output format is described loosely ("produce a task plan"), different LLM providers will produce different structures, making inter-agent handoffs unreliable. A concrete template that the agent fills in produces consistent output regardless of provider.
+**Why prescriptive output templates:** if the output format is described loosely, different LLM providers will produce different structures, making inter-agent handoffs unreliable. A concrete template that the agent fills in produces consistent output regardless of provider.
 
-**Why few-shot examples:** The empirical evidence on few-shot prompting is clear — concrete examples improve output quality and format adherence more reliably than instructions alone. For a framework that depends on agents producing precisely formatted outputs, examples are non-optional.
+**Why "Profile Variants" section:** every agent's behavior is calibrated to the project profile (DEC-0013). A separate table makes the profile scaling explicit and consistent across all agents — without it, profile-specific behavior is scattered through the Responsibilities text.
+
+**Why "When This Agent Is Invoked" section:** some agents are conditional (Scaffolder, Sentinel, Scribe). Their trigger conditions are important enough to be in their own section at the top of the file, not buried in Responsibilities.
 
 ## Consequences
 
-**Easier:**
-- Users can start immediately — load a file, provide context, go
-- Agent definitions are version-controlled, diffable, reviewable in PRs
-- Customization is straightforward — fork and edit a markdown file
-- No installation, no dependencies, no infrastructure
-
-**Harder:**
-- Behavioral constraints are enforced by prompt adherence, not by code — sufficiently creative (or poorly aligned) LLMs may violate them
-- Testing agent definitions requires running them against LLMs and evaluating outputs, which is inherently non-deterministic
-- Keeping agent files in sync when the framework evolves requires discipline (no automated schema migration)
-
-**Newly constrained:**
-- Every agent definition must follow this canonical structure — deviations break the inter-agent contract
-- Agent files must be self-contained — no imports, no includes, no external dependencies
-- The Project Context document format must be stable because every agent file references it
+- Users can start immediately — load a file, provide context, go.
+- Agent definitions are version-controlled, diffable, reviewable in PRs.
+- Customization is straightforward — fork and edit a markdown file.
+- No installation, no dependencies, no infrastructure.
+- Every agent definition must follow the canonical structure — deviations break the inter-agent contract.
+- Agent files must be self-contained — no imports, no includes, no external dependencies.
+- The "Working With the Project Context" section is not used — agents declare artifact dependencies in Input Contract and Output Contract instead.
+- Every agent file includes a Profile Variants table.
 
 ## Alternatives Considered
 
-**YAML/JSON configuration files:** Machine-parseable but not human-friendly for the amount of natural language instruction required. An agent definition is primarily prose (behavioral instructions, reasoning guidance) with some structure (input/output contracts). Markdown handles this mix better than structured data formats. Rejected for poor prose support.
+**YAML/JSON configuration files:** machine-parseable but not human-friendly for the amount of natural language instruction required. An agent definition is primarily prose with some structure. Markdown handles this mix better. Rejected for poor prose support.
 
-**Single monolithic prompt file:** All agent definitions in one file with role-switching instructions. Simpler file management but produces extremely long prompts that exceed context windows and make it impossible to load a single role. Rejected for impracticality.
+**Single monolithic prompt file:** all agent definitions in one file with role-switching instructions. Simpler file management but produces extremely long prompts and makes it impossible to load a single role. Rejected for impracticality.
 
-**Templating language (Jinja, Mustache):** Enables dynamic composition (e.g., include common sections across agents). But re-introduces tooling — users need a template renderer. The self-contained principle means accepting some duplication across agent files in exchange for zero-tooling portability. Rejected for infrastructure dependency.
+**Templating language (Jinja, Mustache):** enables dynamic composition but re-introduces tooling. The self-contained principle means accepting some duplication in exchange for zero-tooling portability. Rejected for infrastructure dependency.
 
-**Structured prompt format (DSPy signatures, LangChain templates):** Ties the framework to a specific library. Violates the LLM-agnostic and infrastructure-free principles. Rejected for vendor lock-in.
+**Structured prompt format (DSPy signatures, LangChain templates):** ties the framework to a specific library. Violates the LLM-agnostic and infrastructure-free principles. Rejected for vendor lock-in.
