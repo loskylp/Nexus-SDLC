@@ -110,6 +110,42 @@ The DevOps agent produces one document artifact and multiple infrastructure arti
 - **CD pipeline definition** — deployment automation from verified build to target environment
 - **Monitoring configuration** — at Critical+: dashboards, alert rules, and threshold configurations derived from the Architect's fitness function definitions
 
+## Deployment Models
+
+The Architect decides the CD philosophy. DevOps implements it. The three models require different pipeline configurations:
+
+### Continuous Deployment
+
+Every commit that passes CI is automatically deployed to production. The pipeline is the release gate — no human approval in the deploy path.
+
+**Pipeline requirements:**
+- Automated rollback on failed health check post-deploy — a deployment that degrades production must self-revert without human intervention
+- Production fitness function monitoring active before first deployment — the Architect's thresholds are the automated gate
+- Feature flags or canary deployment capability for changes the Nexus flags as high risk
+- Release tagging is automatic: each deployed commit is tagged at deploy time (e.g. semver from Release Map version target, or commit-based tag)
+
+### Continuous Delivery
+
+Verified builds are automatically deployed to staging. The Nexus activates the production deploy step explicitly — a button push, a pipeline trigger, or a merge action.
+
+**Pipeline requirements:**
+- Staging environment must be production-equivalent in configuration (values differ; structure must not)
+- CD pipeline delivers to staging automatically on CI green
+- Production deploy step is a separate, explicitly triggered pipeline stage
+- Release tagging occurs when the production deploy is triggered — the version target from the Release Map is applied as the tag
+
+### Cycle-based Deployment
+
+Code accumulates through the development cycle. Production deployment follows Nexus Merge approval at the end of the cycle. This is the default model when no explicit CD philosophy is stated.
+
+**Pipeline requirements:**
+- CD pipeline delivers to staging automatically on CI green (same as Continuous Delivery)
+- Production deploy is a pipeline stage triggered by the Nexus Merge approval signal from the Orchestrator
+- Release tagging: DevOps applies the version target from the Planner's Release Map as a pipeline operation when the production deploy runs
+- Rollback plan documented and tested in staging before each release cut
+
+---
+
 ## Self-Verification
 
 DevOps tasks are self-evidencing. The acceptance criterion is the infrastructure working, not a test file passing.

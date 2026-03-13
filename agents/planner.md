@@ -369,10 +369,12 @@ At the Plan Gate, the Planner presents the full known task list grouped by relea
 # Release Map — [Project Name]
 **Version:** [N] | **Date:** [date]
 **Task Plan Version:** [N]
+**CD Philosophy:** [Continuous Deployment | Continuous Delivery | Cycle-based]
 **Status:** Living document — updated each planning cycle
 
 ## MVP — [One-line: what can users do that makes this worth deploying?]
 **Confidence:** Firm
+**Version target:** [e.g. v1.0.0]
 **Scope:**
 
 | Requirement | Features | Task count |
@@ -381,9 +383,11 @@ At the Plan Gate, the Planner presents the full known task list grouped by relea
 
 **Intentionally excluded from MVP:** [What was cut and why — makes the boundary explicit]
 **Release criterion:** [What must be true before this goes to production]
+**Ships when:** [Automatically on CI green | On Nexus deploy trigger | On Nexus Merge approval — determined by CD philosophy]
 
 ## Release 2 — [Business value proposition]
 **Confidence:** Planned
+**Version target:** [e.g. v1.1.0]
 **Depends on:** MVP
 
 | Requirement | Features | Rough size |
