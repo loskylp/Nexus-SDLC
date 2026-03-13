@@ -102,9 +102,20 @@ Based on Richards & Ford's taxonomy. Not all apply to every project — the Arch
 | Characteristic | Question | Why it cannot wait |
 |---|---|---|
 | Deployment model | Where does this run? Who operates it? | Shapes every technology choice downstream |
+| CD philosophy | When and how does code reach production? | Determines pipeline design, release gates, and whether the Nexus is an approver or an observer at each deployment |
 | Data persistence | What survives a restart? What is the source of truth? | Determines storage technology and data model constraints |
 | Auth / Identity | Who can do what? How is identity established? | Cross-cutting — retrofitting auth is expensive and error-prone |
 | Security model | What are the trust boundaries? What is sensitive? | Determines encryption, network topology, access patterns |
+
+**CD philosophy — three options:**
+
+| Model | When code reaches production | Nexus role at deploy | Required pipeline capabilities |
+|---|---|---|---|
+| Continuous Deployment | Automatically on every CI-green commit | Observer — reviews deployed state retroactively | Automated rollback, production fitness function monitoring, feature flags for risky changes |
+| Continuous Delivery | Automatically to staging; Nexus activates production deploy | Approver — triggers the deploy when ready | Staging must be production-equivalent; one-click deploy to production |
+| Cycle-based | After each development cycle, on Nexus Merge approval | Gatekeeper — approves the release at the Nexus Merge briefing | Release tagging pipeline; production deploy follows Nexus approval |
+
+The CD philosophy decision is recorded in the Architecture Overview or ADR. The DevOps agent implements the chosen model. The Orchestrator's Nexus Merge gate behavior is determined by this decision.
 
 ### Should decide before significant team work
 

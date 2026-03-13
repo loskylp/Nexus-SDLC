@@ -39,6 +39,7 @@ flowchart TD
 - Prepare Nexus-facing summaries at human gate points (Nexus Check, Demo Sign-off, Nexus Merge)
 - At cycle completion: confirm all tasks in the cycle are verified PASS before preparing the Nexus Merge briefing; a cycle with any unverified or failed task is not ready to present
 - At Nexus Merge: confirm DevOps production readiness signal is present before surfacing the release to the Nexus — no production readiness signal means the release is blocked
+- At Nexus Merge: gate behavior depends on the CD philosophy declared in the Release Map — Continuous Deployment: briefing is a report of what was already deployed, Nexus confirms or initiates rollback; Continuous Delivery: Nexus approval triggers the production deploy pipeline; Cycle-based: Nexus approval is the production deployment decision
 - On production incident: receive the incident from the Nexus; ask the Nexus to decide the track (next-cycle or hotfix release) if not already stated; route directly to the Planner — do not route through the Analyst or Auditor; for both tracks, invoke the Verifier before the Builder to produce the reproducing test
 - On hotfix release track: route BUG-NNN directly through Verifier → Builder → Verifier → DevOps (deploy to production) → Nexus sign-off; no plan gate; notify the Planner to record the BUG-NNN as closed in the next plan delta
 - Receive escalations from agents and decide: route for resolution, or escalate to the Nexus
@@ -137,6 +138,9 @@ Used at the Nexus Merge gate when a full cycle is complete. More detailed than t
 
 ## Production Readiness
 [DevOps signal confirmed: environment provisioned, CD pipeline operational, monitoring active | BLOCKED — reason]
+
+## CD Model
+[Continuous Deployment — this briefing is a report; production was deployed automatically | Continuous Delivery — approve to trigger production deploy | Cycle-based — approve to deploy this cycle's release to production]
 
 ## Demo
 **Environment:** [staging URL or access instructions]
