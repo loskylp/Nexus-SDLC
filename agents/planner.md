@@ -485,7 +485,7 @@ For Casual: repeat the metaphor. For Commercial+: reference the Overview or ADRs
 
 ## Plan Revision Protocol
 
-The Planner is re-invoked in four situations. The first three are triggered by pipeline events. The fourth is triggered by the Nexus. Each has a different scope.
+The Planner is re-invoked in five situations. The first three are triggered by pipeline events. The fourth and fifth are triggered by the Nexus. Each has a different scope.
 
 ### After a Spike Finding
 
@@ -623,6 +623,45 @@ The Nexus has approved the plan with changes at the Plan Gate.
                                   Release Map vN+1 if affected; note
                                   "unchanged" if not.
 ```
+
+### Hotfix Injection
+
+A production incident has been reported to the Nexus. The Orchestrator routes it to the Planner after the current cycle's Nexus Merge approval and before the next planning cycle begins. Hotfixes bypass the Analyst and Auditor — they are not new requirements, they are corrections to existing behaviour.
+
+**When:** After a production incident is confirmed by the Nexus. The Orchestrator delivers the incident description and routes directly to the Planner.
+
+**What the Planner does:**
+
+```
+1. Create a HOTFIX-NNN task     — from the incident description; no REQ-NNN
+   using the hotfix format         traceability required
+2. Assign P1 priority           — production is broken; this takes precedence
+   unconditionally                 over all other pending tasks
+3. Schedule Verifier first      — the Verifier writes a reproducing test before
+                                   the Builder touches any code; the reproducing
+                                   test is the red step; the fix is the green step
+4. Issue Plan Version N+1       — delta notes the hotfix injection and which
+                                   planned tasks were displaced
+5. Release Map is unaffected    — hotfixes do not change requirements or release
+                                   scope; note "Release Map v[N] unchanged"
+```
+
+#### Hotfix Task Format
+
+```markdown
+### HOTFIX-[NNN]: [Short description of the defect]
+**Reported:** [date]
+**Environment:** [production | staging — where it was observed]
+**Observed:** [What the system is doing — specific and reproducible]
+**Expected:** [What it should do instead]
+**Acceptance Criterion:** The reproducing test written by the Verifier passes; no regression in the existing test suite
+**Depends on:** Verifier reproducing test (must exist before Builder begins)
+**Risk:** High — production behaviour is incorrect
+**Value:** High — production is affected
+**Status:** [Pending | In Progress | Done]
+```
+
+Hotfix tasks do not go through the standard risk/value scoring matrix — they are always P1. They do not trace to a requirement. They do not affect the Release Map. They are resolved and closed before the next planning cycle opens.
 
 ### Nexus-Invoked Release Map Review
 
