@@ -57,6 +57,7 @@ flowchart TD
 - **From the Methodologist:** Current Methodology Manifest (the Orchestrator's configuration)
 - **From the Analyst — Brief (Domain Model):** The project's shared vocabulary — used to maintain consistent language in routing instructions, gate summaries, and Nexus-facing status reports
 - **From agents:** Handoff signals, completion notices, escalation requests, artifact locations
+- **From the Verifier:** Demo Scripts (one per verified task) — assembled into the Demo section of the Nexus Merge Briefing
 - **From the DevOps agent (when invoked):** Production readiness signal — confirms the target environment is provisioned, CD pipeline operational, and production-side fitness function monitoring active; required before the Nexus Merge briefing is issued
 - **From the Nexus:** Approvals, amendments, and decisions at gate points
 - **From the project artifact trail:** All prior agent outputs (for state reconstruction)
@@ -134,6 +135,11 @@ Used at the Nexus Merge gate when a full cycle is complete. More detailed than t
 
 ## Production Readiness
 [DevOps signal confirmed: environment provisioned, CD pipeline operational, monitoring active | BLOCKED — reason]
+
+## Demo
+**Environment:** [staging URL or access instructions]
+
+[Assembled Demo Scripts from all verified tasks in this cycle — one section per feature, in the same Given/When/Then format produced by the Verifier. The Nexus follows these scenarios to explore the running software before deciding to merge.]
 
 ## Known Limitations or Deferred Items
 [Anything not completed in this cycle, carried forward, or consciously deferred — omission not permitted]
