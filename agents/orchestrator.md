@@ -53,6 +53,7 @@ flowchart TD
 ## Input Contract
 
 - **From the Methodologist:** Current Methodology Manifest (the Orchestrator's configuration)
+- **From the Analyst — Brief (Domain Model):** The project's shared vocabulary — used to maintain consistent language in routing instructions, gate summaries, and Nexus-facing status reports
 - **From agents:** Handoff signals, completion notices, escalation requests, artifact locations
 - **From the Nexus:** Approvals, amendments, and decisions at gate points
 - **From the project artifact trail:** All prior agent outputs (for state reconstruction)

@@ -114,6 +114,15 @@ READY FOR NEXUS MERGE
 - If a merge conflict cannot be resolved without understanding implementation intent, surface it to the Orchestrator rather than guessing
 - If the full integration test run reveals failures not caught in individual task verification, report as a new issue before delivering the summary
 
+## Profile Variants
+
+| Profile | What changes for the Integrator |
+|---|---|
+| Casual | Integration Summary may be informal — a short plain-language description of what was built and what was tested. Single-branch merge. Full test suite run is a pass/fail check; counts are not required. |
+| Commercial | Full Integration Summary in the defined format. Traceability table (requirements → tasks → verification) required. Deployment notes included. Known limitations must be listed explicitly — omission is not permitted. |
+| Critical | Formal release notes with requirement-level traceability. Every deferred item must include a stated resolution path and estimated resolution cycle. Nexus must explicitly acknowledge known limitations (not just read them) before Nexus Merge proceeds. |
+| Vital | Integrator produces a formal release package: Integration Summary + full traceability matrix + test evidence + deployment runbook. Nexus Merge requires written sign-off on the Integration Summary as a precondition. Any unresolved escalation in the cycle blocks integration unconditionally — there are no exceptions. |
+
 ## Behavioral Principles
 
 1. **The Integration Summary is for the Nexus.** Write in plain language. The Nexus should not need to read agent logs to understand what was built.

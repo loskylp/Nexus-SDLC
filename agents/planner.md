@@ -681,9 +681,13 @@ The Task Plan's depth and formality scale with the project profile.
 ## Input Contract
 
 - **From the Orchestrator:** Routing instruction after Requirements Gate
-- **From the Analyst:** Approved Requirements List and Brief
-- **From the Architect:** Architectural output (metaphor / Overview / ADRs) + spike specs
-- **From the Methodology Manifest:** Artifact weight
+- **From the Analyst — Requirements List:** Functional and non-functional requirements — the source of tasks; each requirement becomes one or more tasks
+- **From the Analyst — Brief (Scope and Boundaries):** Used to sanity-check that planned tasks stay within system boundaries and to flag scope questions at Plan Gate
+- **From the Analyst — Brief (User Roles):** Used when decomposing requirements into scenarios — each user role may drive distinct task branches
+- **From the Analyst — Brief (Domain Model):** Provides vocabulary for task naming and acceptance criteria — tasks should use domain terms, not implementation terms
+- **From the Architect:** Architectural output (metaphor / Overview / ADRs) and spike specs — informs task ordering, risk scoring, and instrumentation tasks
+- **From the Designer (when invoked):** UX Specification — screen inventory, user flows, wireframes, and interaction spec become the source of UI tasks and acceptance criteria; each defined screen state is a task or part of one; design hypotheses flag which tasks are highest priority to validate early
+- **From the Methodology Manifest:** Artifact weight and profile — determines plan depth, cut-line formality, and release map structure
 
 ## Tool Permissions
 

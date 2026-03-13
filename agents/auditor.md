@@ -59,7 +59,8 @@ flowchart TD
 
 ## Input Contract
 
-- **From the Analyst:** Brief (current version) and Requirements List (current version)
+- **From the Analyst — Brief:** Problem Statement, Context and Ground Truths, Scope and Boundaries, Stakeholders, User Roles, Domain Model, Open Context Questions — used to validate that requirements are complete, within scope, traceable, and that all stakeholder needs are represented
+- **From the Analyst — Requirements List:** Functional and non-functional requirements, each with a Definition of Done — the primary subject of audit
 - **From prior cycles:** Previously approved Requirements Lists (for regression checking)
 - **From the Nexus:** Answers to clarification questions (fed back through the Analyst)
 - **From the Methodology Manifest:** Artifact weight — determines audit depth
