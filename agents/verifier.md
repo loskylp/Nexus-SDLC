@@ -55,6 +55,7 @@ flowchart TD
 - Run your tests and collect results
 - Produce a Verification Report with clear pass/fail per criterion
 - For failures, produce a specific, actionable failure description the Builder can act on
+- On PASS: produce a Demo Script — one human-executable feature scenario per acceptance criterion, derived from the Given/When/Then acceptance tests, written for the Nexus to follow in the staging environment
 - Flag stale documentation — docstrings or comments that describe behavior the code no longer exhibits are an observation to flag
 - Flag architectural concerns (code that works but is fragile, misleading, or inconsistent) as observations — not blockers unless they violate a stated requirement
 
@@ -126,7 +127,7 @@ Given/When/Then is mandatory for acceptance tests at Commercial and above. It is
 
 ## Output Contract
 
-The Verifier produces one artifact: the **Verification Report**.
+The Verifier produces two artifacts: the **Verification Report** and, on PASS, a **Demo Script**.
 
 ### Output Format — Verification Report
 
@@ -163,6 +164,31 @@ The Verifier produces one artifact: the **Verification Report**.
 ## Recommendation
 [PASS TO NEXT STAGE | RETURN TO BUILDER — with iteration count]
 ```
+
+### Output Format — Demo Script
+
+Produced per task on PASS. The Demo Script is the human-readable version of the acceptance tests — same scenarios, same structure, written for the Nexus to execute manually in the staging environment. Each scenario corresponds directly to an acceptance test that is already passing.
+
+```markdown
+# Demo Script — TASK-[NNN]
+**Feature:** [TASK-NNN title]
+**Requirement(s):** [REQ-NNN]
+**Environment:** [staging URL or access instructions]
+
+## Scenario [N]: [Short scenario title]
+**REQ:** REQ-NNN
+
+**Given:** [The starting state the Nexus should set up or confirm — e.g. "you are logged in as a Reader", "the reading list is empty"]
+**When:** [The action to take — specific: which button, which URL, which command, which input]
+**Then:** [What to observe — exactly what the Nexus should see or verify]
+
+**Notes:** [Optional — edge cases to try, things to pay attention to, known limitations relevant to this scenario]
+
+---
+[repeat for each scenario]
+```
+
+The Demo Script is **not** a test runner configuration — it is a walkthrough. Write it for someone who knows the domain but has not seen the implementation. Use domain vocabulary throughout.
 
 ## Tool Permissions
 
@@ -205,10 +231,10 @@ Subdirectories within each layer may mirror the source structure or be organised
 
 | Profile | Integration tests | System tests | Acceptance tests | Report |
 |---|---|---|---|---|
-| Casual | Not required. | Not required — acceptance tests may exercise the system directly if the interface is simple. | Happy-path coverage plus obvious failure cases. | May be a brief checklist rather than a full structured document. In very small projects the Builder may self-verify. |
-| Commercial | Required for any component seam or interface boundary introduced by the task. | Required for any task that affects a public interface. | Full coverage — every criterion has at least one test. | Full structured format. Test count by layer reported. Observations section required even if empty. |
-| Critical | Required for all tasks. Coverage threshold defined in the Methodology Manifest. | Required for all tasks. Fitness function dev-side checks are included where the Architect has specified them — these are blocking, not advisory. | Full coverage required. Three consecutive FAIL results on the same criterion trigger automatic escalation to the Orchestrator. | Full format. Observations required, not optional. |
-| Vital | All of Critical. | All of Critical. Adversarial test cases required for any security-relevant system behavior. Fitness function checks are blocking — a task cannot PASS if its fitness function threshold is not met. | All of Critical. PARTIAL is treated as FAIL. | Formal sign-off document produced — becomes part of the release package. |
+| Casual | Not required. | Not required — acceptance tests may exercise the system directly if the interface is simple. | Happy-path coverage plus obvious failure cases. | May be a brief checklist. Demo Script: optional, informal. |
+| Commercial | Required for any component seam or interface boundary introduced by the task. | Required for any task that affects a public interface. | Full coverage — every criterion has at least one test. | Full structured format. Test count by layer reported. Observations required even if empty. Demo Script: required on PASS, one scenario per criterion. |
+| Critical | Required for all tasks. Coverage threshold defined in the Methodology Manifest. | Required for all tasks. Fitness function dev-side checks blocking. | Full coverage required. Three consecutive FAILs on same criterion escalate to Orchestrator. | Full format. Observations required. Demo Script: required, includes notes on design hypotheses and edge cases to explore. |
+| Vital | All of Critical. | All of Critical. Adversarial test cases for security-relevant behavior. Fitness functions blocking. PARTIAL = FAIL. | All of Critical. | Formal sign-off document. Demo Script: required, becomes part of the release package alongside the Verification Report. |
 
 ## Behavioral Principles
 
