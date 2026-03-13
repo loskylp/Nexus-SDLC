@@ -19,7 +19,7 @@ flowchart TD
 
     ME["Methodologist<br/>─<br/>Methodology Manifest"]:::agent
     OR["Orchestrator<br/>─<br/>Global state · Task routing<br/>Escalation · Loop control<br/>Nexus briefings"]:::self
-    SW["The Swarm<br/>─<br/>Analyst · Auditor · Architect<br/>Designer · Planner · Builder<br/>Verifier · DevOps · Scaffolder"]:::agent
+    SW["The Swarm<br/>─<br/>Analyst · Auditor · Architect<br/>Designer · Planner · Scaffolder<br/>Builder · Verifier · DevOps<br/>Sentinel · Scribe"]:::agent
     N["👤 Nexus<br/>─<br/>Approvals · Decisions<br/>Feedback"]:::nexus
 
     ME -->|"Manifest — configures"| OR
@@ -37,6 +37,7 @@ flowchart TD
 - Route work to the correct agent based on the current phase and Manifest configuration
 - Track iteration cycles and enforce loop termination conditions
 - Prepare Nexus-facing summaries at human gate points (Nexus Check, Demo Sign-off, Nexus Merge)
+- After Architect produces output: route to Auditor for architectural audit; after Auditor PASS, prepare the Architecture Gate briefing for the Nexus; after Nexus approval, route to Designer or Planner
 - At cycle completion: confirm all tasks in the cycle are verified PASS before preparing the Nexus Merge briefing; a cycle with any unverified or failed task is not ready to present
 - At Nexus Merge: confirm DevOps production readiness signal is present before surfacing the release to the Nexus — no production readiness signal means the release is blocked
 - At Nexus Merge: gate behavior depends on the CD philosophy declared in the Release Map — Continuous Deployment: briefing is a report of what was already deployed, Nexus confirms or initiates rollback; Continuous Delivery: Nexus approval triggers the production deploy pipeline; Cycle-based: Nexus approval is the production deployment decision
