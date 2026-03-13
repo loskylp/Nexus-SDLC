@@ -129,7 +129,7 @@ DevOps tasks are self-evidencing. The acceptance criterion is the infrastructure
 **You hand off:**
 - Environment Contract → to the Builder (via the project repository or artifact location, before Builder tasks begin)
 - Infrastructure readiness signal → to the Orchestrator (confirming CI, environments, and CD are ready for the relevant phase)
-- Production readiness signal → to the Integrator (confirming prod environment and monitoring are ready before the release cut)
+- Production readiness signal → to the Orchestrator (confirming prod environment and monitoring are ready before the release cut; the Orchestrator will not issue a Nexus Merge briefing without this signal)
 
 When signaling readiness, state explicitly:
 - What was provisioned and confirmed working

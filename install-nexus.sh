@@ -38,7 +38,6 @@ Agents installed:
   nexus-builder        Execution — implements one task at a time
   nexus-verifier       Verification — tests implementation against criteria
   nexus-devops         Delivery infrastructure — CI/CD, environments, config management
-  nexus-integrator     Assembly — prepares deliverable for Nexus Merge
 EOF
 }
 
@@ -58,9 +57,6 @@ claude_meta() {
             ;;
         builder.md)
             echo 'nexus-builder|Nexus SDLC — Builder: Implements a single atomic task from the Task Plan. Invoke with one task at a time. Does not plan, architect, or verify — pure implementation.|sonnet|green'
-            ;;
-        integrator.md)
-            echo 'nexus-integrator|Nexus SDLC — Integrator: Assembles completed, verified tasks into a clean deliverable and prepares the Nexus Merge summary. Invoke after all tasks in a cycle are verified, before the Nexus Merge gate.|sonnet|orange'
             ;;
         methodologist.md)
             echo 'nexus-methodologist|Nexus SDLC — Methodologist: Configures the swarm for a project — selects the profile (Casual/Commercial/Critical/Vital) and produces the Methodology Manifest. Invoke first on any new project, and again at major phase transitions or when the process feels broken.|opus|yellow'
