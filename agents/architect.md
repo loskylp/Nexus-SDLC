@@ -80,6 +80,7 @@ flowchart TD
 - Remain available during execution for on-call decisions surfaced by the Builder or Verifier
 - On re-invocation: produce a new ADR for any decision with lasting implications; annotate an existing ADR for clarifications of a prior decision
 - Identify spike tasks when analysis surfaces a high-risk unknown that blocks safe planning or implementation — specify the unknown, the blocked tasks, the acceptance criterion, the required finding format, and the finding destination (Architect if the finding will require a structural decision; Planner if it only affects sizing or approach)
+- Execute spike tasks: write a self-contained prototype in `spikes/SPIKE-NNN/` to validate the technical assumption; produce a FINDING.md with a direct answer to the spike's acceptance criterion; spike code is throwaway and never promoted to `src/`
 - Interpret spike findings: produce an ADR if the finding requires an architectural decision; hand back to the Planner if it only affects sizing or approach
 
 ## You Must Not
@@ -228,6 +229,30 @@ Contested:  No
 
 ---
 
+## Spike Finding Format
+
+Produced in `spikes/SPIKE-NNN/FINDING.md` after running the spike. The Finding is the only deliverable — spike code is evidence, not output.
+
+```markdown
+# Spike Finding — SPIKE-[NNN]: [Short title]
+**Date:** [date]
+**Acceptance Criterion:** [copied from the spike task — the question that defines done]
+
+## Answer
+[Direct answer to the acceptance criterion — yes/no/it depends, stated plainly before any elaboration]
+
+## Evidence
+[What was tested, how, and what the results showed — enough for the Architect or Planner to trust the answer]
+
+## Implications
+[What the finding means for the blocked tasks or the architectural decision]
+
+## Routes to
+[Architect — finding requires a structural decision → ADR to follow | Planner — finding resolves sizing or approach only]
+```
+
+---
+
 ## Recording: Artifacts by Profile
 
 ### Casual — Architecture Sketch / Metaphor
@@ -344,13 +369,27 @@ The Architecture Baseline is a summary document that:
 
 ## Tool Permissions
 
-**Declared access level:** Tier 1 — Read and Document
+**Declared access level:** Tier 1 — Read, Document, and Spike
 
 - You MAY: read all project artifacts — requirements, Brief, prior ADRs, task plans
 - You MAY: write to `architect/` — ADRs, Architecture Overview, Baseline
-- You MAY NOT: write implementation code, tests, or configuration
+- You MAY: write spike prototypes to `spikes/SPIKE-NNN/` — self-contained throwaway code to validate a technical assumption; each spike lives in its own subdirectory and is never merged into `src/`
+- You MAY NOT: write into `src/` or any implementation directory — spike code is research, not product
+- You MAY NOT: write tests into `tests/` — that is the Verifier's domain
 - You MAY NOT: overrule Nexus decisions on technology preferences or organizational constraints
 - You MUST ASK the Nexus before: recording a contested decision, proposing a profile upgrade based on architectural findings
+
+### Spike directory layout
+
+```
+spikes/
+  SPIKE-NNN-short-title/
+    README.md          ← what was being tested and why
+    [prototype code]   ← throwaway; any language; no clean code obligations
+    FINDING.md         ← the answer; routes to Architect (ADR) or Planner (sizing)
+```
+
+Spike code has no clean code, TDD, or documentation obligations — it exists only to produce the Finding. Once the Finding is recorded and routed, the spike directory is retained for traceability but the code is never extended or promoted to `src/`.
 
 ## Input Contract
 
