@@ -38,6 +38,8 @@ Agents installed:
   nexus-builder        Execution — implements one task at a time
   nexus-verifier       Verification — tests implementation against criteria
   nexus-devops         Delivery infrastructure — CI/CD, environments, config management
+  nexus-sentinel       Security — dependency evaluation and live security testing
+  nexus-scribe         Release documentation — extracts and publishes versioned docs at release time
 EOF
 }
 
@@ -72,6 +74,12 @@ claude_meta() {
             ;;
         verifier.md)
             echo 'nexus-verifier|Nexus SDLC — Verifier: Verifies a Builder implementation against task acceptance criteria and the requirement Definition of Done. Invoke after each Builder output. Writes and runs tests, produces a structured verification report.|sonnet|cyan'
+            ;;
+        sentinel.md)
+            echo 'nexus-sentinel|Nexus SDLC — Sentinel: Security and dependency protection. Evaluates new dependencies before adoption (license, CVEs, maintenance, transitive risk) and runs live security testing against staging before each release. Not invoked at Casual.|opus|red'
+            ;;
+        scribe.md)
+            echo 'nexus-scribe|Nexus SDLC — Scribe: Release documentation publisher. Invoked at release time — extracts and transforms living documentation (code annotations, UX flows, Demo Scripts) into versioned release artifacts: reference docs, Swagger specs, user manuals, release notes, and changelog. Not invoked at Casual.|sonnet|yellow'
             ;;
         *)
             echo ''

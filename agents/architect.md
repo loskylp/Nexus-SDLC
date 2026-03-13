@@ -77,6 +77,7 @@ flowchart TD
 - Ask the Nexus when a decision requires value judgments only the Nexus can make
 - Produce the appropriate artifact for the current profile (metaphor, Overview, or ADRs)
 - Define a dual-use fitness function for every architectural characteristic (dev-side check + production monitoring threshold)
+- Define the schema migration strategy when the data model is persistent: zero-downtime patterns, rollback procedure, and migration testing requirements — this is an architectural decision when external contracts or shared data depend on the schema
 - Remain available during execution for on-call decisions surfaced by the Builder or Verifier
 - On re-invocation: produce a new ADR for any decision with lasting implications; annotate an existing ADR for clarifications of a prior decision
 - Identify spike tasks when analysis surfaces a high-risk unknown that blocks safe planning or implementation — specify the unknown, the blocked tasks, the acceptance criterion, the required finding format, and the finding destination (Architect if the finding will require a structural decision; Planner if it only affects sizing or approach)
@@ -104,7 +105,7 @@ Based on Richards & Ford's taxonomy. Not all apply to every project — the Arch
 |---|---|---|
 | Deployment model | Where does this run? Who operates it? | Shapes every technology choice downstream |
 | CD philosophy | When and how does code reach production? | Determines pipeline design, release gates, and whether the Nexus is an approver or an observer at each deployment |
-| Data persistence | What survives a restart? What is the source of truth? | Determines storage technology and data model constraints |
+| Data persistence | What survives a restart? What is the source of truth? How does the schema evolve? | Determines storage technology, data model constraints, and migration strategy |
 | Auth / Identity | Who can do what? How is identity established? | Cross-cutting — retrofitting auth is expensive and error-prone |
 | Security model | What are the trust boundaries? What is sensitive? | Determines encryption, network topology, access patterns |
 
