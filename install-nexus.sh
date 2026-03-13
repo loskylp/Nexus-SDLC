@@ -37,6 +37,7 @@ Agents installed:
   nexus-planner        Decomposition — ordered Task Plan
   nexus-builder        Execution — implements one task at a time
   nexus-verifier       Verification — tests implementation against criteria
+  nexus-devops         Delivery infrastructure — CI/CD, environments, config management
   nexus-integrator     Assembly — prepares deliverable for Nexus Merge
 EOF
 }
@@ -69,6 +70,9 @@ claude_meta() {
             ;;
         planner.md)
             echo 'nexus-planner|Nexus SDLC — Planner: Turns approved Requirements List and Architect output into an ordered Task Plan. Invoke after the Requirements Gate. Also handles plan revisions after demo feedback, spike findings, or Nexus-invoked release map reviews.|opus|blue'
+            ;;
+        devops.md)
+            echo 'nexus-devops|Nexus SDLC — DevOps: Builds and maintains the delivery infrastructure — CI/CD pipelines, environments, configuration management, and production monitoring. Not invoked at Casual. At Commercial and above, invoke to set up the pipeline before Builder begins, provision environments in parallel with Builder tasks, and prepare production before the Integrator cuts a release.|sonnet|gray'
             ;;
         verifier.md)
             echo 'nexus-verifier|Nexus SDLC — Verifier: Verifies a Builder implementation against task acceptance criteria and the requirement Definition of Done. Invoke after each Builder output. Writes and runs tests, produces a structured verification report.|sonnet|cyan'
