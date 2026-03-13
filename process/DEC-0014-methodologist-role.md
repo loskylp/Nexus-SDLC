@@ -39,13 +39,17 @@ The Manifest declares:
 
 1. **Selected Profile and Artifact Weight** — "This is a [Profile] project. The swarm will operate in [ArtifactWeight] mode."
 
-2. **Active Agents** — Which agents from the taxonomy are active for this project. A Casual project might activate only Planner, Coder, and QA. A Critical project activates the full roster including Analyst, Auditor, Security, and Reviewer.
+2. **Active Agents** — Which agents from the taxonomy are active for this project. A Casual project might activate only Planner, Builder, and Verifier. A Critical project activates the full roster including Analyst, Auditor, Sentinel, and Architect.
 
 3. **Documentation Requirements Per Agent** — How much each active agent produces. In Sketch mode, the Planner produces a task list. In Blueprint mode, the Planner produces a formal task breakdown with requirement traceability, dependency graphs, and risk annotations.
 
-4. **Agent Combination Rules** — Whether agents may be combined for this project. In a Casual project, the Reviewer and QA roles might be combined into a single verification agent. In a Critical project, they are always separate.
+4. **Agent Combination Rules** — Whether agents may be combined for this project. In a Casual project, the Verifier might perform a light security check rather than invoking Sentinel separately. In a Critical project, Verifier and Sentinel are always separate.
 
-5. **Human Gate Configuration** — Which gates are active. Casual projects may use only NEXUS MERGE (skip NEXUS CHECK for speed). Critical and Vital projects use all gates including additional mid-execution reviews.
+5. **Human Gate Configuration** — Which gates are active. Casual projects may use only Demo Sign-off (skip Requirements Gate and Plan Gate for speed). Critical and Vital projects use all gates.
+
+6. **CD Philosophy** — Continuous Deployment, Continuous Delivery, or Cycle-based (determines Go-Live trigger).
+
+7. **max_iterations** — Iterate loop bound for the execution/verification cycle.
 
 ### Continuous Lifecycle Role
 
@@ -56,6 +60,7 @@ The Methodologist is not a bootstrap agent that runs once and is retired. It is 
 | Trigger | What it signals |
 |---|---|
 | Project start | Initial configuration — produces first Manifest |
+| Demo Sign-off | Orchestrator hands control to Methodologist with one question: "Is there anything you want to change for the next iteration?" If yes, Methodologist reconfigures before next cycle. |
 | End of each major phase | Process retrospective — is the current profile still appropriate? |
 | Team composition change | More or fewer humans changes coordination needs |
 | Scope or criticality shift | A PoC gaining users; a tool becoming customer-facing |
@@ -82,13 +87,15 @@ The Orchestrator receives the current Methodology Manifest as its configuration.
 
 ## Rationale
 
-**Why a separate agent, not a section of the Orchestrator prompt:** Separation of concerns. The Orchestrator's prompt is already complex — it manages phase transitions, task routing, escalation, and context assembly. Adding project assessment and swarm configuration to the same prompt would overload it and blur the boundary between "what process to use" and "how to execute the process." The Methodologist has a different input (human intake answers), a different output (Manifest), and a different lifecycle (runs once, not continuously).
+**Why a separate agent, not a section of the Orchestrator prompt:** Separation of concerns. The Orchestrator's prompt is already complex — it manages phase transitions, task routing, escalation, and context assembly. Adding project assessment and swarm configuration to the same prompt would overload it and blur the boundary between "what process to use" and "how to execute the process." The Methodologist has a different input (human intake answers), a different output (Manifest), and a different lifecycle (runs once per trigger, not continuously).
 
 **Why the Manifest weight matches the profile:** Self-consistency. If you are assessing a Casual project, a 10-page methodology document is itself over-engineered. If you are assessing a Vital project, a one-paragraph configuration is recklessly light. The Methodologist practices what it preaches.
 
 **Why intake questions, not automated assessment:** The three dimensions (team, nature, scale) require information the system cannot infer from a codebase. How many people are involved? What happens if it fails? These are human knowledge. The Methodologist elicits this per DEC-0009 — asking one question at a time, accepting approximate answers, making provisional assumptions for the rest.
 
-**Why the Methodologist can combine agent roles:** Right-sizing. A solo developer running a PoC does not need seven separate agent invocations. Combining Reviewer and QA into a single verification pass, or having the Planner also perform light analysis, reduces operational friction without sacrificing the concern-separation principle for projects where the stakes do not justify the overhead.
+**Why the Methodologist can combine agent roles:** Right-sizing. A solo developer running a PoC does not need seven separate agent invocations. Combining Verifier with light security checks, or having the Planner also perform light analysis, reduces operational friction without sacrificing the concern-separation principle for projects where the stakes do not justify the overhead.
+
+**Why the Methodologist re-activates at Demo Sign-off:** The end of a working cycle is the best moment to reconsider the process. The Orchestrator hands off with one specific question — "is there anything you want to change?" — which keeps the retrospective lightweight. The Methodologist only produces an updated Manifest if the answer is yes.
 
 ## Consequences
 
@@ -96,7 +103,7 @@ The Orchestrator receives the current Methodology Manifest as its configuration.
 - The swarm is right-sized for every project from the start
 - The Orchestrator has a clear configuration to operate from, not implicit assumptions
 - The human gets explicit confirmation of what process will be used before any work begins
-- Adding the Methodologist to DEC-0001's taxonomy is clean — it occupies a new tier (Tier 0 — Configuration) that runs before the Control Plane
+- Adding the Methodologist to DEC-0001's taxonomy is clean — it occupies Tier 0 (Configuration) that runs before the Control Plane
 
 **Harder:**
 - The Methodologist agent definition must encode enough methodology knowledge to make good profile assessments
@@ -106,7 +113,7 @@ The Orchestrator receives the current Methodology Manifest as its configuration.
 **Newly constrained:**
 - No swarm execution begins without a Methodology Manifest
 - The Orchestrator's agent definition must include instructions for reading and following the Manifest
-- DEC-0001 (Agent Role Taxonomy) should be updated to include the Methodologist at Tier 0
+- After every Demo Sign-off, the Orchestrator must hand control to the Methodologist before starting the next cycle
 
 ## Alternatives Considered
 

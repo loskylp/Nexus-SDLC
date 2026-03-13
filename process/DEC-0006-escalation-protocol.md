@@ -1,14 +1,12 @@
 # DEC-0006: Escalation Protocol and Failure Mode Taxonomy
 
-**Status:** Proposed
-**Date:** 2026-03-12
+**Status:** Accepted (revised — programmatic schema replaced by markdown format)
+**Date:** 2026-03-12 (revised)
 **Deciders:** Nexus Method Architect
 
 ## Context
 
-The RATIONALE.md identifies "Graceful Degradation" as a core design goal: when agents fail to converge, the system must fail safely and informatively, surfacing a clear escalation with failure context, attempted approaches, and a specific question. Escalation paths must be first-class citizens, not afterthoughts.
-
-We need to define: what failure modes exist, how they are classified, what the escalation path is for each, and how the human receives escalation information.
+The initial proposal described a NexusEscalation structured schema with typed fields (escalation_id, severity, attempts array, options array, default_action). This was a programmatic concept designed for a software runtime. With no software runtime (OQ-0005), all escalations are markdown Nexus Briefings prepared by the Orchestrator and delivered to the Nexus.
 
 ## Decision
 
@@ -16,83 +14,86 @@ We need to define: what failure modes exist, how they are classified, what the e
 
 | Failure Mode | Description | Detection | Response |
 |---|---|---|---|
-| **Verification Failure** | Tests fail, lint errors, type errors | QA/Reviewer/Security reports | Autonomous retry within iterate bounds (DEC-0002) |
-| **Convergence Failure** | Iterate loop exhausted without passing verification | Orchestrator detects max_iterations or non-decreasing failures | NEXUS ESCALATION |
-| **Plan Infeasibility** | Agent determines a task cannot be completed as specified | Coder or QA raises infeasibility signal | Orchestrator validates, then NEXUS ESCALATION |
-| **Ambiguity Detection** | Agent encounters ambiguous requirement that has multiple valid interpretations | Any agent flags ambiguity | Orchestrator collects interpretations, then NEXUS ESCALATION |
-| **Tool Failure** | External tool (compiler, test runner, linter) fails unexpectedly | Agent detects non-zero exit code with unexpected error | Orchestrator retries once; if persistent, NEXUS ESCALATION |
-| **Scope Creep Detection** | Agent determines the task requires changes outside its authorized scope | Coder detects need to modify files outside task scope | NEXUS ESCALATION with scope expansion request |
-| **Security Alert** | Security agent detects a vulnerability in generated code or dependencies | Security report with severity rating | Critical/High severity: immediate NEXUS ESCALATION. Medium/Low: included in verification report. |
+| Verification Failure | Tests fail, lint errors, type errors | Verifier reports | Autonomous retry within iterate bounds |
+| Convergence Failure | Iterate loop exhausted without passing | Orchestrator detects max_iterations or non-decreasing failures | NEXUS ESCALATION |
+| Plan Infeasibility | Agent determines a task cannot be completed as specified | Builder raises infeasibility signal | Orchestrator validates, then NEXUS ESCALATION |
+| Ambiguity Detection | Agent encounters ambiguity requiring domain knowledge | Any agent flags | Orchestrator surfaces to Nexus with one specific question (DEC-0009) |
+| Scope Creep Detection | Task requires changes outside authorized scope | Builder detects | NEXUS ESCALATION with scope expansion request |
+| Security Alert | Sentinel finds Critical or High severity findings | Sentinel Security Report | Demo Sign-off is blocked; findings listed in Demo Sign-off Briefing |
+| Dependency Rejection | Sentinel REJECTs a new dependency | Sentinel Dependency Review | Escalate to Nexus — Builder does not adopt without Nexus decision |
+| Architectural Conflict | Two agents produce conflicting artifacts | Orchestrator detects | Hold conflicting artifact; NEXUS ESCALATION before proceeding |
+| Incident (Production) | Bug reported against production | Nexus reports | Orchestrator asks Nexus to choose track (next-cycle or hotfix) if not stated; route to Planner |
+| Escalation Pattern | Same failure mode appears 3+ times | Orchestrator detects | Flag to Methodologist as potential process issue |
 
-### Escalation Message Format
+### Escalation Format
 
-Every escalation to the Nexus must use this structure:
+The Orchestrator uses the Nexus Briefing format for all escalations:
 
+```markdown
+# Nexus Briefing — [Escalation description]
+**Project:** [Name] | **Date:** [date] | **Phase:** [phase]
+
+## Status
+[One sentence: where we are and what is blocked]
+
+## What Happened
+[Compact summary of what led to this escalation — including what was already tried]
+
+## What Needs Your Decision
+[The specific approval, amendment, or answer required — one question, per DEC-0009]
+
+## Risks or Concerns
+[Anything the Nexus should be aware of even if no action is needed now]
+
+## To Proceed
+[Exact instruction: "Approve to continue", "Choose track: next-cycle or hotfix", etc.]
 ```
-NexusEscalation {
-  escalation_id: string
-  timestamp: ISO8601
-  failure_mode: FailureModeType
-  severity: Critical | High | Medium | Low
 
-  // What happened
-  summary: string (1-3 sentences, human-readable)
-  task_context: {task_id, task_description, phase}
+### Escalation Log
 
-  // What was tried
-  attempts: [{iteration, approach, result}]
+Every escalation received and every Nexus decision is recorded as an ESC-NNN entry in the Orchestrator's escalation log:
 
-  // What the swarm needs
-  question: string (specific, actionable question for the human)
-  options: [{option, trade_offs}]  // if applicable
-
-  // What happens if the human does nothing
-  default_action: string (e.g., "task will be skipped", "execution will pause")
-}
+```markdown
+## ESC-NNN — [date]
+**From:** [Agent] | **Type:** [failure mode]
+**Description:** [What happened]
+**Decision:** [How it was resolved: routed / amended / escalated to Nexus / aborted]
+**Outcome:** [What happened as a result]
 ```
 
 ### Escalation Principles
 
-1. **Every escalation must contain a specific question.** "Something went wrong" is not an escalation. "The authentication module requires either JWT or session-based auth — which approach aligns with your infrastructure?" is an escalation.
-
-2. **Every escalation must include what was already tried.** The human should never have to ask "did you try X?" because X should be listed in the attempts.
-
-3. **Escalations are batched when possible.** If multiple tasks hit escalation simultaneously, the Orchestrator consolidates them into a single briefing rather than interrupting the human multiple times.
-
-4. **The human can respond with: resolve (answer the question), amend (change the plan), skip (deprioritize the task), or abort (stop the lifecycle).** These are the only valid escalation responses.
-
-5. **No silent failures.** If an agent encounters any condition it cannot handle, it must signal the Orchestrator. An agent that silently swallows an error is a design defect.
+1. **Every escalation must contain a specific question.** Per DEC-0009: one question, not a decision matrix.
+2. **Every escalation must include what was already tried.** The Nexus should not need to ask "did you try X?"
+3. **No silent failures.** An agent that cannot complete its task must signal the Orchestrator.
+4. **Production incidents require identification.** If an incident description is too vague to identify the violated requirement, the Orchestrator surfaces one specific question before creating any BUG task.
+5. **Escalation log is part of the traceability trail.** It is preserved for the lifetime of the project.
 
 ## Rationale
 
-**Why a taxonomy rather than a generic "error" category:** Different failure modes require different responses. A verification failure should be retried autonomously; a scope creep detection should not. The taxonomy encodes this knowledge into the system design, preventing the Orchestrator from treating all failures uniformly.
+**Why markdown over programmatic schema:** Consistent with OQ-0005 (no runtime). The Nexus reads escalations directly — human-readable markdown is more useful than a JSON object.
 
-**Why batched escalations:** The Crystal methodology principle — reduce human cognitive load. Five sequential interruptions asking unrelated questions is far more costly to the human than one consolidated briefing with five items.
+**Why security findings are not standalone escalations:** Sentinel findings that block Demo Sign-off are included in the Demo Sign-off Briefing, keeping gate decisions consolidated. The Nexus sees the full cycle picture at one gate rather than receiving separate escalation interrupts.
 
-**Why four response types (resolve, amend, skip, abort):** These cover the complete decision space. The human can answer the question (resolve), change the upstream plan (amend), defer the work (skip), or halt everything (abort). Any other response can be decomposed into one of these four.
-
-**Why a default action for no-response:** The system must be able to make progress or halt cleanly if the human is unavailable. A default action (usually "pause and wait") ensures the system does not take unintended action in the absence of human input.
+**Why escalation patterns flag to the Methodologist:** Three occurrences of the same failure mode signals a process issue, not just a task issue. The Methodologist is the appropriate agent to diagnose and reconfigure the process — the Orchestrator should not make process changes unilaterally.
 
 ## Consequences
 
 **Easier:**
-- Humans receive structured, actionable escalation messages rather than raw error dumps
-- The Orchestrator has a complete decision tree for every failure mode
-- Batched escalations reduce interrupt frequency
+- Nexus receives structured, actionable escalation messages
+- The Orchestrator has a complete taxonomy for every failure mode
+- The escalation log provides an audit trail of all significant decisions
 
 **Harder:**
-- Every agent must implement the failure detection and signaling protocol
-- The Orchestrator must implement escalation batching logic
-- The escalation message format requires discipline — it is easier to dump a stack trace than to formulate a specific question
+- The Orchestrator must implement the escalation log diligently — every escalation received and decision made
+- Escalation quality depends on the Orchestrator formulating a specific question, which requires judgment
 
 **Newly constrained:**
 - Agents cannot silently retry indefinitely — all failures must be surfaced through the taxonomy
-- The human must respond using one of four structured response types
+- The Orchestrator routes production incidents by asking the Nexus to choose the track before creating tasks
 
 ## Alternatives Considered
 
-**Unstructured escalation (free-text messages to human):** Lower implementation cost but transfers the interpretation burden to the human. The human would need to parse agent output, determine the failure mode, and figure out what question is being asked. Rejected for violating the Crystal principle of cognitive load reduction.
+**NexusEscalation structured schema (initial proposal):** Typed object with attempt arrays and option lists. Replaced with markdown Nexus Briefing format — same information, human-readable, no runtime required.
 
-**No escalation (agents retry indefinitely or abort):** Simpler but violates the "human in the middle" principle. An agent that retries indefinitely wastes compute. An agent that aborts without informing the human wastes the work already completed. Rejected for both waste and safety reasons.
-
-**Per-agent escalation directly to human:** Each agent contacts the human independently. Creates interrupt storms and loses the Orchestrator's ability to batch and prioritize. Rejected for cognitive overload risk.
+**Per-agent escalation directly to the Nexus:** Each agent contacts the Nexus independently. Creates interrupt storms and loses the Orchestrator's ability to batch, contextualize, and prioritize. Rejected.

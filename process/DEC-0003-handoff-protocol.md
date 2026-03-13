@@ -1,87 +1,84 @@
-# DEC-0003: Agent Handoff Protocol — Gated Milestone with Continuous Integration Hybrid
+# DEC-0003: Agent Communication and Handoff Protocol
 
-**Status:** Proposed
-**Date:** 2026-03-12
-**Deciders:** Nexus Method Architect
+**Status:** Accepted (revised — initial CI hybrid proposal replaced)
+**Date:** 2026-03-12 (revised through conversation)
+**Deciders:** Nexus Method Architect (initial proposal); Nexus (Human) corrected to hub model
 
 ## Context
 
-Three handoff protocols are standard in SDLC methodology:
-1. **Scrum-style Backlog Handoff** — agents pull from a prioritized queue, sprint-bounded
-2. **XP-style Continuous Integration Handoff** — agents push outputs to a shared stream, no batching
-3. **RUP-style Gated Milestone Handoff** — work advances only through quality gates
+The initial proposal described a "hybrid protocol": gated milestones between lifecycle phases, plus a Continuous Integration-style inner loop where verification agents would feed failure reports directly back to the Builder without Orchestrator mediation. The HandoffEnvelope was a programmatic schema designed for a software runtime. Both assumptions were wrong.
 
-The Nexus SDLC lifecycle (DEC-0002) has clear phase boundaries with human gates, suggesting a gated approach. But within the EXECUTE-VERIFY-ITERATE loop, agents need tight, fast feedback — suggesting continuous integration. We need a protocol that serves both needs.
+Through conversation, the user established the correct model: all inter-agent communication routes through the Orchestrator — it is the hub, not an observer of an inner loop. One exception was added later: the Builder may raise architectural questions directly to the Architect during implementation. The HandoffEnvelope schema was eliminated when OQ-0005 resolved to no software runtime.
 
 ## Decision
 
-Adopt a **hybrid protocol**: Gated Milestone between lifecycle phases, Continuous Integration within the execution loop.
+### Hub Model
 
-### Between Phases: Gated Milestone
+The Orchestrator is the communication hub. All agent handoffs, routing instructions, and escalations pass through it. Agents do not communicate directly with each other, with one declared exception.
 
-Phase transitions (DEFINE->DECOMPOSE, DECOMPOSE->NEXUS CHECK, NEXUS CHECK->EXECUTE, etc.) are gated. The Orchestrator enforces that exit criteria for phase N are met before phase N+1 begins. Artifacts are handed off as structured messages with the following envelope:
+**Routing Instruction format (Orchestrator → Agent):**
 
-```
-HandoffEnvelope {
-  source_agent: AgentID
-  source_role: RoleType
-  target_phase: PhaseID
-  artifact_type: ArtifactType
-  artifact: <structured payload>
-  reasoning_trace: string
-  timestamp: ISO8601
-  project_context_version: int
-}
+```markdown
+# Routing Instruction
+**To:** [Agent name]
+**Phase:** [Current lifecycle phase]
+**Task:** [What the agent should do]
+**Load these artifacts:** [List of artifact files to include as context]
+**Produce:** [Expected output artifact]
+**Iteration:** [N of max N if in iterate loop]
+**Return to:** Orchestrator when complete
 ```
 
-The Orchestrator validates the envelope before routing. Invalid envelopes are rejected with a structured error.
+### The Builder → Architect Direct Path
 
-### Within EXECUTE-VERIFY-ITERATE: Continuous Integration
+During implementation, the Builder may raise architectural questions directly to the Architect without routing through the Orchestrator. This is the only direct agent-to-agent path in the swarm.
 
-Once the plan is approved and execution begins, agents operate in a tight CI-style loop:
-1. Coder produces an artifact and pushes it to the shared working state
-2. Verification agents (Reviewer, QA, Security) are triggered immediately
-3. Failure reports are fed directly back to the Coder without Orchestrator mediation for routing (though the Orchestrator observes and logs)
-4. The loop continues until verification passes or bounds are hit (DEC-0002)
+Protocol:
+1. Builder raises the architectural question to the Architect with enough context to decide
+2. Architect resolves the question and notifies the Orchestrator of any new ADR produced
+3. If the Architect cannot resolve without a Nexus decision, the Architect escalates via the Orchestrator to the Nexus — not directly
 
-This inner loop is **event-driven**, not sprint-bounded. There is no batching of verification feedback.
+**Scope of this exception:** Implementation-time architectural questions only — decisions that the Architect is the authoritative resolver for and that the Builder cannot proceed without. Not a general bypass for any inter-agent communication.
 
-### Task-Level Parallelism
+### Artifact Format
 
-Within the EXECUTE phase, independent tasks (no dependency edges in the task DAG) may execute concurrently. Each independent task runs its own EXECUTE-VERIFY-ITERATE loop. The Integrator assembles results only after all concurrent loops complete.
+All artifacts are markdown files stored in the project repository. There is no programmatic schema, no serialization layer, and no runtime. Routing instructions are structured markdown documents. Agent outputs are markdown files written to declared conventional locations.
 
-Dependent tasks execute sequentially according to the DAG topological order.
+### Parallelism
+
+Within an execution cycle, independent tasks (no dependency edges in the task DAG) may be routed to concurrent Builder sessions. The Planner's dependency graph determines what is independent. The Orchestrator manages concurrent routing and collects completions.
+
+During the verification cycle, the Verifier and Sentinel run concurrently. The Orchestrator collects both reports before preparing the Demo Sign-off Briefing.
 
 ## Rationale
 
-**Why hybrid instead of pure gated:** Pure gated handoffs between every agent interaction would introduce unnecessary latency in the inner loop. The Coder-QA feedback cycle needs to be as tight as possible — this is the XP "10-minute build" principle applied to agentic systems. Adding gate overhead to every test-fix cycle would multiply cycle time without adding value.
+**Why hub model over CI inner loop:** The Orchestrator's state management function depends on seeing all handoffs. An inner loop it only observes creates state it cannot see — breaking its ability to enforce iteration bounds, detect thrashing, and assemble accurate Demo Sign-off briefings. The Orchestrator is not overhead; it is the agent that maintains coherence across the swarm.
 
-**Why hybrid instead of pure CI:** The lifecycle phases (DEFINE through NEXUS MERGE) have fundamentally different actors and quality criteria. A pure CI stream would blur the distinction between "plan is ready for human review" and "code fix is ready for re-test." Phase gates preserve semantic clarity about what kind of transition is happening.
+**Why markdown over programmatic schemas:** No software runtime exists (OQ-0005). Programmatic schemas require parsers, validators, and serialization infrastructure. Markdown is human-readable, version-controllable, and directly loadable into LLM prompts. Structure comes from section headers and declared output formats, not from typed schemas.
 
-**Why event-driven inner loop:** Sprint-bounded inner loops (e.g., "batch all verification results and deliver every N minutes") add artificial latency. When a test fails, the Coder should know immediately. Reinertsen's *Principles of Product Development Flow* demonstrates that batch size is the single largest source of delay in development processes.
+**Why the Builder→Architect exception:** Implementation-time architectural questions require the Architect's judgment and cannot always wait for a routing cycle. The exception is narrow — only for architectural questions the Architect is authoritative to resolve — and the Orchestrator is always notified of outcomes. State remains complete.
 
-**Why the Orchestrator observes but does not mediate the inner loop:** The Orchestrator needs visibility for logging and loop-bound enforcement, but inserting it as a mandatory router in every Coder->QA->Coder cycle would add latency and a single point of failure. The Orchestrator intervenes only when bounds are hit or escalation is needed.
+**Why the CI inner loop proposal was wrong:** It was designed to mirror XP's fast-feedback model. But the feedback path (verification failures → Builder fix) is already fast within a single cycle — the Orchestrator routing adds minimal overhead compared to the value of maintaining complete state. The principle was sound (fast feedback) but the implementation was wrong (bypassing the hub breaks state).
 
 ## Consequences
 
 **Easier:**
-- Inner loop speed is maximized — verification feedback reaches the Coder in the fastest possible path
-- Phase transitions are explicit and auditable
-- Task-level parallelism is well-defined by the DAG structure
+- The Orchestrator has a complete picture of all agent activity at all times
+- Hub routing makes the interaction log complete and auditable
+- Concurrent execution is well-defined — the Orchestrator batches completions
 
 **Harder:**
-- The Orchestrator must maintain two modes of operation: phase-gate enforcement and inner-loop observation
-- The HandoffEnvelope schema must be defined and validated before implementation
-- Event-driven inner loops require a messaging or event system (even if in-process)
+- Every handoff goes through one more routing step than direct communication would require
+- The Orchestrator becomes a potential bottleneck (mitigated by the fact that routing is a lightweight operation)
 
 **Newly constrained:**
-- Every inter-phase handoff must use the envelope format — no informal message passing
-- The Orchestrator must log all inner-loop events even though it does not mediate them
+- Agents do not communicate directly with each other except the Builder→Architect path
+- The Builder→Architect exception requires the Architect to always notify the Orchestrator of outcomes
 
 ## Alternatives Considered
 
-**Pure Scrum-style Backlog:** Tasks in a prioritized queue, agents pull from the top. Clean and simple, but sprint boundaries add artificial delays and do not map well to the DEFINE->MERGE lifecycle which has hard phase semantics. Rejected for poor lifecycle fit.
+**CI inner loop (initial proposal):** Verification agents feed back directly to the Builder. Replaced because it broke the Orchestrator's ability to maintain complete state.
 
-**Pure RUP-style Gated Milestone:** Every handoff goes through a quality gate. Maximally rigorous but adds gate overhead to the inner Coder-QA loop, turning a 3-iteration fix cycle into a 3x-gated process. Rejected for excessive overhead in the execution phase.
+**All communication through Orchestrator with no exceptions:** Fully consistent but creates unnecessary overhead for the specific case of implementation-time architectural questions. The Builder→Architect path is time-sensitive and the Architect is the authoritative resolver. Rejected for that specific case.
 
-**Pure XP-style CI:** All work flows through a single integration stream. Elegant for homogeneous work but loses semantic clarity about which lifecycle phase is active. Makes it harder for the Orchestrator to enforce phase-specific quality criteria. Rejected for insufficient structure.
+**HandoffEnvelope schema (initial proposal):** A programmatic typed structure for all inter-agent messages. Replaced when OQ-0005 resolved to no software runtime.

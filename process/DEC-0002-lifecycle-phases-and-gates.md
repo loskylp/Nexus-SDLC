@@ -1,82 +1,97 @@
 # DEC-0002: Lifecycle Phases and Human Gates
 
-**Status:** Proposed
-**Date:** 2026-03-12
-**Deciders:** Nexus Method Architect
+**Status:** Accepted (revised)
+**Date:** 2026-03-12 (revised substantially through conversation)
+**Deciders:** Nexus Method Architect (initial proposal); Nexus (Human) shaped the gate structure
 
 ## Context
 
-The RATIONALE.md defines a seven-phase lifecycle: DEFINE, DECOMPOSE, NEXUS CHECK, EXECUTE, VERIFY, INTEGRATE, NEXUS MERGE — with an ITERATE loop feeding back from VERIFY/EXECUTE to DECOMPOSE. The CLAUDE.md establishes that the Nexus Check (step 3) and final PR merge (step 5) are non-negotiable human gates.
-
-We need to formalize: (a) the exact entry and exit criteria for each phase, (b) the handoff contracts between phases, (c) whether additional human gates are needed beyond the two mandated ones, and (d) how the iterate loop is bounded.
+The initial proposal described an 8-phase lifecycle (DEFINE, DECOMPOSE, NEXUS CHECK, EXECUTE, VERIFY, ITERATE, INTEGRATE, NEXUS MERGE) with two mandatory human gates and one conditional. Through conversation this evolved substantially: the single Nexus Check was split into three gates with distinct purposes; the ingestion phase was defined as a distinct multi-pass loop; the Integrator was removed; "Nexus Merge" was replaced by two separate decisions — Demo Sign-off (per-cycle feature approval) and Go-Live (release decision, decoupled, with three trigger modes); and the retrospective was embedded at Demo Sign-off with the Methodologist.
 
 ## Decision
 
-Adopt the seven-phase lifecycle with the following formalization:
+### Phases
 
-### Phase Definitions
+**1. Ingestion**
+Analyst elicits requirements and produces the Brief and Requirements List. Auditor validates in a multi-pass loop — every issue triggers a clarification question to the Nexus; the Analyst incorporates the answer and the Auditor re-checks everything. The loop continues until the Auditor produces a clean pass. Ingestion re-opens after every Demo Sign-off when the Nexus introduces new requirements.
 
-| Phase | Entry Condition | Actor(s) | Exit Artifact | Exit Condition |
-|---|---|---|---|---|
-| **DEFINE** | Human initiates | Nexus (Human) | Goal Specification (goal, constraints, acceptance criteria) | Goal spec is non-empty and parseable by Planner |
-| **DECOMPOSE** | Goal spec received | Orchestrator + Planner | Task Plan (atomic tasks, dependency DAG, risk flags, effort estimates) | Plan passes structural validation (no circular deps, all tasks have acceptance criteria) |
-| **NEXUS CHECK** | Task Plan ready | Nexus (Human) | Approved Plan (with optional amendments) | Explicit human approval signal. No timeout-based auto-approval. |
-| **EXECUTE** | Approved Plan | Coder(s) | Implementation artifacts per task | All atomic tasks have produced artifacts |
-| **VERIFY** | Implementation artifacts exist | Reviewer + QA + Security | Verification Report (pass/fail per criterion, structured failure details) | All verification agents have reported |
-| **ITERATE** | Verification failures exist AND iteration budget remaining | Coder + QA (autonomous) | Corrected artifacts | All verification criteria pass OR iteration budget exhausted |
-| **INTEGRATE** | All verifications pass | Integrator | Clean branch + PR summary + diff summary | Branch builds, all tests pass, no merge conflicts |
-| **NEXUS MERGE** | PR ready | Nexus (Human) | Merged PR | Explicit human merge action |
+**2. Decomposition**
+Architect produces architecture artifacts calibrated to the project profile. Auditor performs an architectural audit (UNCOVERED, INCONSISTENCY, UNGROUNDED, INADEQUATE). Planner produces the Task Plan — atomic tasks ordered by risk and value, spike tasks for unresolved unknowns. Scaffolder optionally produces code structure when invoked.
+
+**3. Execution Cycle**
+Builder implements atomic tasks, one at a time. Independent tasks may execute concurrently. Each task produces implementation artifacts and a handoff note.
+
+**4. Verification Cycle**
+Verifier and Sentinel run concurrently. Verifier runs all test layers; produces Verification Report and Demo Script per task. Sentinel performs dependency review and live security testing against staging; produces Security Report. Both report to the Orchestrator.
+
+**5. Go-Live**
+DevOps deploys to production. Scribe produces documentation and release notes. Decoupled from the execution/verification cycle — may target any previously signed-off version, not necessarily the most recent cycle.
 
 ### Human Gates
 
-Two mandatory, one conditional:
+**Requirements Gate**
+The Nexus approves requirements before decomposition begins. This approves enough to proceed — not a complete specification. Big, high-risk requirements must be understood and stable; smaller requirements may surface during execution cycles and demo discovery.
 
-1. **NEXUS CHECK** (mandatory): Human reviews and approves the decomposed plan before any code execution begins. This is the intent-alignment gate.
+**Architecture Gate**
+After the Architect produces artifacts and the Auditor performs an architectural audit, the Orchestrator prepares an Architecture Gate Briefing for the Nexus. The Nexus approves the architectural approach before planning begins. This is a separate decision from requirements approval — "do we understand the approach?" is distinct from "do we understand the problem?"
 
-2. **NEXUS MERGE** (mandatory): Human reviews the final PR, diff summary, and verification reports before merging. This is the quality-and-trust gate.
+**Plan Gate**
+After the Planner produces the Task Plan, the Nexus approves the task decomposition, prioritization (by risk and value), and any spike tasks. Profile-calibrated depth: Casual may be a two-minute exchange; Vital is a formal review with a signed-off Architecture Baseline.
 
-3. **NEXUS ESCALATION** (conditional): Triggered when the iterate loop exhausts its budget without converging. The Orchestrator surfaces: what was attempted, why it failed, and a specific question for the human. The human may amend the plan, relax constraints, or abort. This is the graceful-degradation gate.
+**Demo Sign-off**
+At the end of each execution/verification cycle, the Nexus reviews:
+- The Verification Summary (test results per layer)
+- The Security Summary (Sentinel's report — Critical or High findings block this gate)
+- The Demo (assembled Demo Scripts — the Nexus follows these to explore the running software)
 
-### Iterate Loop Bounds
+Approval authorizes the next cycle. After Demo Sign-off, the Orchestrator hands control to the Methodologist with one question: "Is there anything you want to change for the next iteration?" If yes, the Methodologist reconfigures the swarm before the next cycle begins. If no, the next cycle proceeds directly.
 
-The iterate loop is bounded by two configurable parameters:
-- **max_iterations**: Maximum number of code-verify cycles per atomic task (default: 3)
-- **convergence_signal**: If the verification failure count is not monotonically decreasing over 2 consecutive iterations, escalate immediately (the swarm is thrashing, not converging)
+**Go-Live Gate**
+Decoupled from Demo Sign-off. Triggered by the CD philosophy declared in the Methodology Manifest:
 
-When either bound is hit, the Orchestrator triggers NEXUS ESCALATION.
+| CD Philosophy | Trigger |
+|---|---|
+| **Continuous Deployment** | Automatically triggered when CI is green — no human gate at this step |
+| **Continuous Delivery** | Triggered at Demo Sign-off — the release happens when features are approved |
+| **Cycle-based** | Triggered by the Nexus at any time, against any previously signed-off version |
+
+The Cycle-based model means the Nexus may choose to release a version from January in March, despite additional work completed since. The version being released is the specific signed-off version the Nexus selects — not necessarily the latest cycle.
+
+### Iterate Loop
+
+Within a cycle, the iterate loop is bounded by the Manifest's max_iterations. If verification does not converge, the Orchestrator escalates to the Nexus. The convergence signal (non-decreasing failure count across consecutive iterations) triggers early escalation when thrashing is detected.
 
 ## Rationale
 
-**Why only two mandatory gates:** The RATIONALE.md explicitly identifies human cognitive bandwidth as the primary constraint (Goldratt's Theory of Constraints). Every mandatory gate consumes human attention. The two chosen gates are the minimum set that preserves intent alignment (pre-execution) and output quality (pre-merge). Adding more gates (e.g., mid-execution progress reviews) would reduce the value proposition of the framework.
+**Why three pre-execution gates instead of one:** The original single Nexus Check collapsed three distinct decisions. The Requirements Gate asks "do we understand the problem?" The Architecture Gate asks "do we understand the approach?" The Plan Gate asks "do we agree on what to build first?" These are answered at different times with different information — collapsing them creates false choices.
 
-**Why the iterate loop needs bounds:** Unbounded retry loops are the most dangerous failure mode in agentic systems. An agent that fails and retries indefinitely can consume unlimited compute, drift from the original intent, and produce increasingly incoherent artifacts. The convergence signal (non-decreasing failure count) catches thrashing early.
+**Why Demo Sign-off is separate from Go-Live:** Feature approval and release decisions have different triggers, different audiences, and different consequences. A Nexus may approve features every two weeks (Demo Sign-off) but choose to release to production only quarterly (Go-Live). Separating the gates makes this natural.
 
-**Why NEXUS ESCALATION is conditional, not mandatory:** Most iterate cycles should converge autonomously — that is the core value of the framework. Making escalation mandatory would turn every test failure into a human-gated event, defeating the purpose.
+**Why three CD philosophy models:** Continuous Deployment, Continuous Delivery, and Cycle-based cover the full range of delivery practices without prescribing one. The framework serves projects at all points on the deployment frequency spectrum.
 
-**Why no timeout-based auto-approval at NEXUS CHECK:** Auto-approval under time pressure is a safety anti-pattern. If the human is unavailable, the swarm waits. The cost of waiting is lower than the cost of executing a misaligned plan.
+**Why the retrospective lives at Demo Sign-off:** The end of a working cycle — when software has been built, tested, and demonstrated — is the natural moment to ask "is our process working?" The Methodologist re-activates every cycle to answer this question, not only at project start.
+
+**Why no auto-approval:** A gate waiting for Nexus response waits. The cost of waiting is lower than the cost of executing on a misaligned decision.
 
 ## Consequences
 
 **Easier:**
-- Human cognitive load is minimized — only two mandatory decision points per lifecycle
-- Iterate loop has clear termination semantics, preventing runaway compute
-- Each phase has explicit entry/exit criteria, making orchestrator logic deterministic
+- Each gate has a distinct purpose and distinct approval criteria
+- The Go-Live model is declared upfront in the Methodology Manifest — no ambiguity about when production deployment happens
+- Retrospectives are embedded — process improvement happens naturally, not as a project-end exercise
 
 **Harder:**
-- The human must provide high-quality goal specifications upfront, since the next human interaction is after decomposition
-- If the plan is approved but turns out to be wrong mid-execution, there is no mandatory checkpoint to catch it — the system relies on verification failures and escalation
-- Configuring max_iterations and convergence signals requires empirical tuning per project type
+- Three pre-execution gates add ceremony before any Builder work begins
+- The Nexus must be available at five gate types, not two — though Demo Sign-off and Go-Live may be automated depending on CD philosophy
 
 **Newly constrained:**
-- The Orchestrator must implement a state machine that tracks phase transitions and enforces gate conditions
-- Every phase transition must be logged for audit trail purposes
+- The Orchestrator must track which gates are active (declared in the Manifest) and enforce entry criteria for each
+- Demo Sign-off is blocked if Sentinel has unresolved Critical or High findings — the Orchestrator enforces this condition
 
 ## Alternatives Considered
 
-**More human gates (review after each task):** Provides tighter control but at extreme cognitive cost. A plan with 20 atomic tasks would require 20 human reviews. This collapses back to a code-review workflow with extra steps. Rejected for defeating the managed-autonomy principle.
+**Single Nexus Check (initial proposal):** Combined requirements approval and plan approval into one gate. Created the false choice of either rushing the plan to get to the gate, or delaying requirements approval until planning was complete. Replaced.
 
-**Fewer human gates (only NEXUS MERGE):** Removes the pre-execution alignment check. The swarm could spend significant compute implementing a misunderstood plan before the human sees any output. Rejected for violating the "verifiable intent" design goal.
+**Nexus Merge (initial proposal):** A single release gate that combined feature approval with production deployment. Replaced by Demo Sign-off + Go-Live to support the three CD philosophy models.
 
-**Time-bounded iterate loop (wall-clock timeout):** Simpler than iteration counting but doesn't account for task complexity. A complex refactoring might legitimately take longer. Rejected for being a poor proxy for convergence.
-
-**No convergence signal (just max_iterations):** Simpler but allows the swarm to thrash for all N iterations before escalating. The convergence signal provides early termination when thrashing is detected. Rejected for waste tolerance.
+**No retrospective gate:** Retrospectives would only happen when the Nexus explicitly requested them. Rejected — without a structural trigger, retrospectives don't happen. Embedding it at Demo Sign-off makes it a standing feature of the process.
