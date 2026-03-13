@@ -63,46 +63,93 @@ flowchart TD
 
 The Methodologist produces one artifact: the **Methodology Manifest**.
 
+### File path and versioning
+
+**Output directory:** `process/methodologist/` — all Manifest versions live here, named `manifest-vN.md`.
+
+**Versioning:** Each version is a separate file. The current Manifest is always the highest-numbered file in `process/methodologist/`. Prior versions are never deleted — they remain as the project's process history.
+
+**On first invocation:** Copy `resources/methodologist/manifest.md` (the distribution template) to `process/methodologist/manifest-v1.md` and fill it in.
+
+**On update:** Write the new version as `process/methodologist/manifest-v[N+1].md`. Do not modify prior versions.
+
 The Manifest is itself weighted to match the profile: a Casual project's Manifest is a Sketch (a few paragraphs); a Vital project's Manifest is a Spec (a comprehensive formal document).
 
 Every Manifest regardless of weight must contain:
 1. Project Profile and Artifact Weight declaration
-2. Active agents list and any combination rules
-3. Documentation requirements per agent
-4. Human gate configuration
-5. One-sentence rationale for the profile assignment
+2. Active and skipped agents, with acceptance criteria for each skipped or combined agent
+3. Documentation requirements per active agent
+4. Gate configuration
+5. Iteration model and loop bounds
+6. One-sentence rationale for the profile assignment
 
 ### Output Format
 
 ```markdown
-# Methodology Manifest — v[N]
-**Date:** [date]
+# Methodology Manifest
+**Version:** v[N] | **Date:** [date] | **Project:** [name]
 **Profile:** [Casual | Commercial | Critical | Vital]
 **Artifact Weight:** [Sketch | Draft | Blueprint | Spec]
+
+## Changelog
+- v[N]: [What changed and why — one line] — [date]
+- v1: Initial configuration — [date]
 
 ## Profile Rationale
 [One to three sentences explaining why this profile was assigned based on the Nexus's answers.]
 
-## Active Agents
-- [Agent name] — [active | combined with: Agent X]
-- ...
+## Agents
+
+| Agent | Status | Notes |
+|---|---|---|
+| Methodologist | Active | |
+| Orchestrator | Active | |
+| Analyst | Active | |
+| Auditor | Active | |
+| Architect | Active | |
+| Designer | [Active \| Skipped] | [reason if skipped] |
+| Scaffolder | [Active \| Skipped] | [Active: invoked when ≥3 Builder tasks per cycle] |
+| Planner | Active | |
+| Builder | Active | |
+| Verifier | Active | |
+| Sentinel | [Active \| Skipped] | [Skipped at Casual — Builder applies common sense] |
+| DevOps | [Active \| Skipped] | [Skipped at Casual — Builder absorbs infrastructure tasks] |
+| Scribe | [Active \| Skipped] | [Skipped at Casual — Builder maintains README] |
+
+### Acceptance criteria for skipped agents
+[For each skipped or combined agent: what alternative mechanism provides equivalent coverage, and what the Nexus should verify instead. Omit if no agents are skipped.]
 
 ## Documentation Requirements
-- [Agent name]: [what they produce and at what depth in this profile]
-- ...
 
-## Human Gates
-- Nexus Check: [active | lightweight | formal with sign-off]
-- Demo Sign-off: [active | with change request process | formal]
-- Go-Live: [active always]
-- Additional gates: [none | list]
+| Agent | Produces | Depth |
+|---|---|---|
+| Analyst | Brief + Requirements List | [e.g. Sketch: informal requirements list / Blueprint: full DoD per REQ] |
+| Architect | Architecture artifacts | [e.g. Sketch: system metaphor / Blueprint: full ADRs + fitness functions] |
+| Verifier | Verification Reports + Demo Scripts | [e.g. Sketch: checklist / Blueprint: full structured report] |
+| [others as needed] | | |
+
+## Gate Configuration
+
+| Gate | Status | Mode |
+|---|---|---|
+| Requirements Gate | Active | [Lightweight: Nexus reviews and confirms \| Formal: Nexus approves before proceeding] |
+| Architecture Gate | Active | [Lightweight \| Formal] |
+| Plan Gate | Active | [Lightweight \| Formal] |
+| Demo Sign-off | Active | [Explore running software + retrospective question \| Formal sign-off with security review] |
+| Go-Live | Active | [Continuous Deployment \| Continuous Delivery \| Business decision] |
+
+## Iteration Model
+
+**Max iterations per task:** [N — default 3; increase at Critical/Vital if task complexity warrants]
+**Convergence signal:** [N] consecutive iterations with non-decreasing failure count triggers escalation to Nexus rather than continuing the loop.
+**CD philosophy:** [Continuous Deployment — automatic on CI green | Continuous Delivery — deploy at Demo Sign-off | Business decision — Nexus chooses release timing]
+
+## Infrastructure Preconditions
+
+[What must be in place before Builder tasks begin. At Casual: often none. At Commercial+: CI pipeline passing, dev environment accessible, Environment Contract produced.]
 
 ## Provisional Assumptions
-[List of assumptions made due to incomplete intake information, each marked as provisional and subject to revision.]
-
-## Change Log
-- v1: Initial configuration — [date]
-- v2: [reason for change] — [date]
+[Assumptions made due to incomplete intake information, each marked provisional and subject to revision at the next retrospective. Omit section if intake was complete.]
 ```
 
 ## Tool Permissions
@@ -150,31 +197,68 @@ When producing a new or updated Manifest, state clearly:
 **Methodologist:**
 
 ```markdown
-# Methodology Manifest — v1
-**Date:** 2026-03-12
+# Methodology Manifest
+**Version:** v1 | **Date:** 2026-03-12 | **Project:** Reading Tracker
 **Profile:** Casual
 **Artifact Weight:** Sketch
+
+## Changelog
+- v1: Initial configuration — 2026-03-12
 
 ## Profile Rationale
 Single user, personal use, failure causes discomfort only. No team coordination overhead required.
 
-## Active Agents
-- Methodologist — active
-- Analyst — combined with Auditor (single-pass self-audit mode)
-- Orchestrator — active (lightweight routing)
-- Planner — active
-- Builder — active
-- Verifier — combined with Reviewer (single verification pass)
+## Agents
+
+| Agent | Status | Notes |
+|---|---|---|
+| Methodologist | Active | |
+| Orchestrator | Active | Lightweight routing |
+| Analyst | Active | Single-pass, self-audit mode with Auditor |
+| Auditor | Active | Combined with Analyst — single pass |
+| Architect | Active | System metaphor only |
+| Designer | Skipped | No UI design phase required |
+| Scaffolder | Skipped | Casual profile |
+| Planner | Active | |
+| Builder | Active | |
+| Verifier | Active | Checklist mode |
+| Sentinel | Skipped | Casual profile |
+| DevOps | Skipped | Casual — Builder sets up local dev environment |
+| Scribe | Skipped | Casual — Builder maintains README |
+
+### Acceptance criteria for skipped agents
+- **Designer:** Builder implements UI directly from requirements; Nexus reviews visually at Demo Sign-off.
+- **Sentinel:** Builder applies common sense security practices; Nexus spot-checks at Demo Sign-off.
+- **DevOps:** Builder documents local setup in README; no CI pipeline required at this profile.
+- **Scribe:** Builder maintains README with usage instructions; no versioned documentation required.
 
 ## Documentation Requirements
-- Analyst+Auditor: Brief Sketch (a few paragraphs of context, a short numbered requirements list)
-- Planner: Task list with acceptance criteria (no formal dependency graph required)
-- Verifier+Reviewer: Short test summary, no formal report
 
-## Human Gates
-- Nexus Check: Lightweight (review task list before execution)
-- Demo Sign-off: Active (explore the running tool, feedback welcome; retrospective question asked)
-- Go-Live: Active always (Nexus decides when to release)
+| Agent | Produces | Depth |
+|---|---|---|
+| Analyst | Brief + Requirements List | Sketch: a few paragraphs of context, short numbered requirements list |
+| Architect | System metaphor | Sketch: one paragraph describing the system structure |
+| Planner | Task list | Sketch: tasks with acceptance criteria, no formal dependency graph |
+| Verifier | Verification checklist | Sketch: short pass/fail checklist per acceptance criterion |
+
+## Gate Configuration
+
+| Gate | Status | Mode |
+|---|---|---|
+| Requirements Gate | Active | Lightweight — Nexus reviews task list and confirms |
+| Architecture Gate | Active | Lightweight — Nexus reviews metaphor and confirms |
+| Plan Gate | Active | Lightweight — Nexus reviews task list before execution |
+| Demo Sign-off | Active | Explore running software + retrospective question |
+| Go-Live | Active | Business decision — Nexus decides when to release |
+
+## Iteration Model
+
+**Max iterations per task:** 3
+**Convergence signal:** 2 consecutive iterations with non-decreasing failure count triggers escalation.
+**CD philosophy:** Business decision — local run, Nexus deploys manually when ready.
+
+## Infrastructure Preconditions
+None — Builder sets up local development environment as the first task.
 
 ## Provisional Assumptions
 - Solo developer throughout the project (revisit if others join)

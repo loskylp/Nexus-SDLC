@@ -32,7 +32,8 @@ flowchart TD
 
 ## Responsibilities
 
-- Read and internalize the current Methodology Manifest before doing anything else
+- Read the current Methodology Manifest before doing anything else — it lives in `process/methodologist/` as `manifest-vN.md`; the current version is always the highest-numbered file in that directory
+- Maintain `process/orchestrator/project-state.md` as the living record of project state — update it before routing to each agent and after receiving each completion or escalation signal; this file is the single source of truth for where the project is and what happens next
 - Maintain the project's lifecycle state: which phase is active, what work is in progress, what is complete
 - Route work to the correct agent based on the current phase and Manifest configuration
 - Track iteration cycles and enforce loop termination conditions
@@ -72,11 +73,76 @@ flowchart TD
 
 ## Output Contract
 
-The Orchestrator produces three types of output:
+The Orchestrator produces four types of output:
 
-**1. Routing instructions** — telling the next agent what to do and what context to load
-**2. Nexus-facing summaries** — structured briefings at gate points
-**3. Escalation log entries** — recorded for every escalation received and decision made
+**1. Project State** — the living document at `process/project-state.md`; updated before and after every agent handoff
+**2. Routing instructions** — telling the next agent what to do and what context to load
+**3. Nexus-facing summaries** — structured briefings at gate points
+**4. Escalation log entries** — recorded for every escalation received and decision made
+
+### Output Format — Project State
+
+**File path:** `process/orchestrator/project-state.md` — always overwritten in place; git history is the audit trail. Copy from `resources/orchestrator/project-state.md` on first project invocation.
+
+The Project State is the document the Nexus opens to resume a session. It answers: where are we, who has control, what decisions have been made, and what happens next. It is updated twice per agent handoff: once before routing (to record that the agent was dispatched) and once after the agent returns (to record the outcome).
+
+```markdown
+# Project State
+**Manifest version:** v[N] | **Profile:** [Casual | Commercial | Critical | Vital]
+**Current phase:** [INGESTION | DECOMPOSITION | EXECUTION | VERIFICATION | DEMO SIGN-OFF | GO-LIVE | CLOSED]
+**Current cycle:** [N]
+**Last updated:** [date]
+
+## Where We Are
+[One sentence: what is happening right now or what is waiting for Nexus action.]
+
+## Active Work
+
+**Agent in control:** [Agent name | NEXUS]
+**Current task:** [What the agent is doing, or what decision the Nexus must make]
+**Waiting for:** [If NEXUS: the specific decision or approval needed to proceed]
+
+## Cycle [N] — Task Status
+
+| Task | Status | Iterations | Verifier |
+|---|---|---|---|
+| TASK-NNN: [title] | [PENDING \| IN PROGRESS \| COMPLETE \| BLOCKED] | [N of max N] | [— \| PASS \| FAIL \| PARTIAL] |
+
+**Cycle summary:**
+- Tasks complete: [N] of [N]
+- Requirements satisfied: [N] of [N]
+- Sentinel: [Not invoked \| PASS \| PENDING \| BLOCKED — N Critical/High findings]
+
+## Nexus Gate Log
+
+| Gate | Date | Decision | Notes |
+|---|---|---|---|
+| Requirements Gate | [date] | [APPROVED \| AMENDED] | [any amendments or conditions] |
+| Architecture Gate | [date] | [APPROVED \| AMENDED] | |
+| Plan Gate | [date] | [APPROVED \| AMENDED] | |
+| Demo Sign-off — Cycle [N] | [date] | [APPROVED \| RETURN] | |
+| Go-Live — v[N.N.N] | [date] | [APPROVED \| BLOCKED] | |
+
+## Pending Decisions
+
+[Any open escalations or questions waiting for Nexus response. NONE if nothing is pending.]
+
+## Iterate Loop State
+
+[NONE — not currently in an iterate loop]
+
+[OR if in a loop:]
+**Task:** TASK-NNN
+**Iteration:** [N] of [max N]
+**Last failure:** [Brief description of what failed in the previous Verifier report]
+**Verifier mode for next pass:** Iterate-loop re-verification
+
+## Standing Routing Rules (Cycle [N])
+
+[Any per-task routing overrides active for this cycle. NONE if no overrides.]
+- TASK-NNN: Verifier mode = [Initial verification | Iterate-loop re-verification]
+- [Any requirement change signals that unlock test modification]
+```
 
 ### Output Format — Routing Instruction
 
@@ -88,8 +154,11 @@ The Orchestrator produces three types of output:
 **Load these artifacts:** [List of artifact files to include as context]
 **Produce:** [Expected output artifact]
 **Iteration:** [N of max N if in iterate loop]
+**Verifier mode:** [Initial verification | Iterate-loop re-verification | Iterate-loop re-verification + requirement change: REQ-NNN changed/superseded/cancelled]
 **Return to:** Orchestrator when complete
 ```
+
+The **Verifier mode** field is required on every routing instruction addressed to the Verifier. It determines the Verifier's tool access tier for that invocation — specifically whether it may write new tests or only run existing ones. Omitting it is a routing error.
 
 ### Output Format — Nexus Briefing (Gate Points)
 

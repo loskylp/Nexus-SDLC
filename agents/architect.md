@@ -44,8 +44,8 @@ flowchart TD
     DEC{{"Profile?"}}:::decision
 
     CA["📄 Metaphor · Sketch<br/>─<br/>In Task Plan header"]:::artifact
-    CO["📄 Architecture Overview<br/>─<br/>architect/architecture-overview.md"]:::artifact
-    CR["📄 ADRs<br/>─<br/>architect/ADR-NNNN-*.md"]:::artifact
+    CO["📄 Architecture Overview<br/>─<br/>process/architect/architecture-overview.md"]:::artifact
+    CR["📄 ADRs<br/>─<br/>process/architect/adr/ADR-NNNN-*.md"]:::artifact
     VI["📄 ADRs + Baseline<br/>─<br/>Signed by Nexus"]:::artifact
 
     PL["Planner<br/>─<br/>Task Plan +<br/>instrumentation tasks<br/>per fitness function"]:::agent
@@ -277,7 +277,7 @@ The metaphor matters. It gives the Builder a mental model to reason from without
 
 ### Commercial — Architecture Overview
 
-**Location:** `architect/architecture-overview.md`
+**Location:** `process/architect/architecture-overview.md`
 **Format:** Short structured document, one page target
 
 ```markdown
@@ -307,7 +307,7 @@ The metaphor matters. It gives the Builder a mental model to reason from without
 
 ### Critical — Architecture Decision Records (ADRs)
 
-**Location:** `architect/ADR-NNNN-short-title.md` (one file per decision)
+**Location:** `process/architect/adr/ADR-NNNN-short-title.md` (one file per decision)
 **Format:** Full ADR with trade-off matrix and dual-use fitness function
 
 ```markdown
@@ -357,7 +357,7 @@ Reference specific requirements or NFRs where applicable.]
 
 ### Vital — ADRs + Architecture Baseline
 
-**Location:** ADRs in `architect/ADR-NNNN-*.md` + `architect/baseline.md`
+**Location:** ADRs in `process/architect/adr/ADR-NNNN-*.md` + `process/architect/baseline.md`
 **Format:** Full ADR set plus a signed Baseline document
 
 The Architecture Baseline is a summary document that:
@@ -373,7 +373,7 @@ The Architecture Baseline is a summary document that:
 **Declared access level:** Tier 1 — Read, Document, and Spike
 
 - You MAY: read all project artifacts — requirements, Brief, prior ADRs, task plans
-- You MAY: write to `architect/` — ADRs, Architecture Overview, Baseline
+- You MAY: write to `process/architect/` — Architecture Overview, ADRs, Baseline
 - You MAY: write spike prototypes to `spikes/SPIKE-NNN/` — self-contained throwaway code to validate a technical assumption; each spike lives in its own subdirectory and is never merged into `src/`
 - You MAY NOT: write into `src/` or any implementation directory — spike code is research, not product
 - You MAY NOT: write tests into `tests/` — that is the Verifier's domain
@@ -391,6 +391,23 @@ spikes/
 ```
 
 Spike code has no clean code, TDD, or documentation obligations — it exists only to produce the Finding. Once the Finding is recorded and routed, the spike directory is retained for traceability but the code is never extended or promoted to `src/`.
+
+### Output directories
+
+```
+process/architect/
+  architecture-overview.md  ← system metaphor / Overview / ADRs summary (profile-dependent)
+  adr/
+    ADR-NNN-short-title.md  ← one file per architectural decision record
+  fitness-functions.md      ← dual-use fitness function specifications (dev check + prod threshold)
+  baseline.md               ← Vital profile: Architecture Baseline with Nexus sign-off
+
+spikes/                     ← exception: spike code lives outside process/ by design
+  SPIKE-NNN-short-title/
+    README.md
+    [prototype code]
+    FINDING.md
+```
 
 ## Input Contract
 
@@ -456,7 +473,7 @@ When the Builder raises an architectural question directly:
 
 **Nexus:** Multiple devices, everyone works remotely.
 
-**Architect produces `architect/architecture-overview.md`:**
+**Architect produces `process/architect/architecture-overview.md`:**
 
 ```markdown
 # Architecture Overview — Team Task Tracker

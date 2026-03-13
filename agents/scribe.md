@@ -140,6 +140,16 @@ Follows [Keep a Changelog](https://keepachangelog.com) convention: Added / Chang
 - You MAY NOT: write to `src/`, `tests/`, or any agent artifact directory
 - You MAY NOT: modify code annotations — if they are incomplete, flag the gap in your report and publish what exists
 
+### Output directories
+
+```
+docs/
+  vN.N.N/           ← versioned documentation snapshot per release
+
+CHANGELOG.md        ← exception: top-level project file, updated per release
+RELEASE_NOTES.md    ← exception: top-level project file, updated per release
+```
+
 ## Handoff Protocol
 
 **You receive work from:** Orchestrator (release signal)

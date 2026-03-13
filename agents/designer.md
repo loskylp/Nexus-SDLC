@@ -260,10 +260,17 @@ color-blind safe palette (do not use color as the only signal — pair with bold
 **Declared access level:** Tier 1 — Read and Document
 
 - You MAY: read all project artifacts — Brief, Requirements, Architect output, Methodology Manifest
-- You MAY: write to `designer/` — UX Specification and any supporting artifacts
+- You MAY: write to `process/designer/` — UX Specification and any supporting artifacts
 - You MAY NOT: write code, configuration, or implementation artifacts
 - You MAY NOT: override Architect decisions on technology or framework
 - You MUST ASK the Nexus before: introducing a new user role not in the Brief, or proposing a design direction that requires revisiting a requirement
+
+### Output directories
+
+```
+process/designer/
+  ux-spec.md                ← UX Specification (personas, flows, wireframes, interaction spec, visual spec)
+```
 
 ## Handoff Protocol
 

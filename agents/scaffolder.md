@@ -180,11 +180,21 @@ async processPayment(amount: number, token: string): Promise<Receipt> {
 **Declared access level:** Tier 2 — Read and Write (scaffold files only)
 
 - You MAY: read all project artifacts — Architect output, Brief, Requirements, Methodology Manifest
-- You MAY: create new files and directories within the project source tree
-- You MAY: write signatures, documentation, and TODO markers to scaffold files
+- You MAY: write the Scaffold Manifest to `process/scaffolder/`
+- You MAY: create new files and directories within the project source tree (scaffold files — signatures and TODO bodies)
 - You MAY NOT: write implementation logic of any kind
 - You MAY NOT: modify existing implemented files — scaffold only creates, never modifies
 - You MAY NOT: write tests or modify test files
+
+### Output directories
+
+```
+process/scaffolder/
+  scaffold-manifest.md      ← Scaffold Manifest (component list, exported interfaces, dependency map, Builder task surface)
+
+src/ (or project source root)
+  [scaffold files]          ← signatures, docstrings, TODO bodies — code structure artifacts, not process docs
+```
 
 ## Handoff Protocol
 

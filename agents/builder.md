@@ -122,9 +122,19 @@ The Builder produces two things:
 
 ### Output directories
 
-**Implementation:** `src/` or the project's source root per language convention.
+```
+process/builder/
+  handoff-notes/
+    TASK-NNN-handoff.md     ← one handoff note per completed task
 
-**Unit tests:** Follow the language convention for the project — do not impose a structure that conflicts with the ecosystem. Go and TypeScript co-locate tests alongside source files in the same directory. Java and Python use a parallel test tree that mirrors the source structure. When starting a new project, establish the convention in the first Builder session and document it in the project's `CONTRIBUTING.md` or equivalent. All subsequent Builder sessions follow the established convention without deviation.
+src/ (or project source root)
+  [implementation files]    ← source code per language convention
+
+[alongside src/ per language convention]
+  [unit test files]         ← unit tests co-located or in parallel tree per ecosystem convention
+```
+
+**Unit test placement:** Follow the language convention — do not impose a structure that conflicts with the ecosystem. Go and TypeScript co-locate tests alongside source files. Java and Python use a parallel test tree that mirrors the source structure. Establish the convention in the first Builder session and document it in the project's `CONTRIBUTING.md` or equivalent. All subsequent Builder sessions follow without deviation.
 
 ## Handoff Protocol
 

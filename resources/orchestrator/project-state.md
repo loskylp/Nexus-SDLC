@@ -1,0 +1,73 @@
+# Project State
+**Manifest version:** v[N] | **Profile:** [Casual | Commercial | Critical | Vital]
+**Current phase:** [INGESTION | DECOMPOSITION | EXECUTION | VERIFICATION | DEMO SIGN-OFF | GO-LIVE | CLOSED]
+**Current cycle:** [N]
+**Last updated:** [date]
+
+---
+
+*Distribution template. On project start, copy this to `process/orchestrator/project-state.md`. The Orchestrator overwrites it in place before and after every agent handoff. Git history is the audit trail. Do not edit directly; invoke the Orchestrator to update.*
+
+---
+
+## Where We Are
+
+[One sentence: what is happening right now, or what is waiting for Nexus action.]
+
+## Active Work
+
+**Agent in control:** [Agent name | NEXUS]
+**Current task:** [What the agent is doing, or what decision the Nexus must make]
+**Waiting for:** [If NEXUS: the specific approval or decision needed to proceed. If agent: expected output.]
+
+---
+
+## Cycle [N] — Task Status
+
+| Task | Status | Iterations | Verifier |
+|---|---|---|---|
+| TASK-NNN: [title] | [PENDING \| IN PROGRESS \| COMPLETE \| BLOCKED] | [N of max N] | [— \| PASS \| FAIL \| PARTIAL] |
+
+**Cycle summary:**
+- Tasks complete: [N] of [N]
+- Requirements satisfied this cycle: [N] of [N]
+- Sentinel: [Not invoked | PASS | PENDING | BLOCKED — N Critical/High findings]
+
+---
+
+## Nexus Gate Log
+
+| Gate | Date | Decision | Notes |
+|---|---|---|---|
+| Requirements Gate | — | — | |
+| Architecture Gate | — | — | |
+| Plan Gate | — | — | |
+| Demo Sign-off — Cycle 1 | — | — | |
+| Go-Live — v[N.N.N] | — | — | |
+
+---
+
+## Pending Decisions
+
+NONE
+
+---
+
+## Iterate Loop State
+
+NONE — not currently in an iterate loop.
+
+---
+
+## Standing Routing Rules (Cycle [N])
+
+NONE
+
+---
+
+## All Nexus Decisions (Complete)
+
+| Decision | Date | Outcome |
+|---|---|---|
+| [e.g. Ratify Manifest v1] | — | — |
+| [e.g. Requirements Gate — Cycle 1] | — | — |

@@ -205,13 +205,22 @@ A [DEFERRED] item requires three things to be valid. If any is missing, it is a 
 
 ## Tool Permissions
 
-**Declared access level:** Tier 1 — Read only
+**Declared access level:** Tier 1 — Read and Audit Report
 
 - You MAY: read all Brief versions, Requirements List versions, and prior Audit Reports
 - You MAY: read the Methodology Manifest for artifact weight configuration
+- You MAY: write to `process/auditor/` — Audit Reports
 - You MAY NOT: write to the Requirements List or Brief
-- You MAY NOT: write to any agent output directory other than your own
+- You MAY NOT: write to any other agent's output directory
 - You MUST ASK the Nexus before: declaring PASS on requirements that contain unresolved open context questions from the Brief
+
+### Output directories
+
+```
+process/auditor/
+  requirements-audit-vN.md  ← Requirements Audit Report (new file per audit pass)
+  architecture-audit-vN.md  ← Architecture Audit Report (new file per audit pass)
+```
 
 ## Handoff Protocol
 
