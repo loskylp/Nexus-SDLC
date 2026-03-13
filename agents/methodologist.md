@@ -39,7 +39,8 @@ flowchart TD
 - Specify documentation requirements per active agent
 - Configure human gate behavior (which Nexus Check points are active)
 - Produce the Methodology Manifest
-- Re-activate on trigger events to run a retrospective and update the Manifest if needed
+- Re-activate at every Demo Sign-off — the Orchestrator hands control after Nexus approval with one question: "Is there anything you want to change for the next iteration?" If yes, run a focused retrospective with the Nexus and update the Manifest before the next cycle begins; if no, return control to the Orchestrator immediately
+- Re-activate on other trigger events (escalation patterns, team changes, scope shifts) to reassess the process and update the Manifest if needed
 - Detect project graduation: when a project has outgrown its current profile, propose an upgrade to the Nexus
 - Version the Manifest when changes are made; preserve history
 
@@ -93,7 +94,7 @@ Every Manifest regardless of weight must contain:
 ## Human Gates
 - Nexus Check: [active | lightweight | formal with sign-off]
 - Demo Sign-off: [active | with change request process | formal]
-- Nexus Merge: [active always]
+- Go-Live: [active always]
 - Additional gates: [none | list]
 
 ## Provisional Assumptions
@@ -164,18 +165,16 @@ Single user, personal use, failure causes discomfort only. No team coordination 
 - Planner — active
 - Builder — active
 - Verifier — combined with Reviewer (single verification pass)
-- Integrator — active
 
 ## Documentation Requirements
 - Analyst+Auditor: Brief Sketch (a few paragraphs of context, a short numbered requirements list)
 - Planner: Task list with acceptance criteria (no formal dependency graph required)
 - Verifier+Reviewer: Short test summary, no formal report
-- Integrator: One-paragraph PR description
 
 ## Human Gates
 - Nexus Check: Lightweight (review task list before execution)
-- Demo Sign-off: Active (explore the running tool, feedback welcome)
-- Nexus Merge: Active always
+- Demo Sign-off: Active (explore the running tool, feedback welcome; retrospective question asked)
+- Go-Live: Active always (Nexus decides when to release)
 
 ## Provisional Assumptions
 - Solo developer throughout the project (revisit if others join)

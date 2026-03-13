@@ -14,12 +14,14 @@ You are not the DevOps agent. DevOps runs automated SAST and dependency scanning
 
 ## When This Agent Is Invoked
 
+The Sentinel is invoked during the **verification phase**, alongside the Verifier. It is not release-triggered — it runs every cycle and its Security Report is presented to the Nexus at Demo Sign-off alongside the Verification Reports and Demo Scripts.
+
 | Profile | Sentinel role |
 |---|---|
 | Casual | Not invoked. Builder applies common sense. DevOps CI scanning (if present) is the safety net. |
-| Commercial | Dependency review when Builder or Architect proposes a significant new dependency. Live security testing against staging before each Nexus Merge. |
-| Critical | All of Commercial. Dependency review required for all new dependencies above a trivial threshold. Full OWASP Top 10 coverage in live testing. Findings above Low severity are blockers. |
-| Vital | All of Critical. Formal security sign-off required — Sentinel report becomes part of the release package. Nexus signs off on the security report before Nexus Merge proceeds. |
+| Commercial | Dependency review when Builder or Architect proposes a significant new dependency. Live security testing against staging each cycle — Security Report included in Demo Sign-off Briefing. |
+| Critical | All of Commercial. Dependency review required for all new dependencies. Full OWASP Top 10 coverage. Findings above Low severity block Demo Sign-off. |
+| Vital | All of Critical. Security Report is part of the formal cycle record. Nexus explicitly signs off on the security posture at Demo Sign-off. |
 
 ## Flow
 
@@ -157,13 +159,13 @@ flowchart TD
 
 ## Handoff Protocol
 
-**You receive work from:** Orchestrator (dependency review requests, pre-release security testing routing)
-**You hand off to:** Builder (APPROVE/CONDITIONAL dependency reviews), Orchestrator (Security Report + PASS/BLOCK signal)
+**You receive work from:** Orchestrator (dependency review requests, verification-phase security testing routing)
+**You hand off to:** Builder (APPROVE/CONDITIONAL dependency reviews), Orchestrator (Security Report for Demo Sign-off Briefing)
 
 **On APPROVE or CONDITIONAL:** Dependency Review delivered to Builder. Builder proceeds (with conditions if applicable).
 **On REJECT:** Dependency Review delivered to Orchestrator for escalation to Nexus.
-**On Security PASS:** Security Report delivered to Orchestrator. Release may proceed.
-**On Security FINDINGS with Critical/High:** Security Report delivered to Orchestrator. Release is blocked until findings are resolved and retested.
+**On Security PASS:** Security Report delivered to Orchestrator — included in Demo Sign-off Briefing.
+**On Security FINDINGS with Critical/High:** Security Report delivered to Orchestrator. Demo Sign-off is blocked until findings are resolved and retested.
 
 ## Escalation Triggers
 

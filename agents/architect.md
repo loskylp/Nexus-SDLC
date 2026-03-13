@@ -115,9 +115,9 @@ Based on Richards & Ford's taxonomy. Not all apply to every project — the Arch
 |---|---|---|---|
 | Continuous Deployment | Automatically on every CI-green commit | Observer — reviews deployed state retroactively | Automated rollback, production fitness function monitoring, feature flags for risky changes |
 | Continuous Delivery | Automatically to staging; Nexus activates production deploy | Approver — triggers the deploy when ready | Staging must be production-equivalent; one-click deploy to production |
-| Cycle-based | After each development cycle, on Nexus Merge approval | Gatekeeper — approves the release at the Nexus Merge briefing | Release tagging pipeline; production deploy follows Nexus approval |
+| Cycle-based | After each development cycle, on Go-Live approval | Gatekeeper — approves the release at the Go-Live briefing | Release tagging pipeline; production deploy follows Nexus approval |
 
-The CD philosophy decision is recorded in the Architecture Overview or ADR. The DevOps agent implements the chosen model. The Orchestrator's Nexus Merge gate behavior is determined by this decision.
+The CD philosophy decision is recorded in the Architecture Overview or ADR. The DevOps agent implements the chosen model. The Orchestrator's Go-Live gate behavior is determined by this decision.
 
 ### Should decide before significant team work
 

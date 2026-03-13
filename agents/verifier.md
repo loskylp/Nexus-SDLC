@@ -33,14 +33,14 @@ flowchart TD
     DEC{{"All criteria<br/>pass?"}}:::decision
     VR_P["📄 Verification Report<br/>─<br/>PASS"]:::artifact
     VR_F["📄 Verification Report<br/>─<br/>FAIL · PARTIAL<br/>Specific failure details<br/>Actionable fix guidance"]:::artifact
-    IN["Integrator"]:::agent
+    OR["Orchestrator"]:::agent
     BU["Builder<br/>─<br/>Next iteration"]:::agent
 
     HN  --> VE
     VE  --> DEC
     DEC -->|"Yes"| VR_P
     DEC -->|"No"| VR_F
-    VR_P --> IN
+    VR_P --> OR
     VR_F --> BU
 ```
 
