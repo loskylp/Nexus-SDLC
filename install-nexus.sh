@@ -8,6 +8,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AGENTS_SRC="$SCRIPT_DIR/agents"
+RESOURCES_SRC="$SCRIPT_DIR/resources"
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -161,10 +162,12 @@ done
 if [[ "$MODE" == "claude" ]]; then
     if $PERSONAL; then
         DEST_DIR="${HOME}/.claude/agents"
+        RESOURCES_DEST="${HOME}/.claude/nexus/resources"
     elif [[ -n "$TARGET_DIR" ]]; then
         TARGET_DIR="${TARGET_DIR%/}"
         TARGET_DIR="$(cd "$TARGET_DIR" 2>/dev/null && pwd)" || die "directory not found: $TARGET_DIR"
         DEST_DIR="$TARGET_DIR/.claude/agents"
+        RESOURCES_DEST="$TARGET_DIR/resources"
     else
         die "specify --personal or a project directory"
     fi
@@ -184,18 +187,28 @@ done
 echo ""
 echo "Installed $INSTALLED agents."
 
+echo ""
+echo "Installing output templates to: $RESOURCES_DEST"
+cp -r "$RESOURCES_SRC/." "$RESOURCES_DEST/"
+echo "  ✓ resources/ → $RESOURCES_DEST"
+
 # ── Post-install hints ────────────────────────────────────────────────────────
 
 if [[ "$MODE" == "claude" ]]; then
     echo ""
     if $PERSONAL; then
         echo "Agents are now available globally in all Claude Code sessions."
+        echo "Output templates installed to: $RESOURCES_DEST"
+        echo ""
         echo "Run 'claude' in any project and use @nexus-methodologist to start."
+        echo "On first invocation, copy resources to your project:"
+        echo "  cp -r $RESOURCES_DEST <project-dir>/resources"
     else
         echo "Next steps:"
         echo "  cd $TARGET_DIR"
         echo "  claude"
         echo ""
         echo "Then: @nexus-methodologist to configure the swarm for your project."
+        echo "Output templates are in: $RESOURCES_DEST"
     fi
 fi
