@@ -197,6 +197,29 @@ relevant to the Nexus SDLC framework.
 - Xi, Z. et al. — "The Rise and Potential of Large Language Model Based Agents: A Survey" (2023), arXiv:2309.07864
 - Guo, T. et al. — "Large Language Model based Multi-Agents: A Survey of Progress and Challenges" (2024), arXiv:2402.01680
 
+## UX Psychology & Cognition
+
+- Norman, D. — *The Design of Everyday Things* (revised ed., 2013), Basic Books *(mental models, affordances, human error)*
+- Weinschenk, S. — *100 Things Every Designer Needs to Know About People* (2nd ed., 2020), New Riders *(neuroscientific research applied to design)*
+- Johnson, J. — *Designing with the Mind in Mind* (3rd ed., 2020), Morgan Kaufmann *(perceptual psychology and cognitive constraints)*
+
+## Interaction Design (IxD)
+
+- Cooper, A., Reimann, R., Cronin, D., Noessel, C. — *About Face: The Essentials of Interaction Design* (4th ed., 2014), Wiley *(Goal-Directed Design and Persona methodology)*
+- Krug, S. — *Don't Make Me Think, Revisited* (3rd ed., 2014), New Riders *(information scent and intuitive web navigation)*
+- Garrett, J.J. — *The Elements of User Experience* (2nd ed., 2010), New Riders *(5 Planes framework: Strategy through Surface)*
+
+## Visual & Interface Design
+
+- Wathan, A., Schoger, S. — *Refactoring UI* (2018), self-published *(pragmatic visual design for engineers)*
+- Yablonski, J. — *Laws of UX* (2020), O'Reilly *(heuristic principles and Gestalt laws for layouts)*
+- Müller-Brockmann, J. — *Grid Systems in Graphic Design* (1981), Niggli *(mathematical structure and layout hierarchy)*
+
+## UX Research & Strategy
+
+- Hall, E. — *Just Enough Research* (2nd ed., 2019), A Book Apart *(pragmatic user interviewing and discovery)*
+- Knapp, J., Zeratsky, J., Kowitz, B. — *Sprint* (2016), Simon & Schuster *(fast-cycle prototyping and validation)*
+
 ---
 
 ## Priority Reading for Nexus SDLC Design

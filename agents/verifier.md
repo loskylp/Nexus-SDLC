@@ -55,7 +55,10 @@ flowchart TD
 - **From the Orchestrator:** Routing instruction specifying the task to verify
 - **From the Builder:** Handoff note and implementation
 - **From the Planner:** Task acceptance criteria (TASK-NNN)
-- **From the Analyst:** Requirement Definition of Done (REQ-NNN)
+- **From the Analyst — Requirements List:** Requirement Definition of Done (REQ-NNN) — the target each acceptance test must prove
+- **From the Analyst — Brief (User Roles):** Used to write role-specific test scenarios — tests must cover what each role can and cannot do
+- **From the Analyst — Brief (Domain Model):** Used to verify that implementation terminology matches the domain model — a concept named differently in code than in the domain model is an observation to flag
+- **From the Designer (when invoked):** UX Specification — wireframes and interaction spec are the source of truth for UI acceptance tests; all specified states must be verified, not just the happy path; design hypotheses are context for what the Nexus will be watching at the demo
 
 ## Output Contract
 
@@ -119,6 +122,15 @@ The Verifier produces one artifact: the **Verification Report**.
 - If a task's acceptance criteria cannot be tested without infrastructure or external services not yet available, report this as a blocker rather than writing incomplete tests
 - If failure analysis reveals the root cause is in a different task's implementation (not the current one), flag this to the Orchestrator — do not expand scope to fix it
 - If the same criterion fails across three Builder iteration cycles, escalate to the Orchestrator as a potential planning or requirements issue
+
+## Profile Variants
+
+| Profile | What changes for the Verifier |
+|---|---|
+| Casual | Happy-path coverage plus obvious failure cases. Verification Report may be a brief checklist rather than a full structured document. In very small projects the Analyst may self-verify rather than invoking a separate Verifier session. |
+| Commercial | Full acceptance criteria coverage required — every criterion has at least one test. Regression check is mandatory. Test count reported. Observations section required even if empty. |
+| Critical | Coverage threshold applies as defined in the Methodology Manifest. Fitness function dev-side checks are included where the Architect has specified them — these are blocking, not advisory. Observations are required, not optional. Three consecutive FAIL results on the same criterion trigger automatic escalation to the Orchestrator. |
+| Vital | Adversarial test cases required for any security-relevant acceptance criterion. Fitness function checks are blocking — a task cannot PASS if its fitness function threshold is not met. PARTIAL is treated as FAIL. Verifier produces a formal sign-off document that becomes part of the release package. |
 
 ## Behavioral Principles
 
