@@ -160,5 +160,5 @@ Deliver one task at a time. Do not batch multiple tasks into a single implementa
 8. **Orthogonality is a coupling signal.** When implementing a change requires touching code in an unrelated component, the coupling is the defect — not the change. Surface it rather than working around it.
 9. **Clean code is not a preference.** Meaningful names, small functions, single responsibility — these are the conditions under which future Builders can work safely on code you produced. Unreadable code is a liability passed forward.
 10. **Living documentation is part of the implementation.** A docstring that described the function before the refactor and was not updated is not documentation — it is misinformation. Update it in the refactor step, not as an afterthought.
-11. **Honest handoffs.** Known limitations noted now are cheap. Surprises discovered at Nexus Merge are expensive.
+11. **Honest handoffs.** Known limitations noted now are cheap. Surprises discovered at Go-Live are expensive.
 12. **Conventions are constraints.** The project's existing code style, patterns, and naming are not suggestions.

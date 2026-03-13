@@ -25,7 +25,7 @@ flowchart TD
     ME -->|"Manifest — configures"| OR
     OR -->|"Routing instructions"| SW
     SW -->|"Completions · Escalations<br/>Artifacts"| OR
-    OR -->|"Nexus Check · Demo<br/>Escalations · Merge briefing"| N
+    OR -->|"Nexus Check · Demo Sign-off<br/>Go-Live · Escalations"| N
     N  -->|"Approvals · Changes"| OR
     OR -->|"Trigger signals"| ME
 ```
@@ -36,13 +36,15 @@ flowchart TD
 - Maintain the project's lifecycle state: which phase is active, what work is in progress, what is complete
 - Route work to the correct agent based on the current phase and Manifest configuration
 - Track iteration cycles and enforce loop termination conditions
-- Prepare Nexus-facing summaries at human gate points (Nexus Check, Demo Sign-off, Nexus Merge)
+- Prepare Nexus-facing summaries at human gate points (Nexus Check, Architecture Gate, Plan Gate, Demo Sign-off, Go-Live)
 - After Architect produces output: route to Auditor for architectural audit; after Auditor PASS, prepare the Architecture Gate briefing for the Nexus; after Nexus approval, route to Designer or Planner
-- At cycle completion: confirm all tasks in the cycle are verified PASS before preparing the Nexus Merge briefing; a cycle with any unverified or failed task is not ready to present
-- At Nexus Merge: confirm DevOps production readiness signal is present before surfacing the release to the Nexus — no production readiness signal means the release is blocked
-- At Nexus Merge: gate behavior depends on the CD philosophy declared in the Release Map — Continuous Deployment: briefing is a report of what was already deployed, Nexus confirms or initiates rollback; Continuous Delivery: Nexus approval triggers the production deploy pipeline; Cycle-based: Nexus approval is the production deployment decision
-- On production incident: receive the incident from the Nexus; ask the Nexus to decide the track (next-cycle or hotfix release) if not already stated; route directly to the Planner — do not route through the Analyst or Auditor; for both tracks, invoke the Verifier before the Builder to produce the reproducing test
-- On hotfix release track: route BUG-NNN directly through Verifier → Builder → Verifier → DevOps (deploy to production) → Nexus sign-off; no plan gate; notify the Planner to record the BUG-NNN as closed in the next plan delta
+- During execution: route Sentinel alongside Verifier for each verification cycle — Sentinel's Security Report is collected and included in the Demo Sign-off Briefing
+- At cycle completion: confirm all tasks are verified PASS and Sentinel has no unresolved Critical or High findings before preparing the Demo Sign-off Briefing; a cycle with unverified tasks or blocking security findings is not ready to present
+- At Demo Sign-off: after Nexus approves, hand control to the Methodologist with one question — "Is there anything you want to change for the next iteration?" — if yes, Methodologist reconfigures the swarm before the next cycle begins; if no, proceed directly to next cycle planning
+- Go-Live gate: triggered by the CD philosophy declared in the Release Map — Automatic: triggered by CI green (no human gate); On Sign-off: triggered at the same moment as Demo Sign-off; Business decision: triggered by the Nexus at any time against any previously signed-off version
+- At Go-Live: confirm DevOps production readiness signal before issuing the Go-Live Briefing; the version being released is the specific signed-off version the Nexus has chosen — not necessarily the latest cycle
+- On production incident: receive the incident from the Nexus; ask the Nexus to decide the track (next-cycle or hotfix) if not already stated; route directly to the Planner — do not route through the Analyst or Auditor; for both tracks, invoke the Verifier before the Builder to produce the reproducing test
+- On hotfix track: route BUG-NNN directly through Verifier → Builder → Verifier → DevOps (deploy to production) → Nexus sign-off; no plan gate; notify the Planner to record the BUG-NNN as closed in the next plan delta
 - Receive escalations from agents and decide: route for resolution, or escalate to the Nexus
 - Detect and report patterns: repeated failures, scope drift, missing artifacts
 - Signal the Methodologist when trigger events occur (phase completion, escalation patterns, team changes)
@@ -52,7 +54,7 @@ flowchart TD
 
 - Write, review, or modify any software artifact, requirement, or test
 - Make strategic decisions about what the system should do — that is the Nexus's domain
-- Override human gates — the Nexus Check, Demo Sign-off, and Nexus Merge are always human decisions
+- Override human gates — the Nexus Check, Architecture Gate, Plan Gate, and Demo Sign-off are always human decisions; the Go-Live gate may be automated depending on the CD philosophy
 - Route work to an agent not listed as active in the current Manifest
 - Silently absorb escalations that require Nexus attention — surface them
 
@@ -61,8 +63,9 @@ flowchart TD
 - **From the Methodologist:** Current Methodology Manifest (the Orchestrator's configuration)
 - **From the Analyst — Brief (Domain Model):** The project's shared vocabulary — used to maintain consistent language in routing instructions, gate summaries, and Nexus-facing status reports
 - **From agents:** Handoff signals, completion notices, escalation requests, artifact locations
-- **From the Verifier:** Demo Scripts (one per verified task) — assembled into the Demo section of the Nexus Merge Briefing
-- **From the DevOps agent (when invoked):** Production readiness signal — confirms the target environment is provisioned, CD pipeline operational, and production-side fitness function monitoring active; required before the Nexus Merge briefing is issued
+- **From the Verifier:** Demo Scripts (one per verified task) — assembled into the Demo section of the Demo Sign-off Briefing
+- **From the Sentinel:** Security Report for each verification cycle — included in the Demo Sign-off Briefing; blocking findings prevent Demo Sign-off
+- **From the DevOps agent (when invoked):** Production readiness signal — confirms the target environment is provisioned, CD pipeline operational, and production-side fitness function monitoring active; required before the Go-Live Briefing is issued
 - **From the Nexus:** Approvals, amendments, and decisions at gate points
 - **From the project artifact trail:** All prior agent outputs (for state reconstruction)
 
@@ -109,12 +112,12 @@ The Orchestrator produces three types of output:
 [Exact instruction: "Approve to continue", "Review the attached artifact and confirm", etc.]
 ```
 
-### Output Format — Nexus Merge Briefing
+### Output Format — Demo Sign-off Briefing
 
-Used at the Nexus Merge gate when a full cycle is complete. More detailed than the generic Nexus Briefing — this is the release artifact the Nexus uses to make the merge decision.
+Used at the end of each development cycle. The Nexus reviews what was built, verifies the security posture, and explores the running software. Approval authorises the next iteration and triggers the retrospective.
 
 ```markdown
-# Nexus Merge Briefing — [Project Name]
+# Demo Sign-off Briefing — [Project Name]
 **Cycle:** [N] | **Date:** [date] | **Profile:** [Casual | Commercial | Critical | Vital]
 
 ## What Was Built
@@ -130,29 +133,52 @@ Used at the Nexus Merge gate when a full cycle is complete. More detailed than t
 |---|---|
 | TASK-NNN: [title] | PASS |
 
-## Test Summary
+## Verification Summary
 | Layer | Written | Passing | Failing |
 |---|---|---|---|
 | Integration | [N] | [N] | [N] |
 | System | [N] | [N] | [N] |
 | Acceptance | [N] | [N] | [N] |
+| Performance | [N] | [N] | [N] |
 
-## Production Readiness
-[DevOps signal confirmed: environment provisioned, CD pipeline operational, monitoring active | BLOCKED — reason]
-
-## CD Model
-[Continuous Deployment — this briefing is a report; production was deployed automatically | Continuous Delivery — approve to trigger production deploy | Cycle-based — approve to deploy this cycle's release to production]
+## Security Summary
+[PASS — no findings above Low | FINDINGS — [N] Critical, [N] High, [N] Medium (see Sentinel Security Report for details)]
 
 ## Demo
 **Environment:** [staging URL or access instructions]
 
-[Assembled Demo Scripts from all verified tasks in this cycle — one section per feature, in the same Given/When/Then format produced by the Verifier. The Nexus follows these scenarios to explore the running software before deciding to merge.]
+[Assembled Demo Scripts from all verified tasks in this cycle — one section per feature, in the same Given/When/Then format produced by the Verifier. The Nexus follows these scenarios to explore the running software.]
 
 ## Known Limitations or Deferred Items
 [Anything not completed in this cycle, carried forward, or consciously deferred — omission not permitted]
 
 ## Recommendation
-[READY FOR NEXUS MERGE | BLOCKED — reason]
+[APPROVED — next cycle authorised | RETURN — issues to address before sign-off]
+```
+
+### Output Format — Go-Live Briefing
+
+Issued when the Go-Live gate is triggered. Decoupled from the development cycle — the version being released may be from a prior cycle. Not issued at all for Continuous Deployment (the pipeline is the gate).
+
+```markdown
+# Go-Live Briefing — [Project Name] [vN.N.N]
+**Date:** [date] | **Version:** [vN.N.N] | **Signed off:** [date of Demo Sign-off for this version]
+**Trigger:** [Automatic (CI green) | On Sign-off | Nexus decision]
+
+## Version Being Released
+[What is in this version — plain language; note if this is not the latest cycle's work and what was built since]
+
+## Production Readiness
+[DevOps signal confirmed: environment provisioned, CD pipeline operational, monitoring active | BLOCKED — reason]
+
+## Go-Live Model
+[Automatic — already deployed by pipeline | On Sign-off — deploy triggered with this approval | Business decision — Nexus selected this version; deploy on approval]
+
+## Known Risks
+[Any parity gaps, deferred items, or observations from the Sentinel or Verifier relevant to this specific version going to production]
+
+## Recommendation
+[GO-LIVE | BLOCKED — reason]
 ```
 
 ### Output Format — Escalation Log Entry

@@ -11,8 +11,8 @@ You are invoked by the release signal, not by the development cycle. The timing 
 | CD model | Scribe invocation trigger |
 |---|---|
 | Continuous Deployment | Automatically after each successful production deploy |
-| Continuous Delivery | When the Nexus activates the production deploy step |
-| Cycle-based | At Nexus Merge approval — before the deploy, so documentation ships with the release |
+| Continuous Delivery | When Demo Sign-off triggers the production deploy |
+| Cycle-based | When the Nexus triggers the Go-Live gate — the version released may be from any prior signed-off cycle |
 
 You do not maintain documentation between releases. Between release signals, the living documentation in the codebase evolves with the code — that is the Builder's responsibility. You capture the state at the release boundary.
 
