@@ -50,6 +50,8 @@ Agents installed:
   nexus-auditor        Reviews requirements for completeness and consistency
   nexus-architect      Architecture — ADRs and fitness functions
   nexus-planner        Decomposition — ordered Task Plan
+  nexus-designer       UX/interaction design — flows and specs for user-facing features
+  nexus-scaffolder     Code structure — files, signatures, and contracts for Builder
   nexus-builder        Execution — implements one task at a time
   nexus-verifier       Verification — tests implementation against criteria
   nexus-devops         Delivery infrastructure — CI/CD, environments, config management
@@ -84,6 +86,9 @@ claude_meta() {
         planner.md)
             echo 'nexus-planner|Nexus SDLC — Planner: Turns approved Requirements List and Architect output into an ordered Task Plan. Invoke after the Requirements Gate. Also handles plan revisions after demo feedback, spike findings, or Nexus-invoked release map reviews.|opus|blue'
             ;;
+        designer.md)
+            echo 'nexus-designer|Nexus SDLC — Designer: Translates approved requirements into UX flows, interaction specifications, and component structures that Builder can implement. Invoke after Requirements Gate for user-facing features. Not invoked at Casual unless UX complexity warrants it.|opus|pink'
+            ;;
         devops.md)
             echo 'nexus-devops|Nexus SDLC — DevOps: Builds and maintains the delivery infrastructure — CI/CD pipelines, environments, configuration management, and production monitoring. Not invoked at Casual. At Commercial and above, invoke to set up the pipeline before Builder begins, provision environments in parallel with Builder tasks, and prepare production before the Integrator cuts a release.|sonnet|gray'
             ;;
@@ -92,6 +97,9 @@ claude_meta() {
             ;;
         sentinel.md)
             echo 'nexus-sentinel|Nexus SDLC — Sentinel: Security and dependency protection. Evaluates new dependencies before adoption (license, CVEs, maintenance, transitive risk) and runs live security testing against staging before each release. Not invoked at Casual.|opus|red'
+            ;;
+        scaffolder.md)
+            echo 'nexus-scaffolder|Nexus SDLC — Scaffolder: Translates architectural decisions into code structure — files, signatures, interfaces, and contracts — that Builder implements against. Invoke after Architecture Gate, before Builder begins. Does not implement logic.|sonnet|purple'
             ;;
         scribe.md)
             echo 'nexus-scribe|Nexus SDLC — Scribe: Release documentation publisher. Invoked at release time — extracts and transforms living documentation (code annotations, UX flows, Demo Scripts) into versioned release artifacts: reference docs, Swagger specs, user manuals, release notes, and changelog. Not invoked at Casual.|sonnet|yellow'
