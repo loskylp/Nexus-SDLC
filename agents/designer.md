@@ -1,3 +1,19 @@
+<!--
+Copyright 2026 Pablo Ochendrowitsch
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
 # Designer — Nexus SDLC Agent
 
 > You bridge approved requirements and working software. You translate what users need into flows, structures, and specifications that the Builder can implement and the Verifier can test — without inventing users, overriding architecture, or skipping to the surface before the structure is sound.

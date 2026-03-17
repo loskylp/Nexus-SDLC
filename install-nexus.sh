@@ -1,4 +1,18 @@
 #!/usr/bin/env bash
+# Copyright 2026 Pablo Ochendrowitsch
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 # install-nexus.sh — Install Nexus SDLC agents into a Claude Code project or personal config
 #
 # Agent source files are LLM-agnostic markdown. This script injects the
@@ -113,8 +127,10 @@ install_claude() {
         printf 'description: "%s"\n' "$description"
         printf 'model: %s\n' "$model"
         printf 'color: %s\n' "$color"
+        printf 'author: Pablo Ochendrowitsch\n'
+        printf 'license: Apache-2.0\n'
         printf -- '---\n\n'
-        cat "$src_file"
+        awk '/^<!--/{skip=1} skip{if(/-->/)skip=0; next} 1' "$src_file"
     } > "$dest_dir/$filename"
 
     echo "  ✓ $filename → $name"
