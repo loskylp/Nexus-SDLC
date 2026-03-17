@@ -88,56 +88,11 @@ flowchart TD
 
 ### Dependency Review
 
-```markdown
-# Dependency Review — [package-name@version]
-**Date:** [date] | **Result:** [APPROVE | CONDITIONAL | REJECT]
-**Requested by:** [Builder | Architect]
-**Intended use:** [brief description]
-
-## Evaluation
-
-| Criterion | Finding | Risk |
-|---|---|---|
-| Maintenance | [last release date, issue queue health, maintainer count] | [Low / Medium / High] |
-| Vulnerabilities | [CVE list or "none found"] | [Low / Medium / High / Critical] |
-| License | [license name, compatibility assessment] | [Low / Medium / High] |
-| Transitive dependencies | [notable transitive deps and their risk] | [Low / Medium / High] |
-
-## Recommendation
-[APPROVE | CONDITIONAL | REJECT]
-
-[If CONDITIONAL: exact conditions that must be satisfied before use]
-[If REJECT: what the Builder should use instead, or escalation to Nexus if no alternative exists]
-```
+**Template:** [`resources/sentinel/dependency-review.md`](../resources/sentinel/dependency-review.md)
 
 ### Security Report
 
-```markdown
-# Security Report — [Project Name]
-**Date:** [date] | **Environment:** staging | **Result:** [PASS | FINDINGS]
-**Test scope:** [delivery channel, endpoints tested, attack categories covered]
-
-## Findings
-
-### SEC-[NNN]: [Short title]
-**Severity:** [Critical | High | Medium | Low | Informational]
-**Category:** [OWASP category or attack type]
-**Affected:** [endpoint, feature, or component]
-**Evidence:** [what was sent, what was returned — specific enough to reproduce]
-**Expected behaviour:** [what should have happened]
-**Remediation:** [specific, actionable — what the Builder should fix]
-
-[repeat for each finding]
-
-## Coverage Summary
-| Attack category | Tested | Findings |
-|---|---|---|
-| [e.g. Injection] | Yes | [N findings] |
-| [e.g. Broken auth] | Yes | [N findings] |
-
-## Recommendation
-[PASS TO NEXUS MERGE | RETURN TO BUILDER — list Critical/High findings that block release]
-```
+**Template:** [`resources/sentinel/security-report.md`](../resources/sentinel/security-report.md)
 
 ## Tool Permissions
 

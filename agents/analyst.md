@@ -1,5 +1,5 @@
 # Analyst — Nexus SDLC Agent
-
+<!-- comment -->
 > You turn what the Nexus knows and wants into a structured, auditable requirements set. You bridge the "why" of the business problem and the "what" of the system to be built.
 
 ## Identity
@@ -83,88 +83,11 @@ Both artifacts are weighted to the current profile's Artifact Weight. The Brief 
 
 ### Output Format — Brief
 
-```markdown
-# Brief — [Project Name]
-**Version:** [N]
-**Date:** [date]
-**Artifact Weight:** [Sketch | Draft | Blueprint | Spec]
-
-## Problem Statement
-[What problem does this system solve? For whom? What is the cost of not solving it?]
-
-## Context and Ground Truths
-[What is true about the world this system operates in, independent of the system itself?
-Business rules, constraints, existing systems, regulatory context, organizational facts.]
-
-## Scope and Boundaries
-**In scope:** [What the system is responsible for]
-**Out of scope:** [What is explicitly excluded — name it, don't leave it implied]
-**Adjacent (conscious exclusion):** [Things that touch the system but are owned elsewhere —
-integrations, upstream data sources, downstream consumers]
-
-## Delivery Channel
-**Channel:** [One of: Web App | Mobile Native (iOS / Android) | Desktop | CLI with menus / TUI (ncurses style) | CLI (commands and flags only) | REST API / Service | GraphQL API | Hybrid — specify]
-**Decision status:** [Nexus-stated | Nexus-confirmed | OPEN — blocking]
-**Implications:** [What this channel means for the project — e.g. "Web App: UX Design phase required before architecture. UI framework decision belongs to Architect." or "REST API: no UX phase. API surface design belongs to Architect. Developer experience is the UX concern."]
-
-## Stakeholders
-| Role | Relationship to system | Needs | Authority over requirements |
-|---|---|---|---|
-| [role] | [affected / approves / funds] | [what they need] | [yes / no / partial] |
-
-## User Roles
-| Role | Description | Goals | Permissions needed |
-|---|---|---|---|
-| [role name] | [who this is] | [what they want to accomplish] | [what actions they need] |
-
-## Domain Model
-[Profile-dependent — see Profile Variants. Captures the key concepts in the problem domain,
-their relationships, and the shared vocabulary for the project.]
-
-### Key Concepts
-| Term | Definition | Relationships |
-|---|---|---|
-| [concept] | [what it means in this domain] | [relates to: ...] |
-
-### Domain Invariants
-[Rules that are always true in this domain, regardless of what the system does.
-Example: "An order cannot be fulfilled if any line item is out of stock."]
-
-## Open Context Questions
-[Things the Analyst still needs to understand. Will shrink each cycle.]
-```
+**Template:** [`resources/analyst/brief.md`](../resources/analyst/brief.md)
 
 ### Output Format — Requirements List
 
-```markdown
-# Requirements — [Project Name]
-**Version:** [N]
-**Date:** [date]
-**Artifact Weight:** [Sketch | Draft | Blueprint | Spec]
-
-## Functional Requirements
-
-### REQ-[NNN]: [Short title]
-**Statement:** [Clear, unambiguous statement of what the system must do.]
-**Origin:** [Brief section or Nexus answer that grounds this requirement]
-**Definition of Done:** [Specific, testable condition that must be true for this requirement to be satisfied]
-**Priority:** [Must Have | Should Have | Could Have]
-**Status:** [Draft | Approved | Superseded]
-
-[repeat for each requirement]
-
-## Non-Functional Requirements
-
-### NFR-[NNN]: [Short title]
-**Statement:** [...]
-**Origin:** [...]
-**Definition of Done:** [...]
-**Priority:** [...]
-**Status:** [...]
-
-## Superseded Requirements
-[Requirements that were approved in prior cycles and have since been changed or removed. Preserved for traceability.]
-```
+**Template:** [`resources/analyst/requirements.md`](../resources/analyst/requirements.md)
 
 ## Tool Permissions
 

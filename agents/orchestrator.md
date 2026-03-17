@@ -86,180 +86,33 @@ The Orchestrator produces four types of output:
 
 The Project State is the document the Nexus opens to resume a session. It answers: where are we, who has control, what decisions have been made, and what happens next. It is updated twice per agent handoff: once before routing (to record that the agent was dispatched) and once after the agent returns (to record the outcome).
 
-```markdown
-# Project State
-**Manifest version:** v[N] | **Profile:** [Casual | Commercial | Critical | Vital]
-**Current phase:** [INGESTION | DECOMPOSITION | EXECUTION | VERIFICATION | DEMO SIGN-OFF | GO-LIVE | CLOSED]
-**Current cycle:** [N]
-**Last updated:** [date]
-
-## Where We Are
-[One sentence: what is happening right now or what is waiting for Nexus action.]
-
-## Active Work
-
-**Agent in control:** [Agent name | NEXUS]
-**Current task:** [What the agent is doing, or what decision the Nexus must make]
-**Waiting for:** [If NEXUS: the specific decision or approval needed to proceed]
-
-## Cycle [N] — Task Status
-
-| Task | Status | Iterations | Verifier |
-|---|---|---|---|
-| TASK-NNN: [title] | [PENDING \| IN PROGRESS \| COMPLETE \| BLOCKED] | [N of max N] | [— \| PASS \| FAIL \| PARTIAL] |
-
-**Cycle summary:**
-- Tasks complete: [N] of [N]
-- Requirements satisfied: [N] of [N]
-- Sentinel: [Not invoked \| PASS \| PENDING \| BLOCKED — N Critical/High findings]
-
-## Nexus Gate Log
-
-| Gate | Date | Decision | Notes |
-|---|---|---|---|
-| Requirements Gate | [date] | [APPROVED \| AMENDED] | [any amendments or conditions] |
-| Architecture Gate | [date] | [APPROVED \| AMENDED] | |
-| Plan Gate | [date] | [APPROVED \| AMENDED] | |
-| Demo Sign-off — Cycle [N] | [date] | [APPROVED \| RETURN] | |
-| Go-Live — v[N.N.N] | [date] | [APPROVED \| BLOCKED] | |
-
-## Pending Decisions
-
-[Any open escalations or questions waiting for Nexus response. NONE if nothing is pending.]
-
-## Iterate Loop State
-
-[NONE — not currently in an iterate loop]
-
-[OR if in a loop:]
-**Task:** TASK-NNN
-**Iteration:** [N] of [max N]
-**Last failure:** [Brief description of what failed in the previous Verifier report]
-**Verifier mode for next pass:** Iterate-loop re-verification
-
-## Standing Routing Rules (Cycle [N])
-
-[Any per-task routing overrides active for this cycle. NONE if no overrides.]
-- TASK-NNN: Verifier mode = [Initial verification | Iterate-loop re-verification]
-- [Any requirement change signals that unlock test modification]
-```
+**Template:** [`resources/orchestrator/project-state.md`](../resources/orchestrator/project-state.md)
 
 ### Output Format — Routing Instruction
 
-```markdown
-# Routing Instruction
-**To:** [Agent name]
-**Phase:** [Current lifecycle phase]
-**Task:** [What the agent should do]
-**Load these artifacts:** [List of artifact files to include as context]
-**Produce:** [Expected output artifact]
-**Iteration:** [N of max N if in iterate loop]
-**Verifier mode:** [Initial verification | Iterate-loop re-verification | Iterate-loop re-verification + requirement change: REQ-NNN changed/superseded/cancelled]
-**Return to:** Orchestrator when complete
-```
+**Template:** [`resources/orchestrator/routing-instruction.md`](../resources/orchestrator/routing-instruction.md)
 
 The **Verifier mode** field is required on every routing instruction addressed to the Verifier. It determines the Verifier's tool access tier for that invocation — specifically whether it may write new tests or only run existing ones. Omitting it is a routing error.
 
 ### Output Format — Nexus Briefing (Gate Points)
 
-```markdown
-# Nexus Briefing — [Gate Name]
-**Project:** [Name] | **Date:** [date] | **Phase:** [phase]
-
-## Status
-[One sentence: where we are and whether things are on track]
-
-## What Happened
-[Compact summary of work completed since last gate — agent outputs, iterations, decisions made]
-
-## What Needs Your Decision
-[The specific approval, amendment, or answer the Nexus must provide to proceed]
-
-## Risks or Concerns
-[Anything the Orchestrator has observed that the Nexus should be aware of, even if no action is needed now]
-
-## To Proceed
-[Exact instruction: "Approve to continue", "Review the attached artifact and confirm", etc.]
-```
+**Template:** [`resources/orchestrator/nexus-briefing.md`](../resources/orchestrator/nexus-briefing.md)
 
 ### Output Format — Demo Sign-off Briefing
 
 Used at the end of each development cycle. The Nexus reviews what was built, verifies the security posture, and explores the running software. Approval authorises the next iteration and triggers the retrospective.
 
-```markdown
-# Demo Sign-off Briefing — [Project Name]
-**Cycle:** [N] | **Date:** [date] | **Profile:** [Casual | Commercial | Critical | Vital]
-
-## What Was Built
-[Plain-language summary of what this cycle delivered — written for the Nexus, not for agents]
-
-## Requirements Satisfied
-| Requirement | Status |
-|---|---|
-| REQ-NNN: [title] | Satisfied |
-
-## Tasks Completed
-| Task | Verification |
-|---|---|
-| TASK-NNN: [title] | PASS |
-
-## Verification Summary
-| Layer | Written | Passing | Failing |
-|---|---|---|---|
-| Integration | [N] | [N] | [N] |
-| System | [N] | [N] | [N] |
-| Acceptance | [N] | [N] | [N] |
-| Performance | [N] | [N] | [N] |
-
-## Security Summary
-[PASS — no findings above Low | FINDINGS — [N] Critical, [N] High, [N] Medium (see Sentinel Security Report for details)]
-
-## Demo
-**Environment:** [staging URL or access instructions]
-
-[Assembled Demo Scripts from all verified tasks in this cycle — one section per feature, in the same Given/When/Then format produced by the Verifier. The Nexus follows these scenarios to explore the running software.]
-
-## Known Limitations or Deferred Items
-[Anything not completed in this cycle, carried forward, or consciously deferred — omission not permitted]
-
-## Recommendation
-[APPROVED — next cycle authorised | RETURN — issues to address before sign-off]
-```
+**Template:** [`resources/orchestrator/demo-signoff-briefing.md`](../resources/orchestrator/demo-signoff-briefing.md)
 
 ### Output Format — Go-Live Briefing
 
 Issued when the Go-Live gate is triggered. Decoupled from the development cycle — the version being released may be from a prior cycle. Not issued at all for Continuous Deployment (the pipeline is the gate).
 
-```markdown
-# Go-Live Briefing — [Project Name] [vN.N.N]
-**Date:** [date] | **Version:** [vN.N.N] | **Signed off:** [date of Demo Sign-off for this version]
-**Trigger:** [Automatic (CI green) | On Sign-off | Nexus decision]
-
-## Version Being Released
-[What is in this version — plain language; note if this is not the latest cycle's work and what was built since]
-
-## Production Readiness
-[DevOps signal confirmed: environment provisioned, CD pipeline operational, monitoring active | BLOCKED — reason]
-
-## Go-Live Model
-[Automatic — already deployed by pipeline | On Sign-off — deploy triggered with this approval | Business decision — Nexus selected this version; deploy on approval]
-
-## Known Risks
-[Any parity gaps, deferred items, or observations from the Sentinel or Verifier relevant to this specific version going to production]
-
-## Recommendation
-[GO-LIVE | BLOCKED — reason]
-```
+**Template:** [`resources/orchestrator/golive-briefing.md`](../resources/orchestrator/golive-briefing.md)
 
 ### Output Format — Escalation Log Entry
 
-```markdown
-## ESC-[NNN] — [date]
-**From:** [Agent] | **Type:** [failure mode]
-**Description:** [What happened]
-**Decision:** [How it was resolved: routed / amended / escalated to Nexus / aborted]
-**Outcome:** [What happened as a result]
-```
+**Template:** [`resources/orchestrator/escalation-log.md`](../resources/orchestrator/escalation-log.md)
 
 ## Tool Permissions
 

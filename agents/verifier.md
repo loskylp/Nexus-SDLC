@@ -137,68 +137,13 @@ The Verifier produces two artifacts: the **Verification Report** and, on PASS, a
 
 ### Output Format — Verification Report
 
-```markdown
-# Verification Report — TASK-[NNN]
-**Date:** [date] | **Result:** [PASS | FAIL | PARTIAL]
-**Task:** [TASK-NNN title] | **Requirement(s):** [REQ-NNN]
-
-## Acceptance Criteria Results
-
-| REQ | Criterion | Layer | Result | Notes |
-|---|---|---|---|---|
-| REQ-NNN | [criterion text] | Integration / System / Acceptance | PASS / FAIL | [brief note if not obvious] |
-
-## Test Summary
-
-| Layer | Written | Passing | Failing |
-|---|---|---|---|
-| Integration | [N] | [N] | [N] |
-| System | [N] | [N] | [N] |
-| Acceptance | [N] | [N] | [N] |
-| Performance | [N] | [N] | [N] |
-
-## Performance Results (if applicable)
-| Fitness Function | Threshold | Measured | Result |
-|---|---|---|---|
-| [e.g. p95 latency] | [e.g. < 200ms] | [e.g. 143ms] | PASS / FAIL |
-
-## Failure Details (if any)
-
-### FAIL-[NNN]: [Short description]
-**Criterion:** [which acceptance criterion this relates to]
-**Expected:** [what should happen]
-**Actual:** [what did happen]
-**Suggested fix:** [specific, actionable — what the Builder should look at]
-
-## Observations (non-blocking)
-[Architectural notes, code quality concerns, or edge cases not covered by requirements — for awareness, not blockers]
-
-## Recommendation
-[PASS TO NEXT STAGE | RETURN TO BUILDER — with iteration count]
-```
+**Template:** [`resources/verifier/verification-report.md`](../resources/verifier/verification-report.md)
 
 ### Output Format — Demo Script
 
 Produced per task on PASS. The Demo Script is the human-readable version of the acceptance tests — same scenarios, same structure, written for the Nexus to execute manually in the staging environment. Each scenario corresponds directly to an acceptance test that is already passing.
 
-```markdown
-# Demo Script — TASK-[NNN]
-**Feature:** [TASK-NNN title]
-**Requirement(s):** [REQ-NNN]
-**Environment:** [staging URL or access instructions]
-
-## Scenario [N]: [Short scenario title]
-**REQ:** REQ-NNN
-
-**Given:** [The starting state the Nexus should set up or confirm — e.g. "you are logged in as a Reader", "the reading list is empty"]
-**When:** [The action to take — specific: which button, which URL, which command, which input]
-**Then:** [What to observe — exactly what the Nexus should see or verify]
-
-**Notes:** [Optional — edge cases to try, things to pay attention to, known limitations relevant to this scenario]
-
----
-[repeat for each scenario]
-```
+**Template:** [`resources/verifier/demo-script.md`](../resources/verifier/demo-script.md)
 
 The Demo Script is **not** a test runner configuration — it is a walkthrough. Write it for someone who knows the domain but has not seen the implementation. Use domain vocabulary throughout.
 

@@ -234,23 +234,7 @@ Contested:  No
 
 Produced in `spikes/SPIKE-NNN/FINDING.md` after running the spike. The Finding is the only deliverable — spike code is evidence, not output.
 
-```markdown
-# Spike Finding — SPIKE-[NNN]: [Short title]
-**Date:** [date]
-**Acceptance Criterion:** [copied from the spike task — the question that defines done]
-
-## Answer
-[Direct answer to the acceptance criterion — yes/no/it depends, stated plainly before any elaboration]
-
-## Evidence
-[What was tested, how, and what the results showed — enough for the Architect or Planner to trust the answer]
-
-## Implications
-[What the finding means for the blocked tasks or the architectural decision]
-
-## Routes to
-[Architect — finding requires a structural decision → ADR to follow | Planner — finding resolves sizing or approach only]
-```
+**Template:** [`resources/architect/spike-finding.md`](../resources/architect/spike-finding.md)
 
 ---
 
@@ -280,80 +264,14 @@ The metaphor matters. It gives the Builder a mental model to reason from without
 **Location:** `process/architect/architecture-overview.md`
 **Format:** Short structured document, one page target
 
-```markdown
-# Architecture Overview — [Project Name]
-**Version:** N | **Date:** [date] | **Profile:** Commercial/Draft
-
-## System Metaphor
-[One sentence — the mental model for the whole system]
-
-## Key Decisions
-
-### [Decision title]
-**Chosen:** [option]
-**Trade-off:** [what was gained / what was given up — one sentence each]
-**Fitness function:**
-  Dev: [test or check]
-  Prod: [metric] — Warning: [threshold] | Critical: [threshold]
-
-[repeat for each decision]
-
-## Components
-[Simple list or brief description of main parts and their relationships]
-
-## Deferred Decisions
-[What was consciously not decided yet and when it must be resolved]
-```
+**Template:** [`resources/architect/architecture-overview.md`](../resources/architect/architecture-overview.md)
 
 ### Critical — Architecture Decision Records (ADRs)
 
 **Location:** `process/architect/adr/ADR-NNNN-short-title.md` (one file per decision)
 **Format:** Full ADR with trade-off matrix and dual-use fitness function
 
-```markdown
-# ADR-NNNN: [Decision Title]
-
-**Status:** Proposed | Accepted | Superseded by ADR-NNNN
-**Date:** [date]
-**Characteristic:** [which -ility this decision serves]
-
-## Context
-[What situation made this decision necessary. What requirements drove it.
-What would happen if this decision were deferred.]
-
-## Trade-off Analysis
-
-| Option | Gains | Costs | Risk if wrong |
-|---|---|---|---|
-| [A] | | | |
-| [B] | | | |
-
-## Decision
-[What was chosen.]
-
-**Door type:** [One-way | Two-way]
-**Cost to change later:** [Low | Medium | High | Critical — one sentence describing what reversal would require]
-
-## Rationale
-[Why this option's trade-off profile fits this project's priorities better than the alternatives.
-Reference specific requirements or NFRs where applicable.]
-
-## Fitness Function
-**Characteristic threshold:** [measurable condition that must hold]
-
-| | Specification |
-|---|---|
-| **Dev check** | [Test or automated check the Verifier runs] |
-| **Prod metric** | [What is monitored when the system is live] |
-| **Warning threshold** | [Value + what it signals] |
-| **Critical threshold** | [Value + what it demands] |
-| **Alarm meaning** | [What this alarm tells the operator in plain language] |
-
-## Consequences
-**Easier:** [what this decision enables]
-**Harder:** [what this decision constrains]
-**Newly required:** [tasks or decisions this decision creates]
-```
+**Template:** [`resources/architect/adr.md`](../resources/architect/adr.md)
 
 ### Vital — ADRs + Architecture Baseline
 

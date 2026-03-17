@@ -365,47 +365,7 @@ At the Plan Gate, the Planner presents the full known task list grouped by relea
 
 ### Output Format — Release Map
 
-```markdown
-# Release Map — [Project Name]
-**Version:** [N] | **Date:** [date]
-**Task Plan Version:** [N]
-**CD Philosophy:** [Continuous Deployment | Continuous Delivery | Cycle-based]
-**Status:** Living document — updated each planning cycle
-
-## MVP — [One-line: what can users do that makes this worth deploying?]
-**Confidence:** Firm
-**Version target:** [e.g. v1.0.0]
-**Scope:**
-
-| Requirement | Features | Task count |
-|---|---|---|
-| REQ-NNN | [feature name] | N |
-
-**Intentionally excluded from MVP:** [What was cut and why — makes the boundary explicit]
-**Release criterion:** [What must be true before this goes to production]
-**Ships when:** [Automatically on CI green | On Demo Sign-off | On Nexus Go-Live decision — determined by CD philosophy]
-
-## Release 2 — [Business value proposition]
-**Confidence:** Planned
-**Version target:** [e.g. v1.1.0]
-**Depends on:** MVP
-
-| Requirement | Features | Rough size |
-|---|---|---|
-| REQ-NNN | [feature group] | S/M/L |
-
-## Release 3+ — [Tentative]
-**Confidence:** Tentative — scope pending feedback from Release 2
-
-[Feature group names only. Not yet decomposed.]
-
-## Unplaced Requirements
-*Approved requirements not yet assigned to a release.*
-
-| Requirement | Reason not yet placed |
-|---|---|
-| REQ-NNN | [pending spike / pending feedback / low priority] |
-```
+**Template:** [`resources/planner/release-map.md`](../resources/planner/release-map.md)
 
 When presenting the Release Map at the Plan Gate, state:
 - What the MVP boundary is and what was explicitly excluded from it
@@ -420,70 +380,7 @@ The Planner produces two artifacts: the **Task Plan** and the **Release Map**.
 
 ### Output Format — Task Plan
 
-```markdown
-# Task Plan — [Project Name]
-**Version:** [N] | **Date:** [date]
-**Requirements Version:** [N] | **Architecture Version:** [N]
-**Artifact Weight:** [Sketch | Draft | Blueprint | Spec]
-
-## Architecture Constraints
-[One-line summary of architectural constraints from the Architect that affect task ordering.
-For Casual: repeat the metaphor. For Commercial+: reference the Overview or ADRs.]
-
-## Priority 1 — Do This Cycle
-*High risk + high value. Dependencies respected within group.*
-
-### TASK-[NNN]: [Short title]
-**Requirement(s):** [REQ-NNN]
-**Description:** [What must be done. Not how.]
-**Acceptance Criteria:**
-- [ ] [Specific, testable condition]
-**Depends on:** [TASK-NNN | none]
-**Risk:** [H/M/L — cite the rubric criterion: e.g. "H — one-way door, no spike yet"]
-**Value:** [H/M/L — cite the rubric criterion: e.g. "H — Must Have for MVP, on walking skeleton critical path"]
-**Status:** [Pending | In Progress | Done | Superseded]
-
-### SPIKE-[NNN]: [Short title]
-[spike format as above]
-
-## Priority 2 — Do This Cycle
-*Low risk + high value. Quick wins.*
-[tasks]
-
-## Priority 3 — Next Cycle
-*High risk + low value. Spike first, then reassess.*
-[tasks]
-
-## Deferred — Below Cut Line
-*Low risk + low value. Nexus decides: defer or cut.*
-
-| Task | What is lost if cut | Cost to include |
-|---|---|---|
-| [TASK-NNN: title] | [impact] | [rough sizing] |
-
-## Open Technical Questions
-[Unknowns not yet resolved by a spike — for Nexus awareness]
-
-## Revision Delta (Plan vN+ only)
-*Present only on revised plans. Omit on the initial plan.*
-
-### New Tasks
-[Tasks created from new requirements this revision]
-
-### Revised Tasks
-| Task | Version | Requirement revised | What changed in acceptance criteria |
-|---|---|---|---|
-| TASK-NNN | v1 → v2 | REQ-NNN v1 → v2 | [summary of criteria change] |
-
-### Superseded Tasks
-| Task | Original Req | Revised Req | Why superseded | Replacement task |
-|---|---|---|---|---|
-| TASK-NNN | REQ-NNN v1 | REQ-NNN v2 | [reason existing implementation cannot be extended] | TASK-NNN |
-
-### Unaffected Tasks (checked)
-*Tasks traced to revised requirements but confirmed unaffected.*
-[TASK-NNN, TASK-NNN — acceptance criteria still satisfy revised requirement]
-```
+**Template:** [`resources/planner/task-plan.md`](../resources/planner/task-plan.md)
 
 ---
 
@@ -667,20 +564,7 @@ For the hotfix release track, the Planner records the BUG-NNN task after the fac
 
 #### Bug Task Format
 
-```markdown
-### BUG-[NNN]: [Short description of the defect]
-**Reported:** [date]
-**Requirement violated:** REQ-NNN — [requirement title]
-**Environment:** [production | staging — where it was observed]
-**Observed:** [What the system is doing — specific and reproducible]
-**Expected:** [What it should do — as stated in REQ-NNN]
-**Track:** [Next-cycle | Hotfix release]
-**Acceptance Criterion:** The reproducing test written by the Verifier passes; no regression in the existing test suite
-**Depends on:** Verifier reproducing test (must exist before Builder begins)
-**Risk:** High — production behaviour is incorrect
-**Value:** High — production is affected
-**Status:** [Pending | In Progress | Done]
-```
+**Template:** [`resources/planner/bug-task.md`](../resources/planner/bug-task.md)
 
 Bug tasks do not go through the standard risk/value scoring matrix — they are always P1. They do not affect the Release Map. They are resolved and closed before the next planning cycle opens.
 

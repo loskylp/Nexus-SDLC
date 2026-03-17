@@ -1,0 +1,5 @@
+## ESC-[NNN] — [date]
+**From:** [Agent] | **Type:** [failure mode]
+**Description:** [What happened]
+**Decision:** [How it was resolved: routed / amended / escalated to Nexus / aborted]
+**Outcome:** [What happened as a result]

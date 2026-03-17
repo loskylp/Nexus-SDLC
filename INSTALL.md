@@ -2,6 +2,8 @@
 
 Nexus SDLC delivers as loadable agent definition files. The install script copies them into the right location for your LLM interface. Currently supported: **Claude Code**.
 
+For usage guidance, initial prompts, and special scenario prompts (bugs, late requirements, profile upgrades), see [USAGE.md](USAGE.md).
+
 ---
 
 ## Requirements
@@ -17,7 +19,7 @@ Nexus SDLC delivers as loadable agent definition files. The install script copie
 ### 1. Clone this repo
 
 ```bash
-git clone https://github.com/your-org/Nexus-SDLC.git ~/nexus-sdlc
+git clone https://github.com/loskylp/Nexus-SDLC.git ~/nexus-sdlc
 ```
 
 ### 2. Create your project directory
@@ -34,7 +36,9 @@ git init
 ~/nexus-sdlc/install-nexus.sh --claude ~/my-project
 ```
 
-This copies the 9 Nexus SDLC agent files into `~/my-project/.claude/agents/`.
+This installs:
+- 13 agent definition files → `~/my-project/.claude/agents/`
+- Output templates → `~/my-project/resources/`
 
 ### 4. Start Claude Code in your project
 
@@ -43,13 +47,13 @@ cd ~/my-project
 claude
 ```
 
-Claude Code automatically picks up agents from `.claude/agents/`. You can now invoke any Nexus agent by name.
+Claude Code automatically picks up agents from `.claude/agents/`. Invoke any Nexus agent with `@nexus-<agent-name>`.
 
 ---
 
 ## Installation Modes
 
-### Project install (recommended for testing)
+### Project install (recommended)
 
 Agents are scoped to a single project directory. Different projects can have different agent versions.
 
@@ -66,55 +70,41 @@ Agents are available in every Claude Code session, regardless of project.
 ./install-nexus.sh --claude --personal
 ```
 
-Installs to `~/.claude/agents/`. Use this when you want Nexus available everywhere.
+Installs agents to `~/.claude/agents/` and templates to `~/.claude/nexus/resources/`.
 
----
+Agents look for blank templates in `resources/` inside the project they're running in. Before starting a new project, copy the templates there:
 
-## Running the Ingestion Phase
-
-Once Claude Code is running in your project:
-
-**Option A — Let the Orchestrator drive:**
-```
-@nexus-orchestrator I'm starting a new project. Here's what I want to build: [describe your project]
+```bash
+cp -r ~/.claude/nexus/resources ~/my-project/resources
 ```
 
-**Option B — Start with the Methodologist:**
-```
-@nexus-methodologist I'm starting a new project. Help me configure the swarm.
-```
-
-**Option C — Go straight to ingestion:**
-```
-@nexus-analyst I want to build [describe your project]. Here's the context: [...]
-```
-
-The typical ingestion sequence is:
-```
-nexus-analyst → nexus-auditor → (repeat until clean) → Nexus Gate → nexus-architect → nexus-planner
-```
+A project install (`--claude <dir>`) does this automatically.
 
 ---
 
 ## Agents Installed
 
-| Agent | Role | When to invoke |
-|---|---|---|
-| `nexus-methodologist` | Configures the swarm | First on any new project |
-| `nexus-orchestrator` | Control plane | When you want the swarm to decide what's next |
-| `nexus-analyst` | Requirements | Start of ingestion, after Nexus feedback |
-| `nexus-auditor` | Requirements review | After every Analyst output |
-| `nexus-architect` | Architecture | After Requirements Gate |
-| `nexus-planner` | Task planning | After Requirements Gate |
-| `nexus-builder` | Implementation | One task at a time |
-| `nexus-verifier` | Verification | After each Builder output |
-| `nexus-integrator` | Assembly | Before Nexus Merge gate |
+| Agent | Role |
+|---|---|
+| `nexus-methodologist` | Configures the swarm — profile, active agents, gate behavior |
+| `nexus-orchestrator` | Control plane — state, routing, escalation, Nexus briefings |
+| `nexus-analyst` | Ingestion — turns goals into a structured Requirements List |
+| `nexus-auditor` | Requirements and architecture integrity checking |
+| `nexus-architect` | Architecture decisions, ADRs, and fitness functions |
+| `nexus-designer` | UX specification — flows, wireframes, interaction spec |
+| `nexus-scaffolder` | Code structure — signatures and contracts before Builder begins |
+| `nexus-planner` | Task Plan and Release Map |
+| `nexus-builder` | Implementation — one task at a time |
+| `nexus-verifier` | Verification — tests against acceptance criteria |
+| `nexus-sentinel` | Security — dependency evaluation and live security testing |
+| `nexus-devops` | Delivery infrastructure — CI/CD, environments, config management |
+| `nexus-scribe` | Release documentation — publishes versioned docs at release time |
 
 ---
 
 ## Updating
 
-Pull the latest from this repo and re-run the install script. It overwrites the existing agent files.
+Pull the latest from this repo and re-run the install script. It overwrites existing agent and template files.
 
 ```bash
 cd ~/nexus-sdlc
@@ -126,6 +116,16 @@ git pull
 
 ## Uninstalling
 
-**Project:** delete `.claude/agents/nexus-*.md` in your project directory.
+**Project:**
 
-**Personal:** delete `~/.claude/agents/nexus-*.md`.
+```bash
+rm ~/my-project/.claude/agents/nexus-*.md
+rm -rf ~/my-project/resources
+```
+
+**Personal:**
+
+```bash
+rm ~/.claude/agents/nexus-*.md
+rm -rf ~/.claude/nexus
+```
