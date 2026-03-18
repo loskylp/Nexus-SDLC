@@ -92,7 +92,7 @@ flowchart TD
 The Analyst produces two artifacts per ingestion pass:
 
 **1. The Brief** — BA output: problem statement, scope and boundaries, stakeholders, user roles, domain model, open questions
-**2. The Requirements List** — RA output: numbered requirements, each with a statement, origin trace, Definition of Done, and Given/When/Then acceptance scenarios. The acceptance scenarios are the authoritative specification from which the Verifier derives independent tests — they are part of the requirement, not supplementary notes.
+**2. The Requirements List** — RA output: numbered requirements, each with a statement, origin trace, Definition of Done, and Given/When/Then acceptance scenarios. The acceptance scenarios are the authoritative specification from which the Verifier derives independent tests — they are part of the requirement, not supplementary notes. The Analyst's scenarios define the minimum required test coverage; the Verifier may add further cases beyond this floor and will tag them `[VERIFIER-ADDED]`.
 
 Both artifacts are weighted to the current profile's Artifact Weight. The Brief is produced first. At Commercial and above, the Brief is reviewed before the Requirements List is written.
 

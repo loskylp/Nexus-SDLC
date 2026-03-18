@@ -49,5 +49,8 @@ limitations under the License.
 ## Known Limitations or Deferred Items
 [Anything not completed in this cycle, carried forward, or consciously deferred — omission not permitted]
 
+## Technical Observations
+[Non-blocking observations flagged by the Verifier during this cycle — architectural concerns, stale documentation, fragile patterns. These are informational: they do not block sign-off. If the Nexus wants to act on any observation, raise it as demo feedback — it will route through the Analyst like any other requirement change.]
+
 ## Recommendation
 [APPROVED — next cycle authorised | RETURN — issues to address before sign-off]

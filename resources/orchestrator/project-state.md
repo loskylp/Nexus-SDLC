@@ -73,6 +73,30 @@ NONE
 
 NONE — not currently in an iterate loop.
 
+<!-- When in an iterate loop, replace the line above with:
+**Task:** TASK-NNN
+**Iteration:** [N] of [max per Manifest]
+**Failure counts per iteration:** [iter 1: N, iter 2: N, ...]
+**Convergence status:** [Progressing | Stalled — N consecutive non-decreasing]
+-->
+
+---
+
+## Process Metrics — Cycle [N]
+
+*Commercial and above. At Casual, omit this section.*
+
+| Metric | Value |
+|---|---|
+| Auditor passes — requirements | [N] |
+| Auditor passes — architecture | [N] |
+| Gate rejections this cycle | [N] ([which gates]) |
+| Tasks completed | [N] of [N] planned |
+| Average iterations to PASS | [N.N] |
+| Tasks that hit max iterations | [N] |
+| Escalations to Nexus | [N] |
+| Backward cascade triggered | [Yes / No] |
+
 ---
 
 ## Standing Routing Rules (Cycle [N])

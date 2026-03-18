@@ -74,6 +74,7 @@ flowchart TD
 - **From the Nexus:** Answers to intake questions (approximate answers are expected and sufficient)
 - **From prior Manifests:** Previous Methodology Manifests when re-activating for retrospective
 - **From the Orchestrator:** Escalation pattern summaries and phase completion signals that trigger re-activation
+- **From the Project State — Process Metrics section (Commercial and above):** Quantitative cycle data — auditor pass counts, gate rejection counts, average iterations to PASS, tasks that hit max iterations, escalation count, backward cascade events; this is the primary quantitative input to the retrospective alongside qualitative observations from the artifact trail
 
 ## Output Contract
 

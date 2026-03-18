@@ -65,6 +65,10 @@ claude
 
 Claude Code automatically picks up agents from `.claude/agents/`. Invoke any Nexus agent with `@nexus-<agent-name>`.
 
+### 5. Start your first project
+
+Open [USAGE.md — Starting a project](USAGE.md#starting-a-project) for the prompt that kicks off the swarm.
+
 ---
 
 ## Installation Modes

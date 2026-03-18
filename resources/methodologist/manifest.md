@@ -76,6 +76,7 @@ limitations under the License.
 
 **Max iterations per task:** [N]
 **Convergence signal:** [N] consecutive iterations with non-decreasing failure count triggers escalation.
+**Cycle scope:** Planner-defined — tasks are grouped into demonstrable increments at the Plan Gate. Each cycle ends with a Demo Sign-off. The Orchestrator executes only the tasks in the current cycle before moving to Demo Sign-off.
 **CD philosophy:** [Continuous Deployment | Continuous Delivery | Business decision]
 
 ## Infrastructure Preconditions

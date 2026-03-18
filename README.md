@@ -77,6 +77,14 @@ flowchart TD
 
 ---
 
+## Getting Started
+
+1. **Install** — [INSTALL.md](INSTALL.md) — clone the repo, run the install script, start Claude Code (5 minutes)
+2. **Use** — [USAGE.md](USAGE.md) — invoke the Methodologist with your project description and let the swarm take it from there
+3. **Understand** — [RATIONALE.md](RATIONALE.md) — the design thinking behind the framework (optional, read when curious)
+
+---
+
 ## How It Works
 
 1. **Define** — The Nexus states the high-level goal and constraints.

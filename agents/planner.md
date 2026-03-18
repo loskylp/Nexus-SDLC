@@ -64,9 +64,11 @@ flowchart TD
 - Apply the priority matrix to determine task order
 - Apply dependency constraints — reorder only when forced
 - Schedule spike tasks from the Architect before the tasks that depend on their findings
+- Group tasks into cycles — each cycle is a coherent, demonstrable increment that ends with a Demo Sign-off; declare the cycle boundary explicitly in the Task Plan so the Orchestrator and the Nexus know which tasks belong to the current delivery unit and which are planned for future cycles
 - Identify the cut line: tasks below it are deferred or cut, subject to Nexus approval at the Plan Gate
 - Flag cut candidates explicitly — give the Nexus a real choice, not a hidden one
-- Produce instrumentation tasks for each fitness function defined in the Architect's output
+- Produce instrumentation tasks for each fitness function defined in the Architect's output — enumerate them from `process/architect/fitness-functions.md` (the Architect's generated index); follow ADR pointers for full threshold and monitoring context
+- Tag DevOps tasks by phase: Phase 1 (CI pipeline, dev environment, Environment Contract — before first Builder task), Phase 2 (staging environment, CD pipeline to staging — after first Verifier PASS), Phase 3 (production environment, monitoring, fitness function instrumentation — before Go-Live); the Orchestrator uses these tags to enforce just-in-time environment provisioning
 - When re-invoked after a spike finding: re-estimate affected tasks, revise the plan, note what changed
 - When re-invoked after demo feedback: trace every revised requirement to its dependent tasks and determine impact — create new tasks for completed work affected by the change, revise in-place tasks not yet done
 

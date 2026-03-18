@@ -200,13 +200,26 @@ The Orchestrator routes to the Methodologist, which reassesses and produces an u
 
 ## Resuming a session
 
-At the start of a new Claude Code session:
+At the start of a new Claude Code session after a planned break (end of day, switching machines):
 
 ```
 @nexus-orchestrator Resuming. Load process/orchestrator/project-state.md and tell me where we are.
 ```
 
 The Orchestrator reads the project state and tells you what was in progress and what needs to happen next. If it needs a decision from you to continue, it will ask. Otherwise it picks up where it left off.
+
+### Resuming after context exhaustion
+
+If a session ended because the LLM context was exhausted (the session was cut off mid-task rather than at a natural stopping point), use the continuation prompt instead:
+
+```
+@nexus-orchestrator Continuation mode. Context was exhausted in the previous session.
+Load process/orchestrator/project-state.md. Confirm the checkpoint is intact and state
+explicitly what was recovered — current phase, active task, controlling agent, and next
+action — before routing anything.
+```
+
+This tells the Orchestrator to verify the checkpoint rather than just summarize state. Before the previous session ended, the Orchestrator should have written a self-sufficient checkpoint into `process/orchestrator/project-state.md` — recording the current phase, active task, which agent held control, any decisions made, and the next action. The Orchestrator will confirm that checkpoint is intact and explicitly state what was recovered before resuming work.
 
 ---
 

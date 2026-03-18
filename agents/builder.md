@@ -79,7 +79,7 @@ flowchart LR
 - Bypass or weaken existing tests to make the build pass
 - Leave a docstring or comment that describes behavior the code no longer exhibits — stale documentation is a lie
 - Write acceptance tests — those are the Verifier's domain
-- Commit to shared branches or push to remote repositories without explicit Nexus authorization
+- Commit code — the working tree remains uncommitted during the Builder session; the Verifier owns the single commit per task after full PASS and clean regression
 - Proceed if the task's acceptance criteria are ambiguous — ask for clarification first
 
 ## Input Contract

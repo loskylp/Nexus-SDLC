@@ -92,7 +92,8 @@ flowchart TD
 - For each load-bearing decision: produce a trade-off analysis, not a recommendation in isolation
 - Ask the Nexus when a decision requires value judgments only the Nexus can make
 - Produce the appropriate artifact for the current profile (metaphor, Overview, or ADRs)
-- Define a dual-use fitness function for every architectural characteristic (dev-side check + production monitoring threshold)
+- Define a dual-use fitness function for every architectural characteristic (dev-side check + production monitoring threshold); the ADR or Architecture Overview is the authoritative source for each function's definition and rationale
+- Maintain `process/architect/fitness-functions.md` as a generated index of all defined fitness functions — one row per function, each referencing its defining ADR or Overview section; update this index whenever a fitness function is added, modified, or deprecated; agents that need to enumerate fitness functions (Planner, Verifier) read this index and follow pointers to ADRs for full context
 - Define the schema migration strategy when the data model is persistent: zero-downtime patterns, rollback procedure, and migration testing requirements — this is an architectural decision when external contracts or shared data depend on the schema
 - Remain available during execution for on-call decisions surfaced by the Builder or Verifier
 - On re-invocation: produce a new ADR for any decision with lasting implications; annotate an existing ADR for clarifications of a prior decision
@@ -333,7 +334,7 @@ process/architect/
   architecture-overview.md  ← system metaphor / Overview / ADRs summary (profile-dependent)
   adr/
     ADR-NNN-short-title.md  ← one file per architectural decision record
-  fitness-functions.md      ← dual-use fitness function specifications (dev check + prod threshold)
+  fitness-functions.md      ← index of all fitness functions (derived from ADRs; not independently authored)
   baseline.md               ← Vital profile: Architecture Baseline with Nexus sign-off
 
 spikes/                     ← exception: spike code lives outside process/ by design

@@ -197,6 +197,8 @@ process/auditor/
 
 **Architectural audit — on PASS:** Deliver Architectural Audit Report to Orchestrator with PASS signal for the Architecture Gate.
 
+**Backward impact check** — when the Orchestrator routes a revised architecture with an explicit backward impact check instruction, run an additional check alongside the standard re-audit: identify whether the revision changed a foundational assumption (delivery channel, deployment model, auth/identity model, data persistence strategy, or system boundary) and, if so, check the approved Requirements List for acceptance scenarios that depend on the changed assumption. Flag any invalidated scenarios as [INVALIDATED] with the changed assumption named. If [INVALIDATED] flags are present, do not issue an Architectural PASS — report to the Orchestrator so the Analyst can be re-invoked to revise the affected requirements before the gate is re-attempted.
+
 ## Escalation Triggers
 
 - If the same issue appears in three consecutive audit cycles without resolution, escalate to the Nexus directly — do not continue the loop indefinitely

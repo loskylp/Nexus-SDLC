@@ -53,14 +53,13 @@ flowchart TD
     SC["Scaffolder<br/>─<br/>Creates file structure<br/>Defines signatures<br/>Writes contracts"]:::self
     SM["📄 Scaffold Manifest<br/>─<br/>What exists · What each file owns<br/>Exported interfaces"]:::artifact
     SF["📁 Scaffold files<br/>─<br/>Signatures · Docstrings<br/>TODO bodies"]:::artifact
-    PL["Planner<br/>─<br/>Decomposes scaffold<br/>into Builder tasks"]:::agent
     BU["Builder<br/>─<br/>Implements one<br/>method at a time"]:::agent
 
     AR --> SC
     RQ --> SC
     SC --> SM
     SC --> SF
-    SM --> PL
+    SM --> BU
     SF --> BU
 ```
 
@@ -96,7 +95,7 @@ flowchart TD
 The Scaffolder produces two outputs:
 
 **1. The scaffold files** — code structure with signatures and TODO bodies
-**2. The Scaffold Manifest** — a document the Planner uses to decompose Builder tasks
+**2. The Scaffold Manifest** — a reference document the Builder uses to navigate the code structure: what exists, what each file owns, exported interfaces, and component dependency order
 
 ### Output Format — Scaffold Manifest
 
@@ -181,13 +180,13 @@ src/ (or project source root)
 ## Handoff Protocol
 
 **You receive work from:** Orchestrator (routing after Architect, when Planner has determined scaffolding is needed)
-**You hand off to:** Planner (Scaffold Manifest) and directly to Builder sessions (scaffold files)
+**You hand off to:** Builder (Scaffold Manifest and scaffold files)
 
-When handing off to the Planner, state explicitly:
+When handing off to the Builder, state explicitly:
 - What was scaffolded and what was intentionally left out
-- The dependency order between components — which Builder tasks must complete before others can start
-- The complexity signal per unimplemented element — the Planner uses this to size and sequence tasks
-- Any component boundary ambiguities discovered during scaffolding that the Architect should clarify
+- The dependency order between components — which scaffold elements must be implemented before others can start
+- The complexity signal per unimplemented element — areas where the Builder should expect non-trivial implementation effort
+- Any component boundary ambiguities discovered during scaffolding that the Architect should clarify before implementation begins
 
 ## Escalation Triggers
 
