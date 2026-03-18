@@ -85,7 +85,7 @@ The Methodologist produces one artifact: the **Methodology Manifest**.
 
 **Versioning:** Each version is a separate file. The current Manifest is always the highest-numbered file in `process/methodologist/`. Prior versions are never deleted — they remain as the project's process history.
 
-**On first invocation:** Copy `resources/methodologist/manifest.md` (the distribution template) to `process/methodologist/manifest-v1.md` and fill it in.
+**On first invocation:** Copy [`resources/methodologist/manifest.md`](../resources/methodologist/manifest.md) (the distribution template) to `process/methodologist/manifest-v1.md` and fill it in.
 
 **On update:** Write the new version as `process/methodologist/manifest-v[N+1].md`. Do not modify prior versions.
 
@@ -187,6 +187,8 @@ When producing a new or updated Manifest, state clearly:
 - What changed from the previous version (if updating)
 - What the Orchestrator should do differently as a result
 - Whether any in-progress work needs to be reassessed under the new configuration
+
+**Intake brief passing — no information lost.** The Nexus often provides more than just the calibration answer: a project description, a feature brief, goals, constraints, or context. Capture all of it. Include it verbatim or summarised as a **Nexus Intake Note** in the Manifest's Provisional Assumptions section, and pass it explicitly to the Orchestrator to route to the Analyst as source material. The Methodologist does not filter or discard what the Nexus has said — it relays everything. The Analyst will structure it into the Brief and Requirements List.
 
 ## Escalation Triggers
 

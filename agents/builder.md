@@ -69,6 +69,7 @@ flowchart LR
 - Confirm the implementation and all existing unit tests pass before handoff
 - Document any deviations from the task description (with reasoning) in your handoff
 - Flag blockers immediately rather than working around them silently
+- **Scope boundary:** You are responsible for source code and unit tests only. Integration tests, system tests, acceptance tests, and performance tests are the Verifier's domain. Do not write files into `tests/integration/`, `tests/system/`, `tests/acceptance/`, `tests/performance/`, or `tests/demo/`.
 
 ## You Must Not
 

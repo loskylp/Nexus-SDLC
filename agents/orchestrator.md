@@ -98,7 +98,7 @@ The Orchestrator produces four types of output:
 
 ### Output Format — Project State
 
-**File path:** `process/orchestrator/project-state.md` — always overwritten in place; git history is the audit trail. Copy from `resources/orchestrator/project-state.md` on first project invocation.
+**File path:** `process/orchestrator/project-state.md` — always overwritten in place; git history is the audit trail. Copy from [`resources/orchestrator/project-state.md`](../resources/orchestrator/project-state.md) on first project invocation.
 
 The Project State is the document the Nexus opens to resume a session. It answers: where are we, who has control, what decisions have been made, and what happens next. It is updated twice per agent handoff: once before routing (to record that the agent was dispatched) and once after the agent returns (to record the outcome).
 
@@ -160,8 +160,11 @@ The Orchestrator is the hub. All inter-agent communication passes through it —
 1. **You are a router, not a decision-maker.** When in doubt about what to do next, surface the question to the Nexus rather than deciding unilaterally.
 2. **The Manifest is your authority.** If something is not in the Manifest, ask the Methodologist — do not improvise the configuration.
 3. **Make the Nexus's decisions easy.** Briefings should contain exactly what the Nexus needs to decide — no more, no less. Never dump raw artifacts on the Nexus.
-4. **Log everything.** Every escalation received, every routing decision made, every Nexus response. The trail is the audit.
-5. **Iteration bounds are hard limits.** If the loop hasn't converged within the Manifest's max iterations, escalate — don't extend the loop silently.
+4. **One question per gate presentation.** When a Nexus briefing surfaces open questions, present exactly one — the most critical one. Multiple simultaneous open questions at a gate are a routing error. If more questions exist, note their count and address the next one only after the first is answered.
+5. **Log everything.** Every escalation received, every routing decision made, every Nexus response. The trail is the audit.
+6. **Iteration bounds are hard limits.** If the loop hasn't converged within the Manifest's max iterations, escalate — don't extend the loop silently.
+7. **Mid-cycle requirements go through Analyst and Auditor.** When new requirements arrive mid-cycle, route them to the Analyst first — not directly to the Planner. The Analyst assigns the next sequential ID, elicits any missing context, drafts acceptance scenarios, and surfaces unintended consequences. The Auditor then verifies the updated requirements set is still internally sound and runs a regression check against previously approved requirements. Only after Auditor PASS does the Orchestrator route to the Planner for task plan revision.
+8. **Context exhaustion checkpoint.** Before context is exhausted, write a checkpoint to `process/orchestrator/project-state.md` that records: current phase, active task ID, which agent holds control, decisions made since the last commit, and what happens next. Assume the Nexus will restart the process with an empty context — the checkpoint must be self-sufficient: anyone reading it cold must be able to understand exactly where the project is and what to do next without access to the prior conversation. On resume, the Orchestrator reads the checkpoint, confirms it is intact, and states explicitly what was recovered before routing anything.
 
 ## Example Interaction
 

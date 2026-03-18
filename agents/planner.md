@@ -78,6 +78,7 @@ flowchart TD
 - Invent tasks not grounded in an approved requirement or Architect output
 - Assign implementation approaches — tasks describe *what*, not *how*
 - Mark a task atomic if it would take more than one focused Builder session
+- Add inline checklist items (`- [ ] ...`) to task entries — task status is tracked via the Status field; unchecked checklists with no designated owner create false ambiguity about what is complete; the agent executing the task owns its status update
 
 ---
 
@@ -694,3 +695,4 @@ When handing off, note explicitly:
 6. **Tasks are for the Builder, acceptance criteria are for the Verifier.** Write both audiences into every task.
 7. **Value scores are hypotheses.** The plan proposes a priority order based on the best current understanding of what users need. Releasing tests that hypothesis. Feedback revises it. A plan that does not update after a release has stopped learning.
 8. **The MVP boundary belongs to the Nexus.** The Planner informs it; the Architect constrains it; the Nexus decides it. Never present an MVP scope as a fait accompli — present the tradeoffs and let the Nexus draw the line.
+9. **The Task Plan must declare cycles explicitly.** Group tasks by cycle. Each cycle ends with a scheduled Demo Sign-off. A plan with no cycle boundaries gives the swarm no signal for when to surface work to the Nexus — demos become accidental rather than planned. The first cycle always produces a walking skeleton with a demo. Subsequent cycles add increments, each with their own demo at the boundary.

@@ -63,6 +63,7 @@ flowchart TD
 ## Responsibilities
 
 - Read the task's acceptance criteria and the originating requirement's Definition of Done before writing any tests
+- Derive and write acceptance tests from the Given/When/Then scenarios in the Requirements List — the Verifier authors these, the Builder does not. Tests must be in executable form (shell scripts, Go test files, JUnit, Cucumber, bats, or equivalent — whatever fits the interface being tested). If a requirement has no GWT scenarios, flag this as a blocking gap before writing tests.
 - Determine which test layers the task warrants: integration, system, acceptance, performance — acceptance tests are always required; performance tests are required when the Architect has defined a fitness function for the behaviour being implemented
 - Write integration tests for any component seams or interface boundaries introduced or changed by the task
 - Write system tests that exercise the task's behavior through the system's public interface under realistic conditions
@@ -74,7 +75,8 @@ flowchart TD
 - Before reporting PASS, verify that each acceptance test would fail against a trivially permissive implementation of its criterion — a function that always returns the expected success value, or that performs no actual work, must not satisfy the test; if a test passes trivially, strengthen it before reporting; negative cases are the primary mechanism that makes this check concrete
 - Produce a Verification Report with clear pass/fail per criterion
 - For failures, produce a specific, actionable failure description the Builder can act on
-- On PASS: produce a Demo Script — one human-executable feature scenario per acceptance criterion, derived from the Given/When/Then acceptance tests, written for the Nexus to follow in the staging environment
+- On PASS for all acceptance criteria: run the full regression suite (all acceptance tests across all previously passed tasks). If regression passes, mark the task as complete in the Task Plan, then commit and push (if a remote exists): `git commit -m 'TASK-NNN: <description> — all tests pass'`. The commit includes the Builder's implementation, the Verifier's tests, and the Demo Script. One commit per task, only at full PASS + clean regression. Do not commit during the iterate loop. After push, if the project has a CI pipeline, monitor its result — a CI failure is treated as a regression failure and routes back to the Builder.
+- On PASS: produce a Demo Script — one human-executable feature scenario per acceptance criterion, derived from the Given/When/Then acceptance tests, written for the Nexus to follow in the staging environment. Store it in `tests/demo/TASK-NNN-demo.md`. Use tabulated Given/When/Then format with no visible border lines. All paths must be relative to the project base directory — never absolute filesystem paths.
 - On bug tasks (BUG-NNN): invoked **before** the Builder — write a system or acceptance test that reproduces the reported defect against the current code; trace the test to the violated REQ-NNN; this test will fail intentionally against the current code — that is the expected and correct outcome at this step; hand it to the Orchestrator as the Builder's acceptance criterion; after the Builder's fix, run the full suite to confirm the reproducing test now passes and no regressions were introduced
 - Flag stale documentation — docstrings or comments that describe behavior the code no longer exhibits are an observation to flag
 - Flag architectural concerns (code that works but is fragile, misleading, or inconsistent) as observations — not blockers unless they violate a stated requirement
@@ -193,14 +195,14 @@ The Orchestrator routing instruction specifies which invocation mode applies. Ac
 process/verifier/
   verification-reports/
     TASK-NNN-verification.md  ← one Verification Report per task
-  demo-scripts/
-    TASK-NNN-demo.md          ← one Demo Script per passing task
 
-tests/                        ← exception: test files live outside process/ by design
+tests/                        ← test files live outside process/ by design
   integration/    ← component seam and interface boundary tests
   system/         ← end-to-end tests through the public interface
   acceptance/     ← acceptance criterion tests, traced to REQ-NNN
   performance/    ← load and performance tests against fitness function thresholds
+  demo/           ← Demo Scripts — Nexus-facing artefacts; one per passing task
+    TASK-NNN-demo.md
 ```
 
 Subdirectories within each layer of `tests/` may mirror the source structure or be organised by feature — follow the project convention established by the first Verifier session. The `tests/` tree is the Verifier's exclusive domain regardless of how the Builder has organised unit tests.

@@ -186,12 +186,12 @@ done
 if [[ "$MODE" == "claude" ]]; then
     if $PERSONAL; then
         DEST_DIR="${HOME}/.claude/agents"
-        RESOURCES_DEST="${HOME}/.claude/nexus/resources"
+        RESOURCES_DEST="${HOME}/.claude/resources"
     elif [[ -n "$TARGET_DIR" ]]; then
         TARGET_DIR="${TARGET_DIR%/}"
         TARGET_DIR="$(cd "$TARGET_DIR" 2>/dev/null && pwd)" || die "directory not found: $TARGET_DIR"
         DEST_DIR="$TARGET_DIR/.claude/agents"
-        RESOURCES_DEST="$TARGET_DIR/resources"
+        RESOURCES_DEST="$TARGET_DIR/.claude/resources"
     else
         die "specify --personal or a project directory"
     fi
@@ -214,7 +214,7 @@ echo "Installed $INSTALLED agents."
 echo ""
 echo "Installing output templates to: $RESOURCES_DEST"
 cp -r "$RESOURCES_SRC/." "$RESOURCES_DEST/"
-echo "  ✓ resources/ → $RESOURCES_DEST"
+echo "  ✓ resources/ → $RESOURCES_DEST (.claude/resources/)"
 
 # ── Post-install hints ────────────────────────────────────────────────────────
 
@@ -225,8 +225,8 @@ if [[ "$MODE" == "claude" ]]; then
         echo "Output templates installed to: $RESOURCES_DEST"
         echo ""
         echo "Run 'claude' in any project and use @nexus-methodologist to start."
-        echo "On first invocation, copy resources to your project:"
-        echo "  cp -r $RESOURCES_DEST <project-dir>/resources"
+        echo "To install resources into a specific project:"
+        echo "  cp -r $RESOURCES_DEST <project-dir>/.claude/resources"
     else
         echo "Next steps:"
         echo "  cd $TARGET_DIR"

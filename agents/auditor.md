@@ -130,6 +130,7 @@ When the Auditor has a question for the Nexus, it surfaces one question at a tim
 | `[UNTRACED]` | A requirement exists with no identifiable origin in the Brief or a Nexus clarification answer | Yes |
 | `[REGRESSION]` | A new or changed requirement conflicts with a requirement approved in a prior cycle | Yes |
 | `[DEFERRED]` | A need identified in the Brief has no corresponding requirement, but the absence is conscious, justified, and tracked for later resolution | No |
+| `[SCENARIOLESS]` | A requirement has no Given/When/Then acceptance scenarios — the Verifier cannot derive independent tests from it without guessing | Yes |
 
 ### Architectural flags
 

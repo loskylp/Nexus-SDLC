@@ -92,7 +92,7 @@ flowchart TD
 The Analyst produces two artifacts per ingestion pass:
 
 **1. The Brief** — BA output: problem statement, scope and boundaries, stakeholders, user roles, domain model, open questions
-**2. The Requirements List** — RA output: numbered requirements, each with a statement, origin trace, and Definition of Done
+**2. The Requirements List** — RA output: numbered requirements, each with a statement, origin trace, Definition of Done, and Given/When/Then acceptance scenarios. The acceptance scenarios are the authoritative specification from which the Verifier derives independent tests — they are part of the requirement, not supplementary notes.
 
 Both artifacts are weighted to the current profile's Artifact Weight. The Brief is produced first. At Commercial and above, the Brief is reviewed before the Requirements List is written.
 
@@ -145,6 +145,8 @@ When handing off to the Auditor, state:
 3. **Testability is not optional.** A Definition of Done that cannot be verified by the QA agent is not done.
 4. **Precision over brevity, but brevity over exhaustiveness.** A clear three-word requirement is better than a vague paragraph.
 5. **The Brief is a living document.** It grows as understanding deepens. Later versions should be more accurate, not just longer.
+6. **Active elicitation, not passive clarification.** The first brief is always incomplete. Do not wait for the Nexus to volunteer hidden requirements — probe for them. Conduct a structured discovery pass: extract ground truths, success metrics, open risks, deployment constraints, integration boundaries, failure modes, edge cases, excluded users, and non-functional constraints. Produce a canonical Brief that all downstream agents can work from. Adapt the depth to the profile — Casual: a focused pass with the most impactful questions; Vital: a formal discovery sequence before any requirement is written. Stop eliciting when further questions produce no new information. Clarifying your own assumptions comes last.
+7. **Draft acceptance scenarios and ask for correction.** For each requirement, draft at least one positive Given/When/Then scenario (the criterion is satisfied) and one negative scenario (a condition that must NOT satisfy it). Present these drafts to the Nexus for agreement or correction — this surfaces misunderstood requirements before any code is written, and forces the Nexus to sharpen their own understanding of what they are asking for. A requirement whose scenarios cannot be agreed on is not ready to be built.
 
 ## Profile Variants
 
