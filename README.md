@@ -144,6 +144,14 @@ flowchart TD
 | [process/INDEX.md](process/INDEX.md) | Architecture decisions (DEC) and open questions (OQ) — the living design record |
 | [guidelines/diagram-guidelines.md](guidelines/diagram-guidelines.md) | Mermaid diagram standards for all agents that produce visual output |
 
+## Test Projects
+
+End-to-end runs of the Nexus SDLC framework on real projects.
+
+| Project | Profile | Report | Transcript |
+|---|---|---|---|
+| [NexusScan](https://github.com/loskylp/NexusScan) | Casual — Python CLI | [tests/NexusScan.md](tests/NexusScan.md) | [tests/NexusScan-TRANSCRIPT.md](tests/NexusScan-TRANSCRIPT.md) |
+
 ## Agent Definitions
 
 Loadable agent files in [`/agents/`](agents/):
