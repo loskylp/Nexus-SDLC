@@ -1,0 +1,84 @@
+site_name: Nexus SDLC
+site_description: Human-in-the-Middle orchestration framework for autonomous software development
+site_url: https://nexus-sdlc.nxlabs.cc
+repo_url: https://github.com/loskylp/Nexus-SDLC
+repo_name: loskylp/Nexus-SDLC
+
+docs_dir: docs_src
+
+extra_css:
+  - stylesheets/extra.css
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - toc.integrate
+    - content.code.copy
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+nav:
+  - Overview: index.md
+  - Rationale: rationale.md
+  - References: references.md
+  - Process Decisions:
+    - Index: process/INDEX.md
+    - DEC-0001 Agent Role Taxonomy: process/DEC-0001-agent-role-taxonomy.md
+    - DEC-0002 Lifecycle Phases and Gates: process/DEC-0002-lifecycle-phases-and-gates.md
+    - DEC-0003 Agent Communication Protocol: process/DEC-0003-agent-communication-protocol.md
+    - DEC-0004 Artifact Trail as Project State: process/DEC-0004-artifact-trail-as-project-state.md
+    - DEC-0005 Tool Access Tiering: process/DEC-0005-tool-access-tiering.md
+    - DEC-0006 Escalation Protocol: process/DEC-0006-escalation-protocol.md
+    - DEC-0008 Swarm Pattern Assessment: process/DEC-0008-swarm-pattern-assessment.md
+    - DEC-0009 Iterative Approximation Principle: process/DEC-0009-iterative-approximation-principle.md
+    - DEC-0010 Agent Definition File Format: process/DEC-0010-agent-definition-file-format.md
+    - DEC-0013 Project Profile Naming: process/DEC-0013-project-profile-naming.md
+    - DEC-0014 Methodologist Role: process/DEC-0014-methodologist-role.md
+    - DEC-0015 Ingestion Loop: process/DEC-0015-ingestion-loop.md
+    - DEC-0016 Decomposition Phase and Gates: process/DEC-0016-decomposition-phase-and-gates.md
+    - DEC-0017 Fitness Functions and Observability: process/DEC-0017-fitness-functions-and-observability.md
+    - DEC-0018 Spike Task Ownership: process/DEC-0018-spike-task-ownership.md
+    - DEC-0019 Acceptance Test Authorship Chain: process/DEC-0019-acceptance-test-authorship-chain.md
+    - DEC-0020 Commit Policy: process/DEC-0020-commit-policy.md
+    - DEC-0021 Context Exhaustion Checkpoint: process/DEC-0021-context-exhaustion-checkpoint.md
+    - DEC-0022 Cycle as Delivery Unit: process/DEC-0022-cycle-as-delivery-unit.md
+    - DEC-0023 Backward Cascade Protocol: process/DEC-0023-backward-cascade-protocol.md
+    - DEC-0024 DevOps Phased Invocation: process/DEC-0024-devops-phased-invocation.md
+  - Open Questions:
+    - OQ-0001 Specification Grounding: process/OQ-0001-specification-grounding.md
+    - OQ-0002 Loop Termination Signals: process/OQ-0002-loop-termination-signals.md
+    - OQ-0003 Context Window Strategy: process/OQ-0003-context-window-strategy.md
+    - OQ-0004 Trust Calibration: process/OQ-0004-trust-calibration.md
+    - OQ-0005 Technology Stack: process/OQ-0005-technology-stack.md
+    - OQ-0006 Orchestrator Implementation: process/OQ-0006-orchestrator-implementation.md
+    - OQ-0007 Evaluation Harness: process/OQ-0007-evaluation-harness.md
+    - OQ-0008 Multi-Project Isolation: process/OQ-0008-multi-project-isolation.md
+    - OQ-0009 Retrospective by Profile: process/OQ-0009-retrospective-by-profile.md
+    - OQ-0010 Builder Session Definition: process/OQ-0010-builder-session-definition.md

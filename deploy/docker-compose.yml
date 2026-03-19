@@ -1,0 +1,16 @@
+services:
+  nexus-sdlc-docs:
+    image: ghcr.io/loskylp/nexus-sdlc-docs:latest
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nexus-sdlc-docs-prod.rule=Host(`nexus-sdlc.nxlabs.cc`)"
+      - "traefik.http.routers.nexus-sdlc-docs-prod.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.nexus-sdlc-docs-prod.entrypoints=websecure"
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
