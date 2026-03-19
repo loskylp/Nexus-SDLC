@@ -10,6 +10,7 @@ on:
       - 'REFERENCES.md'
       - 'process/**'
       - '.github/mkdocs.yml'
+      - '.github/docs-assets/**'
       - '.github/Dockerfile'
       - '.github/nginx.conf'
       - '.github/workflows/docs.yml'

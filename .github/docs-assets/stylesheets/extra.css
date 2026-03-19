@@ -1,14 +1,15 @@
 /*
  * Mermaid diagram contrast fix for Material dark scheme (slate).
  *
- * Material's global text color (white on slate) bleeds into mermaid's
- * SVG foreignObject elements, overriding the `color` values declared in
- * each diagram's classDef. All Nexus SDLC diagrams use light-fill nodes
- * with dark text — this resets the inheritance so classDef colors win.
+ * In slate mode, --md-mermaid-label-fg-color and --md-mermaid-node-fg-color
+ * both resolve to --md-code-fg-color, which is ~86% lightness (near-white).
+ * This makes node text illegible on the light-fill pastel backgrounds defined
+ * by classDef in all Nexus SDLC diagrams.
+ *
+ * Fix: override the two mermaid text-color variables at the root of the slate
+ * scope so node labels render dark against their light backgrounds.
  */
-[data-md-color-scheme="slate"] .mermaid foreignObject p,
-[data-md-color-scheme="slate"] .mermaid foreignObject span,
-[data-md-color-scheme="slate"] .mermaid foreignObject div,
-[data-md-color-scheme="slate"] .mermaid foreignObject label {
-  color: initial;
+[data-md-color-scheme="slate"] {
+  --md-mermaid-label-fg-color: #1a1a2e;
+  --md-mermaid-node-fg-color: #1a1a2e;
 }
