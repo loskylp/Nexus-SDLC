@@ -48,6 +48,10 @@ nav:
   - Overview: index.md
   - Rationale: rationale.md
   - References: references.md
+  - Test Projects:
+    - NexusScan Report: tests/NexusScan.md
+    - NexusScan Transcript: tests/NexusScan-TRANSCRIPT.md
+    - NexusScan Retrospective: tests/NexusScan-RETROSPECTIVE.md
   - Process Decisions:
     - Index: process/INDEX.md
     - DEC-0001 Agent Role Taxonomy: process/DEC-0001-agent-role-taxonomy.md

@@ -9,6 +9,7 @@ on:
       - 'RATIONALE.md'
       - 'REFERENCES.md'
       - 'process/**'
+      - 'tests/**'
       - '.github/mkdocs.yml'
       - '.github/docs-assets/**'
       - '.github/Dockerfile'
@@ -31,11 +32,17 @@ jobs:
 
       - name: Prepare docs_src
         run: |
-          mkdir -p docs_src/process
+          mkdir -p docs_src/process docs_src/tests
           cp README.md    docs_src/index.md
           cp RATIONALE.md docs_src/rationale.md
           cp REFERENCES.md docs_src/references.md
           cp process/*.md  docs_src/process/
+          cp tests/*.md    docs_src/tests/
+          python3 -c "
+          import re, pathlib
+          p = pathlib.Path('docs_src/index.md')
+          p.write_text(re.sub(r'\[([^\]]+)\]\(agents/[^\)]+\)', r'\1', p.read_text()))
+          "
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

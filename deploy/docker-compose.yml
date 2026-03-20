@@ -8,6 +8,8 @@ services:
       - "traefik.http.routers.nexus-sdlc-docs-prod.tls.certresolver=letsencrypt"
       - "traefik.http.routers.nexus-sdlc-docs-prod.entrypoints=websecure"
       - "com.centurylinklabs.watchtower.enable=true"
+      - "kuma.nexus-sdlc-docs.http.name=Nexus SDLC Docs"
+      - "kuma.nexus-sdlc-docs.http.url=https://nexus-sdlc.nxlabs.cc"
     networks:
       - traefik
 
