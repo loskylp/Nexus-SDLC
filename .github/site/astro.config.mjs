@@ -8,9 +8,9 @@ export default defineConfig({
       title: 'Nexus SDLC',
       description: 'Human-in-the-Middle orchestration framework for autonomous software development',
       customCss: ['./src/styles/orbital.css'],
-      social: {
-        github: 'https://github.com/loskylp/Nexus-SDLC',
-      },
+      social: [
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/loskylp/Nexus-SDLC' },
+      ],
       sidebar: [
         { label: 'Overview', slug: 'overview' },
         { label: 'Rationale', slug: 'rationale' },
