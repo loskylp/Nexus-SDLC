@@ -74,6 +74,12 @@ Phase 3 produces the **DevOps production readiness signal** that the Orchestrato
 - The first Verifier session (against the first Builder task) may only run integration and acceptance tests — system tests require staging (Phase 2) which is not yet provisioned
 - The Verifier prompt's test layer selection must account for whether staging is available
 
+### Phase Completion Criteria
+
+**Phase 1 is not COMPLETE until the CI pipeline has processed at least one commit and returned a result (build + test run).** A configuration-only or hello-world commit may be used. This verifies the pipeline is actually operational before Builder work begins — a pipeline that has never run is not a validated pipeline. DevOps signals Phase 1 completion by posting the first CI run URL and its status to the Orchestrator.
+
+**Staging must be live and healthy before the Orchestrator opens the Demo Sign-off gate.** "Healthy" means the staging health endpoint is reachable and the application is running (HTTP 200 on the health check route, or equivalent). DevOps posts a staging readiness signal — health endpoint URL plus confirmation of application startup — before the Orchestrator assembles the Demo Sign-off Briefing. The Orchestrator does not open Demo Sign-off without this signal.
+
 ## Alternatives Considered
 
 **Provision all environments before Builder begins:** Maximizes environment stability but pays infrastructure cost speculatively. If early Builder tasks surface architectural issues that require changes, the environments must be updated. Does not follow just-in-time principles. Rejected.

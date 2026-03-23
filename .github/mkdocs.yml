@@ -78,6 +78,7 @@ nav:
     - DEC-0022 Cycle as Delivery Unit: process/DEC-0022-cycle-as-delivery-unit.md
     - DEC-0023 Backward Cascade Protocol: process/DEC-0023-backward-cascade-protocol.md
     - DEC-0024 DevOps Phased Invocation: process/DEC-0024-devops-phased-invocation.md
+    - DEC-0030 Skills Framework: process/DEC-0030-skills-framework.md
   - Open Questions:
     - OQ-0001 Specification Grounding: process/OQ-0001-specification-grounding.md
     - OQ-0002 Loop Termination Signals: process/OQ-0002-loop-termination-signals.md

@@ -59,6 +59,17 @@ Through collaborative design, the lifecycle was reshaped: the single Nexus Check
 
 The Cycle-based model means the Nexus may choose to release a version from January in March, despite additional work completed since. The version released is the specific signed-off version the Nexus selects.
 
+### Gate-Approval Autonomy
+
+When the Nexus approves a gate, that approval authorises the **entire subsequent phase** to execute autonomously. The Orchestrator proceeds through all agent invocations, iterate loops, and sub-phase transitions without returning to the Nexus — until the next gate boundary or an escalation trigger (DEC-0006).
+
+Examples:
+- **Plan Gate approval** → the Orchestrator invokes DevOps Phase 1 (if active), Builder for each task in the current cycle, Verifier after each Builder output, and iterates up to `max_iterations` — all autonomously. The Nexus re-enters at Demo Sign-off.
+- **Requirements Gate approval** → the Orchestrator invokes the Architect, then the Auditor for an architectural audit, then the Planner — all autonomously, without a Nexus prompt between agents.
+- **Architecture Gate approval** → Designer (if active), Scaffolder (if active), and Planner proceed in sequence — all autonomously.
+
+The Nexus re-enters only at the next gate in the sequence or on an escalation trigger. Autonomy within a phase is a deliberate design choice: the cost of invoking the Nexus at every agent transition is higher than the cost of running a phase to completion and presenting a structured gate briefing. The Human-in-the-Middle principle applies at gate boundaries, not at every agent invocation within a phase.
+
 ### Iterate Loop
 
 Within a cycle, the iterate loop is bounded by the Manifest's max_iterations. If verification does not converge, the Orchestrator escalates to the Nexus. A convergence signal (non-decreasing failure count across consecutive iterations) triggers early escalation when thrashing is detected.

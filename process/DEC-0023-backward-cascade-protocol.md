@@ -55,6 +55,17 @@ The concrete failure scenario: if the Architecture Gate rejects a proposal and t
 
 **Why the Auditor runs the impact check, not the Analyst:** The Auditor's role is checking integrity and consistency between artifacts. Detecting that a requirement's acceptance scenario depends on a now-changed assumption is an integrity check — the requirement is internally consistent but no longer consistent with the revised architecture. The Analyst would need to be re-invoked only if invalidated requirements need revision — that is a separate step after the Auditor's detection.
 
+### Routing After Backward Impact Check
+
+After the Analyst revises the invalidated requirements (step 6 above), the revised requirements re-enter the standard ingestion loop — not the full ingestion cycle:
+
+1. The Analyst produces revised requirements for the `[INVALIDATED]` items only
+2. The Auditor runs a **targeted re-audit**: checks the revised requirements plus any requirements that trace to the same foundational assumption that changed. It does not re-audit the full Requirements List.
+3. On clean Auditor pass, the Architecture Gate retry proceeds with both the revised architecture and the updated requirements in scope
+4. If the targeted re-audit surfaces new issues (revised requirements introduce inconsistencies), the Analyst revises again before the targeted re-audit repeats
+
+The backward impact check adds at most one Analyst + Auditor pass before the Architecture Gate retry under the happy path. It does not re-open the full ingestion loop, does not require a new Requirements Gate approval (unless the scope of invalidated requirements is so large that the Nexus is effectively re-approving requirements — in that case the Orchestrator presents a targeted Requirements Gate refresh rather than a full gate).
+
 ## Consequences
 
 - The Orchestrator must compare architectural revisions against the prior approved architecture to detect foundational assumption changes — this requires reading both versions from the artifact trail

@@ -16,7 +16,7 @@ limitations under the License.
 
 # Nexus SDLC — Process Architecture Index
 
-Last updated: 2026-03-18
+Last updated: 2026-03-23
 
 ---
 
@@ -50,6 +50,7 @@ Last updated: 2026-03-18
 | DEC-0027 | Process Metrics Collection | **Accepted** | The Orchestrator maintains a Process Metrics section in `process/orchestrator/project-state.md` as a running tally (Commercial and above): auditor pass counts, gate rejection counts, average iterations to PASS, tasks hitting max iterations, escalation count, backward cascade events. The Methodologist reads this section as primary quantitative input to the retrospective. |
 | DEC-0028 | Convergence Signal Evaluation | **Accepted** | The Orchestrator tracks failing acceptance criterion counts per Builder-Verifier iteration in the Iterate Loop State. If the count has not decreased for the number of consecutive iterations defined as the convergence signal in the Manifest, the Orchestrator escalates to the Nexus before the next Builder iteration — not after the hard limit. Escalation includes the failure count trend. |
 | DEC-0029 | Technical Observations Routing | **Accepted** | Verifier non-blocking observations (architectural concerns, stale docs, fragile patterns) are collected by the Orchestrator at cycle completion and surfaced in the Demo Sign-off Briefing's Technical Observations section. They do not block sign-off. If the Nexus chooses to act on an observation, it enters the normal demo feedback channel through the Analyst. |
+| DEC-0030 | Skills Framework | **Accepted** | A skill is a reusable procedural document in `skills/` that an agent references to execute a specific capability. Skills are LLM-agnostic markdown, loaded into agent context by the Nexus when relevant. Agent definitions reference skills by name in their Responsibilities or Profile Variants sections. Skills are capability-specific and profile-neutral unless the skill itself declares profile restrictions. |
 
 ## Open Questions
 
@@ -58,14 +59,16 @@ Last updated: 2026-03-18
 | ID | Title | Status | Resolution |
 |---|---|---|---|
 | [OQ-0001](OQ-0001-specification-grounding.md) | Specification Grounding | **Resolved** | Assume-and-flag mode. Planner makes working assumptions, flags them, proceeds, refines on feedback. See DEC-0009. |
+| [OQ-0002](OQ-0002-loop-termination-signals.md) | Loop Termination Signals | **Resolved** | Three structural defenses in agent definitions (directory partition, test immutability, mandatory negative cases + pre-PASS self-check). DEC-0028 adds convergence signal detection (non-decreasing failure count triggers early escalation). Remaining open items (mutation testing at Critical/Vital, dual verification) deferred to pilot phase — do not block current work. Demo Sign-off is the final human defense against semantically wrong implementations. |
+| [OQ-0003](OQ-0003-context-window-strategy.md) | Context Loading Strategy | **Resolved** | Resolved by Option A: the Orchestrator's Routing Instruction includes a "Load these artifacts" field for each agent invocation. The Nexus follows the Routing Instruction. Empirical calibration of exact artifact subsets is deferred to pilot; Input Contracts and Routing Instructions are sufficient for current design-phase work. |
 | [OQ-0005](OQ-0005-technology-stack.md) | Technology Stack | **Resolved** | No software runtime. The deliverable IS the agent definition files — structured markdown prompts loaded into any LLM. See DEC-0010. |
 | [OQ-0006](OQ-0006-orchestrator-implementation.md) | Orchestrator Implementation | **Resolved** | The Orchestrator is an agent definition file. The human is the runtime. Orchestration logic is encoded as behavioral instructions in the prompt. |
+| [OQ-0010](OQ-0010-builder-session-definition.md) | Builder Session Definition | **Resolved** | Resolved by Option C: task atomicity is kept as a heuristic ("one demonstrable outcome, one coherent change to the codebase"). Builder agent definition includes an escalation trigger for tasks that appear to require more than one logical implementation step. Planner splits on Builder's signal. Empirical calibration deferred to first pilot. |
 
 ### Critical Priority
 
 | ID | Title | Status | Summary |
 |---|---|---|---|
-| [OQ-0002](OQ-0002-loop-termination-signals.md) | Loop Termination Signals | Open | How to detect genuine convergence vs. test-gaming in the iterate loop. Builder/Verifier directory separation partially addresses Option A. |
 | OQ-0011 | Fitness Function Source of Truth | **Resolved** | ADR (or Architecture Overview) is authoritative for each fitness function's definition and rationale. `fitness-functions.md` is a generated index maintained by the Architect — not independently authored. Planner and Verifier enumerate from the index and follow pointers for context. See DEC-0017. |
 | OQ-0012 | Scaffolder Handoff Routing | **Resolved** | Scaffold Manifest routes to the Builder, not back to the Planner. The Planner's task decomposition is complete before the Scaffolder is invoked. The Manifest is reference material for the Builder (what exists, interfaces, dependency order). Routing it back to the Planner would create a circular dependency. |
 
@@ -73,7 +76,6 @@ Last updated: 2026-03-18
 
 | ID | Title | Status | Summary |
 |---|---|---|---|
-| [OQ-0003](OQ-0003-context-window-strategy.md) | Context Loading Strategy | Open (Reframed) | How the Nexus decides what artifacts to load into each agent's LLM session. Orchestrator Routing Instructions partially address this. |
 | [OQ-0004](OQ-0004-trust-calibration.md) | Trust Calibration | Open | How the Nexus develops calibrated trust in agent output over time. Demo Sign-off gate (explore running software) partially addresses this. |
 
 ### Medium Priority
@@ -82,7 +84,6 @@ Last updated: 2026-03-18
 |---|---|---|---|
 | [OQ-0007](OQ-0007-evaluation-harness.md) | Evaluation Harness Design | Open (Reframed) | How to measure quality of a prompt-based, human-runtime framework. Covers prompt review, dogfooding, scenario evaluation, and regression through diffing. |
 | [OQ-0009](OQ-0009-retrospective-by-profile.md) | Retrospective by Profile | Open | What a Methodologist retrospective produces at each profile level. Methodologist triggers are defined; per-profile output format is not. |
-| [OQ-0010](OQ-0010-builder-session-definition.md) | Builder Session Definition | Open (Deferred) | What constitutes a single "Builder session" for LLM-based agents? Deferred to implementation phase — resolve before first pilot. |
 
 ### Low Priority
 

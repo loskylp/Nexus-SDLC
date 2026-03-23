@@ -16,8 +16,9 @@ limitations under the License.
 
 # OQ-0010: What Defines a "Builder Session" for LLM-Based Agents?
 
-**Status:** Open (Deferred to implementation phase)
+**Status:** Resolved
 **Date:** 2026-03-12
+**Updated:** 2026-03-23
 **Priority:** Medium
 
 ## Question

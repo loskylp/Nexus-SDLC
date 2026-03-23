@@ -16,8 +16,9 @@ limitations under the License.
 
 # OQ-0003: Context Loading — What Artifacts Should the Human Load for Each Agent Invocation?
 
-**Status:** Open (Reframed)
-**Date:** 2026-03-12 (reframed 2026-03-13)
+**Status:** Resolved
+**Date:** 2026-03-12
+**Updated:** 2026-03-23
 **Priority:** High
 
 ## Question

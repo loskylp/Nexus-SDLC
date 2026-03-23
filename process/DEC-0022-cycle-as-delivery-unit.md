@@ -55,7 +55,7 @@ The Methodology Manifest declares the cycle scope model in its Iteration Model s
 
 - The Task Plan format explicitly declares which tasks belong to which cycle
 - The Methodology Manifest Iteration Model section includes a `Cycle scope` field
-- The Orchestrator stops routing Builder tasks when the current cycle's tasks are all verified PASS, then prepares the Demo Sign-off Briefing
+- The Orchestrator stops routing Builder tasks when the current cycle's tasks are all verified PASS, then routes to Sentinel for the end-of-cycle security report (per DEC-0026) before preparing the Demo Sign-off Briefing — the cycle is not considered closed until the Sentinel report is available
 - Future-cycle tasks remain in the plan but are not routed until the current cycle closes and a new cycle is declared
 - The Planner may plan multiple cycles at once (the Release Map) while executing one cycle at a time
 

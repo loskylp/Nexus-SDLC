@@ -16,9 +16,9 @@ limitations under the License.
 
 # OQ-0002: Loop Termination — What Signals Indicate Genuine Convergence vs. Test-Gaming?
 
-**Status:** Partially Resolved
+**Status:** Resolved
 **Date:** 2026-03-12
-**Updated:** 2026-03-13
+**Updated:** 2026-03-23
 **Priority:** Critical
 
 ## Question

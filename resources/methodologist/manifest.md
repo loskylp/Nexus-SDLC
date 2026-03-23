@@ -79,6 +79,19 @@ limitations under the License.
 **Cycle scope:** Planner-defined — tasks are grouped into demonstrable increments at the Plan Gate. Each cycle ends with a Demo Sign-off. The Orchestrator executes only the tasks in the current cycle before moving to Demo Sign-off.
 **CD philosophy:** [Continuous Deployment | Continuous Delivery | Business decision]
 
+## Verifier Task Modes
+
+*Remove this section at Casual — single verification mode only.*
+
+The Verifier operates in one of two modes depending on whether DevOps Phase 2 (staging) is available. The Orchestrator declares the current mode at each Verifier invocation.
+
+| Mode | When active | Test layers available |
+|---|---|---|
+| **Pre-staging** | Before DevOps Phase 2 completes (first Builder task only) | Unit tests + integration tests + acceptance tests. No system tests. |
+| **Full** | After DevOps Phase 2 completes (all subsequent tasks) | All layers: unit, integration, acceptance, and system tests against staging. |
+
+**Current mode:** [Pre-staging | Full — updated by Orchestrator as DevOps phases complete]
+
 ## Infrastructure Preconditions
 
 **Before Builder tasks begin:**
