@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nexus SDLC | Agent Swarm</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#13121c",
+              "on-surface-variant": "#ccc3d8",
+              "tertiary-container": "#65647c",
+              "on-primary-container": "#ede0ff",
+              "tertiary-fixed": "#e2e0fc",
+              "on-tertiary-fixed": "#1a1a2d",
+              "primary": "#d2bbff",
+              "on-error-container": "#ffdad6",
+              "on-error": "#690005",
+              "primary-fixed-dim": "#d2bbff",
+              "on-primary-fixed-variant": "#5a00c6",
+              "error": "#ffb4ab",
+              "on-secondary-fixed-variant": "#004e5a",
+              "secondary-fixed": "#a2eeff",
+              "tertiary-fixed-dim": "#c6c4df",
+              "secondary": "#5de6ff",
+              "on-secondary": "#00363e",
+              "surface-container-low": "#1b1b24",
+              "surface-container-high": "#292933",
+              "secondary-container": "#00cbe6",
+              "tertiary": "#c6c4df",
+              "surface-container-lowest": "#0d0d16",
+              "surface-bright": "#393843",
+              "on-primary-fixed": "#25005a",
+              "outline": "#958da1",
+              "primary-fixed": "#eaddff",
+              "on-secondary-container": "#00515d",
+              "inverse-primary": "#732ee4",
+              "on-secondary-fixed": "#001f25",
+              "inverse-surface": "#e4e1ee",
+              "inverse-on-surface": "#302f3a",
+              "background": "#13121c",
+              "surface-container-highest": "#34343e",
+              "on-surface": "#e4e1ee",
+              "secondary-fixed-dim": "#2fd9f4",
+              "on-primary": "#3f008e",
+              "error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#45455b",
+              "on-background": "#e4e1ee",
+              "surface-tint": "#d2bbff",
+              "surface-variant": "#34343e",
+              "outline-variant": "#4a4455",
+              "on-tertiary-container": "#e5e2fe",
+              "on-tertiary": "#2f2e43",
+              "surface": "#13121c",
+              "primary-container": "#7c3aed",
+              "surface-container": "#1f1f28"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #0B0B14;
+        color: #EEEEFF;
+      }
+      .inner-glow {
+        box-shadow: inset 0 1px 0 rgba(124, 58, 237, 0.15);
+      }
+      .agent-card {
+        background-color: #1C1C30;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-container selection:text-white">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#0B0B14]/85 backdrop-blur-md border-b border-[#7C3AED]/10 shadow-[0_0_80px_rgba(124,58,237,0.08)]">
+<div class="flex justify-between items-center w-full px-8 py-4">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-[#7C3AED] font-headline">Nexus SDLC</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-label uppercase text-[11px] tracking-widest" href="#">Orchestration</a>
+<a class="text-[#7C3AED] border-b-2 border-[#7C3AED] pb-1 font-label uppercase text-[11px] tracking-widest" href="#">Agents</a>
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-label uppercase text-[11px] tracking-widest" href="#">Telemetry</a>
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-label uppercase text-[11px] tracking-widest" href="#">Logs</a>
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-label uppercase text-[11px] tracking-widest" href="#">Deployments</a>
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-label uppercase text-[11px] tracking-widest" href="#">Settings</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-[#8080A0] hover:bg-[#1B1B24] transition-all duration-300 rounded active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-[#8080A0] hover:bg-[#1B1B24] transition-all duration-300 rounded active:scale-95">
+<span class="material-symbols-outlined">settings_input_component</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-[#7C3AED]/30">
+<img alt="User Orbital Profile" class="w-full h-full object-cover" data-alt="High-contrast stylized profile portrait of a technical operator in a dark cinematic lighting environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDST5rq1mHnTfDAOuLhVHCUFd5H7Zbzf9oTL-u-RRIh52ubWkIWr_clQZsUxt758tK6PI9FYasb_VGhJXpeA9ROFOkiwaHlZkG9fhejF-c8IQBkdq-E5k3J7zxQ_EFKKP0WU_iSujdS51ztZXQkcB-b5uSHLXz53HFIuWHuD5ijz0Ct11cAOpKEDdqRD0CVFRwkXg5PVJU-lIB3NQNmgEPdVDC1--Esg4xiU6Z09t1LE3pf2rYwrSrH9hyzNJUxAczc61siZsFrcSU"/>
+</div>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-16 max-w-[1280px] mx-auto px-8">
+<!-- Section Header -->
+<header class="h-[160px] flex flex-col justify-center mb-16">
+<span class="text-[#22D3EE] font-label uppercase tracking-[0.2em] text-xs mb-3">THE SWARM</span>
+<h1 class="text-[2.2rem] font-headline font-bold text-[#EEEEFF] leading-none mb-4">Thirteen agents. Seven planes. One framework.</h1>
+<p class="text-[1rem] text-[#8080A0] font-body max-w-2xl">Each agent owns a single concern. The Orchestrator routes. The Nexus approves.</p>
+</header>
+<!-- Agent Grid Architecture -->
+<div class="space-y-16">
+<!-- Row 1: Configuration & Control -->
+<section class="grid grid-cols-12 gap-6 items-start">
+<div class="col-span-2 py-4">
+<h3 class="font-label uppercase text-[10px] tracking-[0.1em] text-[#8080A0] border-l-2 border-[#FBBF24] pl-3">Configuration &amp; Control</h3>
+</div>
+<div class="col-span-10 grid grid-cols-2 gap-6">
+<!-- Methodologist -->
+<div class="agent-card p-6 inner-glow group hover:shadow-[0_0_30px_rgba(251,191,36,0.1)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-[#FBBF24]"></div>
+<div class="flex justify-between items-start mb-4">
+<h4 class="font-headline font-bold text-xl text-[#EEEEFF]">Methodologist</h4>
+<span class="text-[#FBBF24] material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">architecture</span>
+</div>
+<p class="text-sm text-[#8080A0] font-body leading-relaxed">Configures the swarm for each project profile, defining the operational guardrails and compliance layers.</p>
+</div>
+<!-- Orchestrator -->
+<div class="agent-card p-6 inner-glow group hover:shadow-[0_0_30px_rgba(249,115,22,0.1)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-[#F97316]"></div>
+<div class="flex justify-between items-start mb-4">
+<h4 class="font-headline font-bold text-xl text-[#EEEEFF]">Orchestrator</h4>
+<span class="text-[#F97316] material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+<p class="text-sm text-[#8080A0] font-body leading-relaxed">Operational control plane — routes every agent handoff and manages state transitions across the swarm.</p>
+</div>
+</div>
+</section>
+<!-- Row 2: Analysis & Design -->
+<section class="grid grid-cols-12 gap-6 items-start">
+<div class="col-span-2 py-4">
+<h3 class="font-label uppercase text-[10px] tracking-[0.1em] text-[#8080A0] border-l-2 border-[#22D3EE] pl-3 leading-tight">Analysis · Planning<br/>Design · Structure</h3>
+</div>
+<div class="col-span-10 grid grid-cols-5 gap-4">
+<!-- Analyst -->
+<div class="agent-card p-5 inner-glow group hover:shadow-[0_0_20px_rgba(59,130,246,0.1)] relative overflow-hidden">
+<div class="absolute bottom-0 left-0 w-full h-1 bg-[#3B82F6]"></div>
+<h4 class="font-headline font-bold text-base text-[#EEEEFF] mb-2">Analyst</h4>
+<p class="text-[11px] text-[#8080A0] font-body">Requirements elicitation and stakeholder alignment.</p>
+</div>
+<!-- Auditor -->
+<div class="agent-card p-5 inner-glow group hover:shadow-[0_0_20px_rgba(239,68,68,0.1)] relative overflow-hidden">
+<div class="absolute bottom-0 left-0 w-full h-1 bg-[#EF4444]"></div>
+<h4 class="font-headline font-bold text-base text-[#EEEEFF] mb-2">Auditor</h4>
+<p class="text-[11px] text-[#8080A0] font-body">Validation and cross-system consistency checks.</p>
+</div>
+<!-- Architect -->
+<div class="agent-card p-5 inner-glow group hover:shadow-[0_0_20px_rgba(168,85,247,0.1)] relative overflow-hidden">
+<div class="absolute bottom-0 left-0 w-full h-1 bg-[#A855F7]"></div>
+<h4 class="font-headline font-bold text-base text-[#EEEEFF] mb-2">Architect</h4>
+<p class="text-[11px] text-[#8080A0] font-body">Architecture modeling and ADR management.</p>
+</div>
+<!-- Planner -->
+<div class="agent-card p-5 inner-glow group hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] relative overflow-hidden">
+<div class="absolute bottom-0 left-0 w-full h-1 bg-[#6366F1]"></div>
+<h4 class="font-headline font-bold text-base text-[#EEEEFF] mb-2">Planner</h4>
+<p class="text-[11px] text-[#8080A0] font-body">Task decomposition and optimal ordering.</p>
+</div>
+<!-- Designer -->
+<div class="agent-card p-5 inner-glow group hover:shadow-[0_0_20px_rgba(236,72,153,0.1)] relative overflow-hidden">
+<div class="absolute bottom-0 left-0 w-full h-1 bg-[#EC4899]"></div>
+<h4 class="font-headline font-bold text-base text-[#EEEEFF] mb-2">Designer</h4>
+<p class="text-[11px] text-[#8080A0] font-body">UX flows and detailed interaction specs.</p>
+</div>
+</div>
+</section>
+<!-- Human Gates Callout Bar -->
+<div class="relative py-8">
+<div aria-hidden="true" class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-[#7C3AED]/20"></div>
+</div>
+<div class="relative flex flex-col items-center">
+<span class="bg-[#0B0B14] px-4 font-label uppercase text-[9px] tracking-[0.3em] text-[#7C3AED] mb-6">HUMAN APPROVAL REQUIRED</span>
+<div class="flex flex-wrap justify-center gap-3">
+<div class="px-5 py-2 bg-[#7C3AED]/10 border border-[#7C3AED]/30 rounded-full flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#7C3AED] animate-pulse"></span>
+<span class="text-[10px] font-label uppercase tracking-widest text-[#EEEEFF]">Requirements Gate</span>
+</div>
+<div class="px-5 py-2 bg-[#7C3AED]/10 border border-[#7C3AED]/30 rounded-full flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#7C3AED]"></span>
+<span class="text-[10px] font-label uppercase tracking-widest text-[#EEEEFF]">Architecture Gate</span>
+</div>
+<div class="px-5 py-2 bg-[#7C3AED]/10 border border-[#7C3AED]/30 rounded-full flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#7C3AED]"></span>
+<span class="text-[10px] font-label uppercase tracking-widest text-[#EEEEFF]">Plan Gate</span>
+</div>
+<div class="px-5 py-2 bg-[#7C3AED]/10 border border-[#7C3AED]/30 rounded-full flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#7C3AED]"></span>
+<span class="text-[10px] font-label uppercase tracking-widest text-[#EEEEFF]">Demo Sign-off</span>
+</div>
+<div class="px-5 py-2 bg-[#7C3AED]/10 border border-[#7C3AED]/30 rounded-full flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#7C3AED]"></span>
+<span class="text-[10px] font-label uppercase tracking-widest text-[#EEEEFF]">Go-Live</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: Execution & Delivery -->
+<section class="grid grid-cols-12 gap-6 items-start">
+<div class="col-span-2 py-4">
+<h3 class="font-label uppercase text-[10px] tracking-[0.1em] text-[#8080A0] border-l-2 border-[#7C3AED] pl-3 leading-tight">Execution · Verification<br/>Delivery</h3>
+</div>
+<div class="col-span-10 grid grid-cols-3 gap-6">
+<!-- Scaffolder -->
+<div class="agent-card p-6 inner-glow group hover:shadow-[0_0_20px_rgba(139,92,246,0.1)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1 h-full bg-[#8B5CF6]"></div>
+<h4 class="font-headline font-bold text-lg text-[#EEEEFF] mb-2">Scaffolder</h4>
+<p class="text-[12px] text-[#8080A0] font-body">Generates boilerplate, code structure, and defined interface contracts.</p>
+</div>
+<!-- Builder -->
+<div class="agent-card p-6 inner-glow group hover:shadow-[0_0_20px_rgba(34,197,94,0.1)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1 h-full bg-[#22C55E]"></div>
+<h4 class="font-headline font-bold text-lg text-[#EEEEFF] mb-2">Builder</h4>
+<p class="text-[12px] text-[#8080A0] font-body">Atomic task implementation focused on single-module logic excellence.</p>
+</div>
+<!-- Verifier -->
+<div class="agent-card p-6 inner-glow group hover:shadow-[0_0_20px_rgba(6,182,212,0.1)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1 h-full bg-[#06B6D4]"></div>
+<h4 class="font-headline font-bold text-lg text-[#EEEEFF] mb-2">Verifier</h4>
+<p class="text-[12px] text-[#8080A0] font-body">Automated test generation and detailed verification reports.</p>
+</div>
+<!-- Sentinel -->
+<div class="agent-card p-6 inner-glow group hover:shadow-[0_0_20px_rgba(239,68,68,0.1)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1 h-full bg-[#EF4444]"></div>
+<h4 class="font-headline font-bold text-lg text-[#EEEEFF] mb-2">Sentinel</h4>
+<p class="text-[12px] text-[#8080A0] font-body">Deep-dive security audits and dependency vulnerability review.</p>
+</div>
+<!-- DevOps -->
+<div class="agent-card p-6 inner-glow group hover:shadow-[0_0_20px_rgba(148,163,184,0.1)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1 h-full bg-[#94A3B8]"></div>
+<h4 class="font-headline font-bold text-lg text-[#EEEEFF] mb-2">DevOps</h4>
+<p class="text-[12px] text-[#8080A0] font-body">CI/CD pipeline orchestration and environment lifecycle management.</p>
+</div>
+<!-- Scribe -->
+<div class="agent-card p-6 inner-glow group hover:shadow-[0_0_20px_rgba(234,179,8,0.1)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1 h-full bg-[#EAB308]"></div>
+<h4 class="font-headline font-bold text-lg text-[#EEEEFF] mb-2">Scribe</h4>
+<p class="text-[12px] text-[#8080A0] font-body">Automated technical documentation and human-ready release notes.</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0D0D16] border-t border-[#1B1B24] w-full py-12 px-8">
+<div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-6">
+<div class="flex flex-col gap-2">
+<span class="text-sm font-bold text-[#7C3AED] font-headline">NEXUS ORBITAL COMMAND</span>
+<p class="font-label uppercase tracking-[0.05em] text-[10px] text-[#8080A0]">© 2024 NEXUS ORBITAL COMMAND. ALL SYSTEMS OPERATIONAL.</p>
+</div>
+<div class="flex gap-8">
+<a class="font-label uppercase tracking-[0.05em] text-[10px] text-[#8080A0] hover:text-[#EEEEFF] transition-colors cursor-pointer" href="#">Documentation</a>
+<a class="font-label uppercase tracking-[0.05em] text-[10px] text-[#8080A0] hover:text-[#EEEEFF] transition-colors cursor-pointer" href="#">API Reference</a>
+<a class="font-label uppercase tracking-[0.05em] text-[10px] text-[#8080A0] hover:text-[#EEEEFF] transition-colors cursor-pointer" href="#">Security Protocol</a>
+<a class="font-label uppercase tracking-[0.05em] text-[10px] text-[#22D3EE] hover:text-[#EEEEFF] transition-colors cursor-pointer" href="#">System Status</a>
+</div>
+</div>
+</footer>
+</body></html>

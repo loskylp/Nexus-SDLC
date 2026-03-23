@@ -1,3 +1,7 @@
-# MkDocs build artifacts
+# CI-generated staging directory (content prep before Docker build)
 docs_src/
-site/
+
+# Astro build output
+.github/site/dist/
+.github/site/.astro/
+.github/site/node_modules/

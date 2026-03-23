@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nexus SDLC | DEC-0002 — Lifecycle Phases and Human Gates</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#d2bbff",
+              "surface-container-highest": "#34343e",
+              "on-primary-fixed-variant": "#5a00c6",
+              "outline-variant": "#4a4455",
+              "tertiary": "#c6c4df",
+              "inverse-primary": "#732ee4",
+              "error-container": "#93000a",
+              "surface-dim": "#13121c",
+              "surface-container-low": "#1b1b24",
+              "on-primary-container": "#ede0ff",
+              "error": "#ffb4ab",
+              "surface-variant": "#34343e",
+              "tertiary-fixed": "#e2e0fc",
+              "surface-bright": "#393843",
+              "on-tertiary-container": "#e5e2fe",
+              "on-primary": "#3f008e",
+              "primary": "#d2bbff",
+              "on-primary-fixed": "#25005a",
+              "secondary": "#22D3EE",
+              "outline": "#958da1",
+              "on-surface": "#e4e1ee",
+              "inverse-surface": "#e4e1ee",
+              "surface-container-high": "#292933",
+              "on-background": "#e4e1ee",
+              "on-tertiary": "#2f2e43",
+              "surface": "#13121c",
+              "on-tertiary-fixed-variant": "#45455b",
+              "primary-container": "#7c3aed",
+              "on-tertiary-fixed": "#1a1a2d",
+              "tertiary-container": "#65647c",
+              "surface-container-lowest": "#0d0d16",
+              "surface-container": "#1f1f28",
+              "primary-fixed-dim": "#d2bbff",
+              "on-secondary-fixed-variant": "#004e5a",
+              "secondary-fixed-dim": "#2fd9f4",
+              "secondary-container": "#00cbe6",
+              "on-error": "#690005",
+              "on-secondary": "#00363e",
+              "on-surface-variant": "#ccc3d8",
+              "tertiary-fixed-dim": "#c6c4df",
+              "background": "#0B0B14",
+              "secondary-fixed": "#a2eeff",
+              "on-secondary-fixed": "#001f25",
+              "inverse-on-surface": "#302f3a",
+              "on-error-container": "#ffdad6",
+              "primary-fixed": "#eaddff",
+              "on-secondary-container": "#00515d"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #0B0B14;
+        color: #EEEEFF;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #1B1B24;
+        border-radius: 10px;
+      }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-container selection:text-white">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full flex justify-between items-center px-6 h-14 bg-[#0B0B14]/85 backdrop-blur-md z-50 shadow-[0_1px_0_rgba(124,58,237,0.15)]">
+<div class="flex items-center gap-8">
+<div class="text-xl font-bold tracking-tighter text-[#EEEEFF] font-headline uppercase">Nexus SDLC</div>
+<div class="hidden md:flex gap-6">
+<a class="font-['Space_Grotesk'] uppercase tracking-wider text-xs text-[#8080A0] hover:text-[#EEEEFF] transition-colors" href="#">Docs</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-wider text-xs text-[#8080A0] hover:text-[#EEEEFF] transition-colors" href="#">API</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-wider text-xs text-[#8080A0] hover:text-[#EEEEFF] transition-colors" href="#">Changelog</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-wider text-xs text-[#8080A0] hover:text-[#EEEEFF] transition-colors" href="#">Community</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden sm:block">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[#8080A0]">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+</div>
+<input class="bg-surface-container-lowest border-none text-xs rounded-lg py-2 pl-10 pr-4 w-64 focus:ring-1 focus:ring-primary-container text-[#EEEEFF] placeholder-[#8080A0] transition-all" placeholder="Search docs... ⌘K" type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-1.5 rounded-md hover:bg-[#1B1B24] text-[#8080A0] hover:text-[#EEEEFF] transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="dark_mode">dark_mode</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-[#1B1B24] text-[#8080A0] hover:text-[#EEEEFF] transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="github">hub</span>
+</button>
+<span class="bg-surface-container-low px-2 py-0.5 rounded text-[10px] font-bold text-secondary tracking-widest uppercase">v0.1 · main</span>
+</div>
+</div>
+</nav>
+<div class="flex max-w-[1280px] mx-auto pt-14">
+<!-- Left Sidebar (SideNavBar) -->
+<aside class="w-[240px] sticky top-14 h-[calc(100vh-56px)] bg-[#0F0F1C] overflow-y-auto custom-scrollbar flex flex-col py-8 px-4">
+<div class="mb-8">
+<div class="font-headline text-xs uppercase tracking-widest text-[#8080A0] mb-4 px-2">Documentation</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 py-2 px-3 text-sm text-primary-container bg-primary-container/10 rounded-lg transition-all font-medium" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+                        Overview
+                    </a>
+<a class="flex items-center gap-3 py-2 px-3 text-sm text-[#8080A0] hover:text-[#EEEEFF] hover:bg-[#1B1B24]/50 rounded-lg transition-all font-medium" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="architecture">architecture</span>
+                        Rationale
+                    </a>
+<a class="flex items-center gap-3 py-2 px-3 text-sm text-[#8080A0] hover:text-[#EEEEFF] hover:bg-[#1B1B24]/50 rounded-lg transition-all font-medium" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="link">link</span>
+                        References
+                    </a>
+<div class="pt-4 pb-2">
+<button class="flex items-center justify-between w-full px-2 py-1 text-xs font-bold text-[#8080A0] uppercase tracking-tighter">
+<span>Test Projects</span>
+<span class="material-symbols-outlined text-xs" data-icon="expand_more">expand_more</span>
+</button>
+<!-- Collapsed child links would go here -->
+</div>
+<div class="pt-2">
+<button class="flex items-center justify-between w-full px-2 py-1 text-xs font-bold text-[#EEEEFF] uppercase tracking-tighter mb-2">
+<span>Process Decisions</span>
+<span class="material-symbols-outlined text-xs" data-icon="expand_less">expand_less</span>
+</button>
+<div class="space-y-1 ml-2">
+<a class="block py-1.5 px-3 text-xs text-[#8080A0] hover:text-[#EEEEFF] rounded-lg" href="#">DEC-0001 Architecture</a>
+<a class="block py-1.5 px-3 text-xs text-primary-container bg-primary-container/20 rounded-lg font-bold border-l-2 border-primary-container" href="#">DEC-0002 Lifecycle Phases</a>
+<a class="block py-1.5 px-3 text-xs text-[#8080A0] hover:text-[#EEEEFF] rounded-lg" href="#">DEC-0003 Validation</a>
+</div>
+</div>
+</nav>
+</div>
+<div class="mt-auto pt-8">
+<nav class="space-y-1">
+<a class="flex items-center gap-3 py-2 px-3 text-sm text-[#8080A0] hover:text-[#EEEEFF] hover:bg-[#1B1B24]/50 rounded-lg transition-all font-medium" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+                        Support
+                    </a>
+<a class="flex items-center gap-3 py-2 px-3 text-sm text-[#8080A0] hover:text-[#EEEEFF] hover:bg-[#1B1B24]/50 rounded-lg transition-all font-medium" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+                        Settings
+                    </a>
+</nav>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 bg-[#0B0B14] min-w-0 px-12 py-12">
+<div class="max-w-[720px] mx-auto">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-xs font-medium text-[#8080A0] mb-6 uppercase tracking-widest">
+<span>Process Decisions</span>
+<span class="material-symbols-outlined text-[10px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-secondary">DEC-0002</span>
+</nav>
+<!-- Header Section -->
+<header class="mb-10">
+<div class="flex items-center gap-4 mb-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#1B3424] text-[#4ADE80] uppercase tracking-wider">Accepted</span>
+<span class="text-xs text-[#8080A0]">Last updated: Oct 24, 2023</span>
+</div>
+<h1 class="font-headline text-[2rem] font-bold leading-tight text-[#EEEEFF] tracking-tight">DEC-0002 — Lifecycle Phases and Human Gates</h1>
+</header>
+<!-- Content Body -->
+<div class="space-y-12 text-[#EEEEFF] leading-[1.7] text-base font-body">
+<section id="context">
+<p class="mb-6">The Nexus SDLC requires a standardized progression model that allows autonomous agents to operate within predefined boundaries while ensuring strict human oversight at critical juncture points.</p>
+</section>
+<section id="decision">
+<div class="flex items-center gap-3 mb-6 border-l-[3px] border-primary-container pl-4">
+<h2 class="font-headline text-xl font-bold uppercase tracking-wide">Decision</h2>
+</div>
+<p class="mb-8">We adopt a linear-gated progression model. Every agent-led cycle must traverse four distinct phases. Progression from one phase to the next is restricted by automated validation and, in key cases, mandatory human approval.</p>
+<div class="overflow-hidden rounded-xl bg-surface-container-low shadow-xl" id="phases">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-secondary">Phase</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-secondary">Description</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<tr class="bg-[#141422]">
+<td class="px-6 py-4 font-bold text-primary">Inception</td>
+<td class="px-6 py-4 text-[#8080A0]">Problem definition and constraint mapping. Agent generates initial proposal.</td>
+</tr>
+<tr class="bg-[#1C1C30]">
+<td class="px-6 py-4 font-bold text-primary">Elaboration</td>
+<td class="px-6 py-4 text-[#8080A0]">Technical specification and prototype scaffolding. Internal validation triggers.</td>
+</tr>
+<tr class="bg-[#141422]">
+<td class="px-6 py-4 font-bold text-primary">Construction</td>
+<td class="px-6 py-4 text-[#8080A0]">Core logic implementation and unit testing. Continuous integration active.</td>
+</tr>
+<tr class="bg-[#1C1C30]">
+<td class="px-6 py-4 font-bold text-primary">Transition</td>
+<td class="px-6 py-4 text-[#8080A0]">Final hardening and deployment preparation. Requires final sign-off.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="human-gates">
+<div class="p-8 rounded-xl bg-[#22223A] border-l-[3px] border-primary-container shadow-2xl relative overflow-hidden">
+<div class="absolute top-[-20%] right-[-10%] w-64 h-64 bg-primary-container/5 blur-[80px] rounded-full"></div>
+<h3 class="font-headline text-lg font-bold mb-4 text-[#EEEEFF] flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="lock_open">lock_open</span>
+                                Human Gates — Non-Negotiable
+                            </h3>
+<p class="text-sm text-[#8080A0] mb-4">The transition from **Elaboration** to **Construction** requires a manual cryptographic signature from a verified Human-in-the-Loop (HITL).</p>
+<ul class="list-disc list-inside text-sm text-[#8080A0] space-y-2 ml-2">
+<li>Cost estimation validation</li>
+<li>Security architecture review</li>
+<li>Intent alignment verification</li>
+</ul>
+</div>
+</section>
+<section id="reasoning">
+<h2 class="font-headline text-xl font-bold uppercase tracking-wide mb-6">Reasoning</h2>
+<p>Fully autonomous systems pose a risk of "drift" where agent goals diverge from initial human intent. By implementing fixed gates, we create a heartbeat mechanism that forces synchronization between technical execution and human strategy.</p>
+</section>
+</div>
+<!-- Footer Navigation -->
+<footer class="mt-20 pt-8 border-t border-surface-container-low flex justify-between">
+<a class="group flex flex-col items-start gap-2" href="#">
+<span class="text-[10px] uppercase tracking-widest text-[#8080A0]">Previous</span>
+<div class="flex items-center gap-2 text-primary-container group-hover:text-[#EEEEFF] transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+<span class="font-bold">DEC-0001 Architecture</span>
+</div>
+</a>
+<a class="group flex flex-col items-end gap-2 text-right" href="#">
+<span class="text-[10px] uppercase tracking-widest text-[#8080A0]">Next</span>
+<div class="flex items-center gap-2 text-primary-container group-hover:text-[#EEEEFF] transition-colors">
+<span class="font-bold">DEC-0003 Validation</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</a>
+</footer>
+</div>
+</main>
+<!-- Right Sidebar (TOC) -->
+<aside class="w-[220px] sticky top-14 h-[calc(100vh-56px)] overflow-y-auto py-12 pr-6">
+<div class="font-headline text-[10px] uppercase tracking-[0.2em] text-[#8080A0] mb-6">On this page</div>
+<nav class="flex flex-col gap-4">
+<a class="text-xs text-[#8080A0] hover:text-[#EEEEFF] border-l border-[#1B1B24] pl-4 transition-colors" href="#context">Context</a>
+<a class="text-xs text-secondary font-bold border-l border-secondary pl-4 flex items-center gap-2" href="#decision">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(34,211,238,0.5)]"></span>
+                    Decision
+                </a>
+<a class="text-xs text-[#8080A0] hover:text-[#EEEEFF] border-l border-[#1B1B24] pl-4 transition-colors" href="#phases">Phases</a>
+<a class="text-xs text-[#8080A0] hover:text-[#EEEEFF] border-l border-[#1B1B24] pl-4 transition-colors" href="#human-gates">Human Gates</a>
+<a class="text-xs text-[#8080A0] hover:text-[#EEEEFF] border-l border-[#1B1B24] pl-4 transition-colors" href="#reasoning">Reasoning</a>
+<a class="text-xs text-[#8080A0] hover:text-[#EEEEFF] border-l border-[#1B1B24] pl-4 transition-colors" href="#">Consequences</a>
+<a class="text-xs text-[#8080A0] hover:text-[#EEEEFF] border-l border-[#1B1B24] pl-4 transition-colors" href="#">Alternatives</a>
+</nav>
+<!-- Community Card -->
+<div class="mt-12 p-4 rounded-lg bg-surface-container-low border border-outline-variant/10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="forum">forum</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-[#EEEEFF]">Feedback</span>
+</div>
+<p class="text-[11px] text-[#8080A0] mb-3 leading-relaxed">Have questions about this lifecycle? Join our Discord.</p>
+<button class="w-full py-2 bg-surface-container-high hover:bg-surface-container-highest text-[10px] font-bold uppercase tracking-widest rounded transition-all">Join Discord</button>
+</div>
+</aside>
+</div>
+</body></html>

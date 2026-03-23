@@ -1,0 +1,271 @@
+---
+---
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nexus SDLC | Orbital Command Protocol</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-surface": "#e4e1ee",
+              "surface-dim": "#13121c",
+              "primary": "#d2bbff",
+              "surface-container-highest": "#34343e",
+              "primary-fixed": "#eaddff",
+              "on-error-container": "#ffdad6",
+              "surface-container-lowest": "#0d0d16",
+              "surface-container-high": "#292933",
+              "on-surface-variant": "#ccc3d8",
+              "on-secondary-fixed-variant": "#004e5a",
+              "surface": "#13121c",
+              "secondary-fixed": "#a2eeff",
+              "secondary": "#5de6ff",
+              "surface-variant": "#34343e",
+              "tertiary-fixed-dim": "#c6c4df",
+              "on-primary-fixed-variant": "#5a00c6",
+              "primary-fixed-dim": "#d2bbff",
+              "on-primary-container": "#ede0ff",
+              "on-background": "#e4e1ee",
+              "surface-bright": "#393843",
+              "secondary-container": "#00cbe6",
+              "error": "#ffb4ab",
+              "primary-container": "#7c3aed",
+              "on-secondary": "#00363e",
+              "inverse-on-surface": "#302f3a",
+              "tertiary-container": "#65647c",
+              "on-secondary-container": "#00515d",
+              "surface-container": "#1f1f28",
+              "on-primary": "#3f008e",
+              "on-tertiary": "#2f2e43",
+              "outline-variant": "#4a4455",
+              "on-secondary-fixed": "#001f25",
+              "tertiary-fixed": "#e2e0fc",
+              "on-error": "#690005",
+              "error-container": "#93000a",
+              "inverse-primary": "#732ee4",
+              "background": "#0b0b14",
+              "tertiary": "#c6c4df",
+              "on-tertiary-container": "#e5e2fe",
+              "on-primary-fixed": "#25005a",
+              "outline": "#958da1",
+              "on-tertiary-fixed": "#1a1a2d",
+              "on-surface": "#e4e1ee",
+              "on-tertiary-fixed-variant": "#45455b",
+              "surface-container-low": "#1b1b24",
+              "surface-tint": "#d2bbff",
+              "secondary-fixed-dim": "#2fd9f4"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0b0b14;
+            color: #eeeeff;
+            font-family: 'Inter', sans-serif;
+        }
+        .orbital-glow {
+            box-shadow: 0 0 80px rgba(124, 58, 237, 0.08);
+        }
+        .cyan-glow {
+            box-shadow: 0 0 60px rgba(34, 211, 238, 0.05);
+        }
+        .inner-glow {
+            box-shadow: inset 0 1px 0 rgba(124, 58, 237, 0.15);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full h-[64px] bg-[#0B0B14]/85 backdrop-blur-[20px] shadow-[0_1px_0_rgba(124,58,237,0.15)] z-50 flex justify-between items-center px-8 w-full">
+<a href="/" class="text-xl font-bold tracking-tighter text-[#EEEEFF] flex items-center gap-2 font-['Space_Grotesk']">
+<span class="material-symbols-outlined text-[#7C3AED]" data-icon="hub">hub</span>
+            Nexus SDLC
+        </a>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-['Space_Grotesk'] text-sm tracking-wide uppercase" href="/swarm/">Agents</a>
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-['Space_Grotesk'] text-sm tracking-wide uppercase" href="/overview/">Process</a>
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-['Space_Grotesk'] text-sm tracking-wide uppercase" href="/tests/nexusscan/">Test Projects</a>
+<a class="text-[#8080A0] hover:text-[#EEEEFF] transition-colors font-['Space_Grotesk'] text-sm tracking-wide uppercase" href="https://github.com/loskylp/Nexus-SDLC" target="_blank" rel="noopener">GitHub</a>
+</div>
+<a href="/overview/" class="bg-primary-container text-on-primary-container px-6 py-2 rounded-lg font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_15px_rgba(124,58,237,0.4)]">
+            Get Started
+        </a>
+</nav>
+<!-- Hero Section -->
+<main class="relative pt-[64px] min-h-[700px] max-w-[1280px] mx-auto px-8 flex flex-col md:flex-row items-center gap-12">
+<!-- Left Content -->
+<div class="md:w-1/2 flex flex-col gap-6 relative z-10 py-12">
+<div class="orbital-glow p-2 inline-block">
+<span class="text-[#22D3EE] font-label text-[10px] tracking-[0.2em] font-bold uppercase">HUMAN-IN-THE-MIDDLE ORCHESTRATION</span>
+</div>
+<h1 class="font-headline text-[3.5rem] leading-[1.1] font-bold tracking-tight text-[#EEEEFF]">
+                The structured swarm framework for autonomous software development
+            </h1>
+<p class="font-body text-[1.1rem] leading-relaxed text-[#8080A0] max-w-xl">
+                Thirteen specialized agents. Five lifecycle phases. Human approval at every gate that matters. You set the goals — the swarm executes.
+            </p>
+<div class="flex flex-wrap gap-4 mt-4">
+<a href="/overview/" class="inline-block bg-[#7C3AED] text-white px-8 py-3 rounded-md font-bold text-sm tracking-wide transition-all hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]">
+                    Read the Docs
+                </a>
+<a href="https://github.com/loskylp/Nexus-SDLC" target="_blank" class="inline-block border border-[#4A4455]/40 text-[#EEEEFF] px-8 py-3 rounded-md font-bold text-sm tracking-wide transition-all hover:bg-[#1B1B24]">
+                    View on GitHub
+                </a>
+</div>
+<div class="flex items-center gap-4 mt-8 pt-8 border-t border-[#4A4455]/10">
+<p class="text-[#8080A0] text-xs font-medium tracking-wide">
+                    Built for <span class="text-[#EEEEFF]">Claude Code</span> · Open source · Apache 2.0
+                </p>
+</div>
+</div>
+<!-- Right Visual (Abstract Orbital Diagram) -->
+<div class="md:w-1/2 h-[600px] relative flex items-center justify-center">
+<div class="relative w-[500px] h-[500px] cyan-glow rounded-full flex items-center justify-center">
+<!-- Orbital Arcs (CSS Drawing) -->
+<div class="absolute inset-0 border border-[#7C3AED]/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
+<div class="absolute inset-8 border border-[#22D3EE]/10 rounded-full animate-[spin_30s_linear_infinite_reverse]"></div>
+<div class="absolute inset-24 border border-[#7C3AED]/15 rounded-full"></div>
+<!-- Central Node -->
+<div class="z-20 w-16 h-16 bg-[#0B0B14] border border-[#7C3AED] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(124,58,237,0.4)]">
+<span class="material-symbols-outlined text-[#7C3AED] text-3xl" data-icon="rocket_launch" data-weight="fill">rocket_launch</span>
+</div>
+<!-- Peripheral Nodes (5 phases) -->
+<!-- Ingestion -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 group">
+<div class="w-12 h-12 bg-[#141422] border border-[#22D3EE]/40 rounded-lg flex items-center justify-center group-hover:border-[#22D3EE] transition-colors inner-glow">
+<span class="material-symbols-outlined text-[#22D3EE] text-xl" data-icon="input">input</span>
+</div>
+<span class="absolute top-14 left-1/2 -translate-x-1/2 text-[10px] text-[#8080A0] font-bold tracking-widest uppercase whitespace-nowrap">Ingestion</span>
+</div>
+<!-- Decomposition -->
+<div class="absolute top-[20%] right-0 translate-x-1/2 group">
+<div class="w-12 h-12 bg-[#141422] border border-[#7C3AED]/40 rounded-lg flex items-center justify-center group-hover:border-[#7C3AED] transition-colors inner-glow">
+<span class="material-symbols-outlined text-[#7C3AED] text-xl" data-icon="account_tree">account_tree</span>
+</div>
+<span class="absolute top-14 left-1/2 -translate-x-1/2 text-[10px] text-[#8080A0] font-bold tracking-widest uppercase whitespace-nowrap">Decomposition</span>
+</div>
+<!-- Execution -->
+<div class="absolute bottom-[20%] right-0 translate-x-1/2 group">
+<div class="w-12 h-12 bg-[#141422] border border-[#22D3EE]/40 rounded-lg flex items-center justify-center group-hover:border-[#22D3EE] transition-colors inner-glow">
+<span class="material-symbols-outlined text-[#22D3EE] text-xl" data-icon="terminal">terminal</span>
+</div>
+<span class="absolute top-14 left-1/2 -translate-x-1/2 text-[10px] text-[#8080A0] font-bold tracking-widest uppercase whitespace-nowrap">Execution</span>
+</div>
+<!-- Verification -->
+<div class="absolute bottom-[20%] left-0 -translate-x-1/2 group">
+<div class="w-12 h-12 bg-[#141422] border border-[#7C3AED]/40 rounded-lg flex items-center justify-center group-hover:border-[#7C3AED] transition-colors inner-glow">
+<span class="material-symbols-outlined text-[#7C3AED] text-xl" data-icon="verified">verified</span>
+</div>
+<span class="absolute top-14 left-1/2 -translate-x-1/2 text-[10px] text-[#8080A0] font-bold tracking-widest uppercase whitespace-nowrap">Verification</span>
+</div>
+<!-- Go-Live -->
+<div class="absolute top-[20%] left-0 -translate-x-1/2 group">
+<div class="w-12 h-12 bg-[#141422] border border-[#22D3EE]/40 rounded-lg flex items-center justify-center group-hover:border-[#22D3EE] transition-colors inner-glow">
+<span class="material-symbols-outlined text-[#22D3EE] text-xl" data-icon="cloud_done">cloud_done</span>
+</div>
+<span class="absolute top-14 left-1/2 -translate-x-1/2 text-[10px] text-[#8080A0] font-bold tracking-widest uppercase whitespace-nowrap">Go-Live</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Feature Bento Grid Section -->
+<section class="max-w-[1280px] mx-auto px-8 py-24">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 h-auto md:h-[400px]">
+<!-- Card 1: Managed Autonomy -->
+<div class="bg-[#1C1C30] p-8 rounded-xl inner-glow flex flex-col justify-between hover:bg-[#292933] transition-all group">
+<div>
+<div class="w-10 h-10 bg-[#7C3AED]/10 rounded flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[#7C3AED]" data-icon="auto_mode">auto_mode</span>
+</div>
+<h3 class="font-headline text-xl font-bold mb-4 text-[#EEEEFF]">Managed Autonomy</h3>
+<p class="text-[#8080A0] text-sm leading-relaxed">Agents execute phases autonomously between human gates, maintaining momentum while ensuring control.</p>
+</div>
+<div class="pt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] font-bold text-[#7C3AED] uppercase tracking-widest">Protocol Delta</span>
+<div class="h-[1px] flex-grow bg-[#7C3AED]/20"></div>
+</div>
+</div>
+<!-- Card 2: Profile-Calibrated Depth -->
+<div class="bg-[#1C1C30] p-8 rounded-xl inner-glow flex flex-col justify-between hover:bg-[#292933] transition-all group">
+<div>
+<div class="w-10 h-10 bg-[#22D3EE]/10 rounded flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[#22D3EE]" data-icon="tune">tune</span>
+</div>
+<h3 class="font-headline text-xl font-bold mb-4 text-[#EEEEFF]">Profile-Calibrated Depth</h3>
+<p class="text-[#8080A0] text-sm leading-relaxed">Casual to Vital, the swarm scales its rigor to match your project's specific stakes and requirements.</p>
+</div>
+<div class="pt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] font-bold text-[#22D3EE] uppercase tracking-widest">Scale Engine</span>
+<div class="h-[1px] flex-grow bg-[#22D3EE]/20"></div>
+</div>
+</div>
+<!-- Card 3: 13 Specialized Agents -->
+<div class="bg-[#1C1C30] p-8 rounded-xl inner-glow flex flex-col justify-between hover:bg-[#292933] transition-all group">
+<div>
+<div class="w-10 h-10 bg-[#7C3AED]/10 rounded flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[#7C3AED]" data-icon="groups">groups</span>
+</div>
+<h3 class="font-headline text-xl font-bold mb-4 text-[#EEEEFF]">13 Specialized Agents</h3>
+<p class="text-[#8080A0] text-sm leading-relaxed">From Analyst to Scribe, each agent operates within a single, high-fidelity plane of responsibility.</p>
+</div>
+<div class="pt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] font-bold text-[#7C3AED] uppercase tracking-widest">Agent Roster</span>
+<div class="h-[1px] flex-grow bg-[#7C3AED]/20"></div>
+</div>
+</div>
+<!-- Card 4: Human Gates -->
+<div class="bg-[#1C1C30] p-8 rounded-xl inner-glow flex flex-col justify-between hover:bg-[#292933] transition-all group border-l-2 border-[#22D3EE]/20">
+<div>
+<div class="w-10 h-10 bg-[#22D3EE]/10 rounded flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[#22D3EE]" data-icon="policy">policy</span>
+</div>
+<h3 class="font-headline text-xl font-bold mb-4 text-[#EEEEFF]">Human Gates</h3>
+<p class="text-[#8080A0] text-sm leading-relaxed">Requirements, Architecture, Plan, Demo Sign-off, Go-Live. Non-negotiable safety checkpoints.</p>
+</div>
+<div class="pt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] font-bold text-[#22D3EE] uppercase tracking-widest">Secure Handover</span>
+<div class="h-[1px] flex-grow bg-[#22D3EE]/20"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer (Shared Component) -->
+<footer class="bg-[#0D0D16] w-full py-12 border-t border-[#4a4455]/15 mt-16">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-8">
+<div class="flex flex-col items-center md:items-start gap-4 mb-8 md:mb-0">
+<div class="text-lg font-black text-[#8080A0] font-['Space_Grotesk'] tracking-tighter flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="security">security</span>
+                    NEXUS SDLC
+                </div>
+<p class="font-['Inter'] text-xs tracking-tight text-[#8080A0]">
+                    © 2026 Nexus SDLC. Orbital Command Protocol.
+                </p>
+</div>
+<div class="flex gap-8">
+<a class="text-[#8080A0] hover:text-[#22D3EE] hover:underline decoration-[#22D3EE] transition-all font-['Inter'] text-xs tracking-tight opacity-80 hover:opacity-100" href="#">Privacy</a>
+<a class="text-[#8080A0] hover:text-[#22D3EE] hover:underline decoration-[#22D3EE] transition-all font-['Inter'] text-xs tracking-tight opacity-80 hover:opacity-100" href="#">Terms</a>
+<a class="text-[#8080A0] hover:text-[#22D3EE] hover:underline decoration-[#22D3EE] transition-all font-['Inter'] text-xs tracking-tight opacity-80 hover:opacity-100" href="#">Security</a>
+<a class="text-[#8080A0] hover:text-[#22D3EE] hover:underline decoration-[#22D3EE] transition-all font-['Inter'] text-xs tracking-tight opacity-80 hover:opacity-100" href="#">Status</a>
+</div>
+</div>
+</footer>
+</body></html>

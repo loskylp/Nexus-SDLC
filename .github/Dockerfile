@@ -1,23 +1,31 @@
-# Stage 1: build the static site with MkDocs
-FROM python:3.12-slim AS builder
+# Stage 1: build the static site with Astro + Starlight
+FROM node:22-alpine AS builder
 
 WORKDIR /build
 
-RUN pip install --no-cache-dir \
-    mkdocs-material==9.5.* \
-    pymdown-extensions
+# Copy site project files
+COPY .github/site/package.json .github/site/package-lock.json ./
+RUN npm ci
 
-# Copy config and source docs
-COPY .github/mkdocs.yml mkdocs.yml
+COPY .github/site/ ./
+
+# docs_src is prepared by CI before the Docker build
 COPY docs_src/ docs_src/
-COPY .github/docs-assets/ docs_src/
 
-RUN mkdocs build
+# Copy markdown content into Starlight content directories
+RUN mkdir -p src/content/docs/process src/content/docs/tests && \
+    cp docs_src/index.md    src/content/docs/overview.md && \
+    cp docs_src/rationale.md src/content/docs/rationale.md && \
+    cp docs_src/references.md src/content/docs/references.md && \
+    cp -r docs_src/process/. src/content/docs/process/ && \
+    cp -r docs_src/tests/.   src/content/docs/tests/
+
+RUN npm run build
 
 # Stage 2: serve with nginx
 FROM nginx:1.27-alpine
 
-COPY --from=builder /build/site /usr/share/nginx/html
+COPY --from=builder /build/dist /usr/share/nginx/html
 
 # Custom nginx config: serve pre-built static files, handle clean URLs
 COPY .github/nginx.conf /etc/nginx/conf.d/default.conf

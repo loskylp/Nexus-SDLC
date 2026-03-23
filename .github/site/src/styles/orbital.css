@@ -1,0 +1,182 @@
+/* ── Fonts ─────────────────────────────────────────────────────────── */
+:root {
+  --sl-font: 'Inter', system-ui, -apple-system, sans-serif;
+  --sl-font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+}
+
+/* ── Orbital color tokens ───────────────────────────────────────────── */
+/* Starlight dark mode — force always-dark regardless of OS preference */
+:root,
+[data-theme='dark'] {
+  /* Accent: Electric Violet */
+  --sl-color-accent-low: #1e1030;
+  --sl-color-accent: #7c3aed;
+  --sl-color-accent-high: #d2bbff;
+
+  /* Text */
+  --sl-color-white: #eeeeff;
+  --sl-color-gray-1: #ccc3d8;
+  --sl-color-gray-2: #8080a0;
+  --sl-color-gray-3: #4a4455;
+  --sl-color-gray-4: #292933;
+  --sl-color-gray-5: #1f1f28;
+  --sl-color-gray-6: #141422;
+  --sl-color-black: #0b0b14;
+
+  /* Background */
+  --sl-color-bg: #0b0b14;
+  --sl-color-bg-nav: #0f0f1c;
+  --sl-color-bg-sidebar: #0f0f1c;
+}
+
+/* Force dark theme — no system preference switching */
+html {
+  color-scheme: dark;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────── */
+:root {
+  --sl-sidebar-width: 16rem;
+}
+
+.sidebar-pane {
+  background-color: #0f0f1c;
+  border-right: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+/* Active nav item */
+[aria-current='page'],
+[aria-current='page']:hover {
+  background-color: rgba(124, 58, 237, 0.12) !important;
+  color: #d2bbff !important;
+  border-radius: 0.25rem;
+}
+
+/* Nav group labels */
+.group-label span {
+  color: #8080a0;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Top header bar ──────────────────────────────────────────────────── */
+header.header {
+  background-color: rgba(11, 11, 20, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(124, 58, 237, 0.12);
+  box-shadow: 0 0 80px rgba(124, 58, 237, 0.05);
+}
+
+/* Site title */
+.site-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #eeeeff;
+}
+
+/* ── Content area ────────────────────────────────────────────────────── */
+.main-pane,
+.content-panel {
+  background-color: #0b0b14;
+}
+
+/* ── Typography ──────────────────────────────────────────────────────── */
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3,
+.sl-markdown-content h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.sl-markdown-content h2 {
+  border-left: 3px solid #7c3aed;
+  padding-left: 0.75rem;
+  margin-left: -0.75rem;
+}
+
+/* ── Tables ──────────────────────────────────────────────────────────── */
+.sl-markdown-content table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.sl-markdown-content table th {
+  background-color: #1c1c30;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ccc3d8;
+  border-bottom: 1px solid rgba(74, 68, 85, 0.5);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.sl-markdown-content table td {
+  padding: 0.75rem 1rem;
+  border: none;
+  color: #ccc3d8;
+}
+
+.sl-markdown-content table tr:nth-child(even) td {
+  background-color: #141422;
+}
+
+.sl-markdown-content table tr:nth-child(odd) td {
+  background-color: #1b1b24;
+}
+
+.sl-markdown-content table tr:hover td {
+  background-color: #1c1c30;
+}
+
+/* ── Callout / Aside blocks ──────────────────────────────────────────── */
+.starlight-aside {
+  border-left: 3px solid #7c3aed;
+  background-color: #1c1c30;
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+/* ── Code blocks ─────────────────────────────────────────────────────── */
+.sl-markdown-content pre {
+  background-color: #0d0d16 !important;
+  border: 1px solid rgba(74, 68, 85, 0.3);
+}
+
+/* ── Breadcrumbs ─────────────────────────────────────────────────────── */
+.breadcrumbs {
+  font-size: 0.75rem;
+  color: #8080a0;
+}
+
+/* ── Right TOC ───────────────────────────────────────────────────────── */
+starlight-toc a[aria-current='true'] {
+  color: #7c3aed;
+  border-left-color: #7c3aed;
+}
+
+/* ── Pagination buttons ──────────────────────────────────────────────── */
+.pagination-links a {
+  background-color: #1c1c30;
+  border: 1px solid rgba(74, 68, 85, 0.3);
+  box-shadow: inset 0 1px 0 rgba(124, 58, 237, 0.1);
+}
+
+.pagination-links a:hover {
+  background-color: #292933;
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+/* ── Back to top / Nexus site nav link ───────────────────────────────── */
+.back-to-site {
+  color: #8080a0;
+  font-size: 0.75rem;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
