@@ -18,6 +18,7 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
+    - navigation.indexes
     - navigation.expand
     - navigation.top
     - toc.integrate
@@ -50,11 +51,11 @@ nav:
   - References: references.md
   - Test Projects:
     - NexusScan:
-      - Report: tests/NexusScan.md
+      - tests/NexusScan.md
       - Transcript: tests/NexusScan-TRANSCRIPT.md
       - Retrospective: tests/NexusScan-RETROSPECTIVE.md
     - BrainDump:
-      - Report: tests/BrainDump.md
+      - tests/BrainDump.md
       - Transcript: tests/BrainDump-TRANSCRIPT.md
       - Retrospective: tests/BrainDump-RETROSPECTIVE.md
     - Explorations:
