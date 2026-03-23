@@ -20,7 +20,7 @@ RUN mkdir -p src/content/docs/process src/content/docs/tests && \
     cp -r docs_src/process/. src/content/docs/process/ && \
     cp -r docs_src/tests/.   src/content/docs/tests/
 
-RUN npm run build
+RUN npx astro telemetry disable && npm run build
 
 # Stage 2: serve with nginx
 FROM nginx:1.27-alpine
