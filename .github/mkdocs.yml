@@ -18,10 +18,7 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
-    - navigation.indexes
-    - navigation.expand
     - navigation.top
-    - toc.integrate
     - content.code.copy
   font:
     text: Inter
@@ -50,14 +47,12 @@ nav:
   - Rationale: rationale.md
   - References: references.md
   - Test Projects:
-    - NexusScan:
-      - tests/NexusScan.md
-      - Transcript: tests/NexusScan-TRANSCRIPT.md
-      - Retrospective: tests/NexusScan-RETROSPECTIVE.md
-    - BrainDump:
-      - tests/BrainDump.md
-      - Transcript: tests/BrainDump-TRANSCRIPT.md
-      - Retrospective: tests/BrainDump-RETROSPECTIVE.md
+    - NexusScan: tests/NexusScan.md
+    - NexusScan — Transcript: tests/NexusScan-TRANSCRIPT.md
+    - NexusScan — Retrospective: tests/NexusScan-RETROSPECTIVE.md
+    - BrainDump: tests/BrainDump.md
+    - BrainDump — Transcript: tests/BrainDump-TRANSCRIPT.md
+    - BrainDump — Retrospective: tests/BrainDump-RETROSPECTIVE.md
     - Explorations:
       - Designer + Stitch MCP: tests/explorations/Designer-StitchMCP-RETROSPECTIVE.md
   - Process Decisions:
