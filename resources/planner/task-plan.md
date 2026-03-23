@@ -30,7 +30,7 @@ For Casual: repeat the metaphor. For Commercial+: reference the Overview or ADRs
 **Requirement(s):** [REQ-NNN]
 **Description:** [What must be done. Not how.]
 **Acceptance Criteria:**
-- [ ] [Specific, testable condition]
+- [Specific, testable condition]
 **Depends on:** [TASK-NNN | none]
 **Risk:** [H/M/L — cite the rubric criterion: e.g. "H — one-way door, no spike yet"]
 **Value:** [H/M/L — cite the rubric criterion: e.g. "H — Must Have for MVP, on walking skeleton critical path"]

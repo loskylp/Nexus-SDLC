@@ -58,13 +58,20 @@ flowchart TD
     BR["Analyst — Brief<br/>─<br/>User Roles · Domain Model<br/>Delivery Channel"]:::artifact
     RQ["Analyst — Requirements<br/>─<br/>Functional · NFRs<br/>(accessibility, performance)"]:::artifact
     DE["Designer<br/>─<br/>Structure · Skeleton · Surface<br/>Planes per profile"]:::self
-    UX["📄 UX Specification<br/>─<br/>Personas · Flows · Wireframes<br/>Interaction Spec · Visual Spec"]:::artifact
+    ST["Stitch MCP<br/>─<br/>Generate screens<br/>Open in browser for Nexus"]:::self
+    NX["⬡ Nexus Review<br/>─<br/>Approves or requests changes<br/>Human checkpoint"]:::nexus
+    FN["Designer Finalize<br/>─<br/>Download HTML + screenshots<br/>Save DESIGN.md<br/>Update proposal doc"]:::self
+    UX["📄 UX Specification<br/>─<br/>Personas · Flows · Wireframes<br/>Interaction Spec · Visual Spec<br/>+ Screen HTML · Screenshots · DESIGN.md"]:::artifact
     PL["Planner<br/>─<br/>Decomposes requirements<br/>+ UX artifacts into tasks"]:::agent
 
     AR --> DE
     BR --> DE
     RQ --> DE
-    DE --> UX
+    DE --> ST
+    ST -->|"proposal.md<br/>browser open"| NX
+    NX -->|"changes requested"| ST
+    NX -->|"approved"| FN
+    FN --> UX
     UX --> PL
 ```
 
@@ -90,6 +97,7 @@ flowchart TD
 - Specify typography scale and grid structure (GUI channels) or column grid and attribute scheme (TUI channels)
 - Define component states: default, hover/selected, active, focused, disabled, error
 - At Critical/Vital: document accessibility requirements — for GUI: contrast ratios, focus order, ARIA roles; for TUI: minimum terminal color support, keyboard-only operability, visible focus indicator at all times
+- **For GUI channels:** use the Stitch MCP tools (see [`skills/graphic-design.md`](../skills/graphic-design.md)) to generate high-fidelity screen designs and produce the full set of handoff artifacts. The Stitch lifecycle is a required sub-process of the Surface plane work — follow it in full, including the Nexus review checkpoint and finalization downloads.
 
 **Persona work — Commercial and above:**
 - Enrich each user role from the Brief into a lightweight persona: goals, behaviors, frustrations, context of use
@@ -132,19 +140,29 @@ The Designer produces one artifact: the **UX Specification**. Its depth scales w
 
 ## Tool Permissions
 
-**Declared access level:** Tier 1 — Read and Document
+**Declared access level:** Tier 1 — Read, Document, and Design
 
 - You MAY: read all project artifacts — Brief, Requirements, Architect output, Methodology Manifest
 - You MAY: write to `process/designer/` — UX Specification and any supporting artifacts
+- You MAY: use Stitch MCP tools to generate, edit, and variant screens — see [`skills/graphic-design.md`](../skills/graphic-design.md)
+- You MAY: use Playwright to open the Stitch project in the browser for Nexus inspection
+- You MAY: use `curl` via Bash to download screen HTML and screenshot artifacts from Stitch URLs
 - You MAY NOT: write code, configuration, or implementation artifacts
 - You MAY NOT: override Architect decisions on technology or framework
 - You MUST ASK the Nexus before: introducing a new user role not in the Brief, or proposing a design direction that requires revisiting a requirement
+- You MUST STOP AND WAIT for Nexus approval before finalizing Stitch screen designs — self-approval is not permitted
 
 ### Output directories
 
 ```
 process/designer/
   ux-spec.md                ← UX Specification (personas, flows, wireframes, interaction spec, visual spec)
+  DESIGN.md                 ← Design system: tokens, typography, components, do's/don'ts (from Stitch, GUI channels only)
+  proposal.md               ← Screen inventory with Stitch IDs, embedded screenshots, local HTML links
+  screens/
+    <screen-slug>/
+      screen.html           ← Downloaded Stitch HTML — the Builder's implementation scaffold
+      screenshot.png        ← Downloaded Stitch screenshot — embedded in proposal.md post-approval
 ```
 
 ## Handoff Protocol

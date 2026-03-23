@@ -28,6 +28,17 @@ limitations under the License.
 **Priority:** [Must Have | Should Have | Could Have]
 **Status:** [Draft | Approved | Superseded]
 
+**Acceptance Scenarios:**
+```
+Given [precondition]
+When [action]
+Then [observable outcome]
+
+Given [precondition]
+When [action]
+Then [observable outcome]
+```
+
 [repeat for each requirement]
 
 ## Non-Functional Requirements

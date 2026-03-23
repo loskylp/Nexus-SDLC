@@ -159,6 +159,7 @@ End-to-end runs of the Nexus SDLC framework on real projects.
 | Project | Profile | Report | Transcript | Retrospective |
 |---|---|---|---|---|
 | [NexusScan](https://github.com/loskylp/NexusScan) | Casual — Python CLI | [tests/NexusScan.md](tests/NexusScan.md) | [tests/NexusScan-TRANSCRIPT.md](tests/NexusScan-TRANSCRIPT.md) | [tests/NexusScan-RETROSPECTIVE.md](tests/NexusScan-RETROSPECTIVE.md) |
+| [BrainDump](https://github.com/loskylp/BrainDump) | Commercial — Node.js + React Web App | [tests/BrainDump.md](tests/BrainDump.md) | [tests/BrainDump-TRANSCRIPT.md](tests/BrainDump-TRANSCRIPT.md) | [tests/BrainDump-RETROSPECTIVE.md](tests/BrainDump-RETROSPECTIVE.md) |
 
 ## Agent Definitions
 

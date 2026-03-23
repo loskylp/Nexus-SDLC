@@ -71,18 +71,23 @@ flowchart TD
 - Stand up the CI pipeline: build, test, lint on every commit to the working branch; results must be visible before the Builder's first commit lands
 - Provision the development environment and confirm the app can be deployed to it
 - Produce the Environment Contract — the names and purposes of every environment variable the project uses; actual values are managed by DevOps and are never committed or exposed in the contract
+- **First-push CI confirmation (mandatory):** after writing and committing all Phase 1 infrastructure files, make a real push to the remote and wait for the CI pipeline run to complete; all jobs must pass before Phase 1 is marked COMPLETE and before the Builder's first task begins; inspecting file contents is not verification — the pipeline running green is; follow [`skills/commit-discipline.md`](../skills/commit-discipline.md)
 
 **Phase 2 — Parallel with Builder:**
 - Provision staging environment as Builder output accumulates verified tasks
-- Add the CD pipeline: a verified build on the main working branch deploys automatically to staging
+- Wire the deployment pipeline per the model declared in the Manifest's Deployment Workflow section:
+  - **Tag-based (default):** on demo tag push (`demo/vN.N`), pipeline builds the Docker image, runs regression, and deploys to staging; on release tag push (`release/vN.N`), pipeline retags the staging-validated image to prod — no rebuild
+  - **Branch-based:** configure per the Manifest's branch strategy
 - Maintain the CI pipeline as dependencies and configuration evolve
 - Manage per-environment configuration — injecting the right values into the right environment at the right time
+- **Demo tag ownership:** when the Orchestrator signals that all cycle tasks are verified and CI is green, DevOps pushes the demo tag — this is the trigger that deploys to staging; naming convention: `demo/v[cycle].[attempt]` (e.g. `demo/v1.0` for Cycle 1 first attempt, `demo/v1.1` for a second attempt after a rejected demo)
+- **Staging precondition for Demo Sign-off:** confirm staging is reachable at its health endpoint after the demo tag pipeline completes; signal the Orchestrator when staging is live; Demo Sign-off does not open until this confirmation is received
 
 **Phase 3 — Before Go-Live gate:**
 - Provision and validate the production environment
 - Wire the production side of each Architect fitness function: metrics flowing, alerting thresholds set, dashboards available
-- Confirm the CD pipeline reaches production cleanly with a staged release or dry run
 - Confirm all security automation is active and the build is clean
+- **Release tag ownership:** when the Orchestrator signals Go-Live approval, DevOps pushes the release tag (`release/vN.N`) against the same commit that received the demo tag — this triggers image promotion to prod; no source rebuild; naming follows the convention in the Manifest's Deployment Workflow section
 
 ## You Must Not
 
@@ -156,7 +161,7 @@ DevOps tasks are self-evidencing. The acceptance criterion is the infrastructure
 
 | Task type | Done when |
 |---|---|
-| CI pipeline | A commit to the working branch triggers the pipeline; build and test results are reported without manual intervention |
+| CI pipeline | A real push to the remote triggers the pipeline; all jobs (build, test, lint) pass and results are reported without manual intervention; file inspection alone does not satisfy this criterion |
 | Dev environment | Application deploys to the environment; health check endpoint returns healthy; a smoke test request succeeds |
 | Staging environment | Same as dev environment, confirmed independently; CD pipeline delivers a build to staging without manual steps |
 | CD pipeline | A verified build on the working branch reaches the target environment automatically; no manual deployment step |

@@ -23,6 +23,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AGENTS_SRC="$SCRIPT_DIR/agents"
 RESOURCES_SRC="$SCRIPT_DIR/resources"
+SKILLS_SRC="$SCRIPT_DIR/skills"
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -87,10 +88,10 @@ claude_meta() {
             echo 'nexus-planner|Nexus SDLC — Planner: Turns approved Requirements List and Architect output into an ordered Task Plan. Invoke after the Requirements Gate. Also handles plan revisions after demo feedback, spike findings, or Nexus-invoked release map reviews.|opus|blue'
             ;;
         designer.md)
-            echo 'nexus-designer|Nexus SDLC — Designer: Translates approved requirements into UX flows, interaction specifications, and component structures that Builder can implement. Invoke after Requirements Gate for user-facing features. Not invoked at Casual unless UX complexity warrants it.|opus|pink'
+            echo 'nexus-designer|Nexus SDLC — Designer: Translates approved requirements into UX flows, interaction specifications, and component structures that Builder can implement. Invoked when the delivery channel requires a visual interface. At Casual, Builder handles UI directly via the graphic-design skill.|opus|pink'
             ;;
         devops.md)
-            echo 'nexus-devops|Nexus SDLC — DevOps: Builds and maintains the delivery infrastructure — CI/CD pipelines, environments, configuration management, and production monitoring. Not invoked at Casual. At Commercial and above, invoke to set up the pipeline before Builder begins, provision environments in parallel with Builder tasks, and prepare production before the Integrator cuts a release.|sonnet|gray'
+            echo 'nexus-devops|Nexus SDLC — DevOps: Builds and maintains the delivery infrastructure — CI/CD pipelines, environments, configuration management, and production monitoring. Not invoked at Casual. At Commercial and above, invoke to set up the pipeline before Builder begins, provision environments in parallel with Builder tasks, and prepare production before the Go-Live gate.|sonnet|gray'
             ;;
         verifier.md)
             echo 'nexus-verifier|Nexus SDLC — Verifier: Verifies a Builder implementation against task acceptance criteria and the requirement Definition of Done. Invoke after each Builder output. Writes and runs tests, produces a structured verification report.|sonnet|cyan'
@@ -187,11 +188,13 @@ if [[ "$MODE" == "claude" ]]; then
     if $PERSONAL; then
         DEST_DIR="${HOME}/.claude/agents"
         RESOURCES_DEST="${HOME}/.claude/resources"
+        SKILLS_DEST="${HOME}/.claude/skills"
     elif [[ -n "$TARGET_DIR" ]]; then
         TARGET_DIR="${TARGET_DIR%/}"
         TARGET_DIR="$(cd "$TARGET_DIR" 2>/dev/null && pwd)" || die "directory not found: $TARGET_DIR"
         DEST_DIR="$TARGET_DIR/.claude/agents"
         RESOURCES_DEST="$TARGET_DIR/.claude/resources"
+        SKILLS_DEST="$TARGET_DIR/.claude/skills"
     else
         die "specify --personal or a project directory"
     fi
@@ -216,6 +219,12 @@ echo "Installing output templates to: $RESOURCES_DEST"
 cp -r "$RESOURCES_SRC/." "$RESOURCES_DEST/"
 echo "  ✓ resources/ → $RESOURCES_DEST (.claude/resources/)"
 
+echo ""
+echo "Installing skills to: $SKILLS_DEST"
+mkdir -p "$SKILLS_DEST"
+cp -r "$SKILLS_SRC/." "$SKILLS_DEST/"
+echo "  ✓ skills/ → $SKILLS_DEST (.claude/skills/)"
+
 # ── Post-install hints ────────────────────────────────────────────────────────
 
 if [[ "$MODE" == "claude" ]]; then
@@ -223,10 +232,12 @@ if [[ "$MODE" == "claude" ]]; then
     if $PERSONAL; then
         echo "Agents are now available globally in all Claude Code sessions."
         echo "Output templates installed to: $RESOURCES_DEST"
+        echo "Skills installed to: $SKILLS_DEST"
         echo ""
         echo "Run 'claude' in any project and use @nexus-methodologist to start."
-        echo "To install resources into a specific project:"
+        echo "To install resources and skills into a specific project:"
         echo "  cp -r $RESOURCES_DEST <project-dir>/.claude/resources"
+        echo "  cp -r $SKILLS_DEST <project-dir>/.claude/skills"
     else
         echo "Next steps:"
         echo "  cd $TARGET_DIR"

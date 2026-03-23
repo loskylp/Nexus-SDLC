@@ -81,7 +81,37 @@ limitations under the License.
 
 ## Infrastructure Preconditions
 
-[What must be in place before Builder tasks begin. At Casual: often none.]
+**Before Builder tasks begin:**
+[What CI pipeline, dev environment, and Environment Contract must be in place. At Casual: often none — Builder sets up the dev environment directly.]
+
+**Before each Demo Sign-off:**
+[Staging must be reachable at its health endpoint and the application must be running. DevOps confirms staging live before the Orchestrator opens the Demo Sign-off gate. At Casual: not applicable.]
+
+## Deployment Workflow
+
+*Remove this section at Casual — no DevOps agent, no pipeline.*
+
+**Model:** [Tag-based | Branch-based — choose based on project scale and team preference. Tag-based is the default for single-branch projects at Commercial.]
+
+### Tag-based model (default at Commercial)
+
+Three triggers, three owners:
+
+| Trigger | Who pushes | Pipeline action |
+|---|---|---|
+| Commit push to `main` (per task) | **Verifier** — after task PASS + local lint | Build + full regression test suite |
+| Demo tag (e.g. `demo/v[cycle].[attempt]`) | **DevOps** — signalled by Orchestrator after all cycle tasks verified and CI green | Build + regression + Docker image build + push to staging |
+| Release tag (e.g. `release/v[major].[minor]`) | **DevOps** — signalled by Orchestrator after Go-Live approved by Nexus | Retag the staging-validated Docker image to prod — no rebuild |
+
+**Tag naming convention:**
+- Demo tags: `demo/v[cycle].[attempt]` — e.g. `demo/v1.0` for Cycle 1 first attempt, `demo/v1.1` for a second attempt after a rejected demo
+- Release tags: `release/v[major].[minor]` — e.g. `release/v1.0`; minor increments on cycle releases, major on breaking changes
+
+**Image promotion rule:** the Docker image deployed to production is the exact image that passed Demo Sign-off — retag only, never rebuild from source. This guarantees the Nexus approved exactly what goes to prod.
+
+### Branch-based model (for multi-branch workflows)
+
+[Describe branch strategy, merge gates, and who triggers each environment promotion. Use this model at Critical and above when parallel feature development requires isolation.]
 
 ## Provisional Assumptions
 

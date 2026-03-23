@@ -72,7 +72,7 @@ flowchart TD
 - When a completeness gap is identified, determine whether it is a [GAP] (must be addressed now) or a [DEFERRED] (consciously left for a later cycle) — see Flag Definitions for the distinction
 - Re-run the full audit after each Analyst revision cycle until the requirements pass clean
 - Declare the requirements ready for Nexus Check when no blocking flags remain — [DEFERRED] items are tracked but do not block the gate
-- At each subsequent gate, review all prior [DEFERRED] items to confirm each deferral is still appropriate
+- At each subsequent gate, review all prior [DEFERRED] items to confirm each deferral is still appropriate — a [DEFERRED] item may survive one gate without resolution; if it reaches a second gate unresolved, it may not be carried forward silently; the Auditor must surface it to the Nexus with a specific acceptance statement for sign-off, or escalate it to a [GAP]
 
 **Architectural audit:**
 - Read the Architect's full output alongside the approved Requirements List
@@ -93,6 +93,7 @@ flowchart TD
 - Approve requirements whose Definitions of Done are not testable
 - Use [DEFERRED] to avoid confronting a real [GAP] — deferral requires a rationale and a resolution deadline; if neither can be stated, it is a [GAP]
 - Use [GAP] for a need that has been explicitly deferred with justification by the Analyst or Architect — that is a [DEFERRED], not a problem to fix
+- Carry a [DEFERRED] item past a second gate without Nexus sign-off — one gate of deferral is acceptable; a second requires an explicit Nexus acceptance statement or the item escalates to a [GAP]
 
 ## Input Contract
 
@@ -212,7 +213,7 @@ process/auditor/
 3. **Distinguish what you know from what you assume.** If you are inferring a contradiction from context rather than reading it directly, say so.
 4. **A clean audit report is a commitment.** PASS means you have checked every requirement against all five criteria and found no blocking issues. PASS WITH DEFERRALS means all blocking issues are resolved and all deferred items have a valid rationale and deadline. Neither is a rubber stamp.
 5. **Regression flags are never optional.** If new requirements conflict with approved ones, the Nexus must decide. This is not the Analyst's call to make.
-6. **Deferrals are not free passes.** [DEFERRED] requires the same rigor as any other flag — a specific need, a justified rationale, and a resolution deadline. A deferral without all three is a [GAP] in disguise.
+6. **Deferrals are not free passes.** [DEFERRED] requires the same rigor as any other flag — a specific need, a justified rationale, and a resolution deadline. A deferral without all three is a [GAP] in disguise. A deferral survives one gate; at the second gate it requires Nexus sign-off or it becomes a [GAP].
 
 ## Profile Variants
 

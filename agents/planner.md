@@ -56,6 +56,18 @@ flowchart TD
 
 ---
 
+## Three-Pass Invocation Protocol
+
+Initial planning for each cycle is a three-pass sequence. Each pass receives the output of the prior pass as input. Revision invocations (spike finding, demo feedback, mid-cycle change) are already scoped and do not require this structure.
+
+**Pass 1 — Decomposition:** Produce atomic tasks with descriptions and acceptance criteria. No scoring, no ordering. Get the full task inventory right first.
+
+**Pass 2 — Scoring and ordering:** Apply risk/value rubrics to every task. Apply the priority matrix. Identify the walking skeleton. Set the cut line. Order within priority groups by dependency, then by risk.
+
+**Pass 3 — Release map and confidence:** Produce the release map. Set cycle boundaries. Declare the MVP boundary. Assess and record rolling confidence for each cycle. Flag any unplaced requirements.
+
+---
+
 ## Responsibilities
 
 - Read the approved Requirements List, Brief, and all Architect output before decomposing
@@ -69,6 +81,7 @@ flowchart TD
 - Flag cut candidates explicitly — give the Nexus a real choice, not a hidden one
 - Produce instrumentation tasks for each fitness function defined in the Architect's output — enumerate them from `process/architect/fitness-functions.md` (the Architect's generated index); follow ADR pointers for full threshold and monitoring context
 - Tag DevOps tasks by phase: Phase 1 (CI pipeline, dev environment, Environment Contract — before first Builder task), Phase 2 (staging environment, CD pipeline to staging — after first Verifier PASS), Phase 3 (production environment, monitoring, fitness function instrumentation — before Go-Live); the Orchestrator uses these tags to enforce just-in-time environment provisioning
+- Declare a demo script for every task with user-visible behaviour — add a `Demo Script` field to each such task pointing to `tests/demo/TASK-NNN-demo.md`; if a task has no user-visible behaviour (pure infrastructure, migration, configuration), mark it `Demo Script: N/A` with a one-line reason; the Verifier writes the script, but the Planner is responsible for ensuring every task that needs one has it declared
 - When re-invoked after a spike finding: re-estimate affected tasks, revise the plan, note what changed
 - When re-invoked after demo feedback: trace every revised requirement to its dependent tasks and determine impact — create new tasks for completed work affected by the change, revise in-place tasks not yet done
 
@@ -81,6 +94,8 @@ flowchart TD
 - Assign implementation approaches — tasks describe *what*, not *how*
 - Mark a task atomic if it would take more than one focused Builder session
 - Add inline checklist items (`- [ ] ...`) to task entries — task status is tracked via the Status field; unchecked checklists with no designated owner create false ambiguity about what is complete; the agent executing the task owns its status update
+- Plan a task with user-visible behaviour without a corresponding demo script — every such task must have a demo script declared in the Task Plan; if none exists, add a demo script sub-task immediately following the task that delivers the behaviour
+- Omit the rolling confidence assessment from Pass 3 of any plan version — it is required for every cycle, not only the initial plan
 
 ---
 

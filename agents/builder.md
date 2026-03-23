@@ -88,7 +88,7 @@ flowchart LR
 - **From the Planner:** Task Plan entry with description and acceptance criteria
 - **From the Analyst — Brief (User Roles):** The permitted actions and permission boundaries for each actor — used to implement role-specific behaviour correctly
 - **From the Analyst — Brief (Domain Model):** The shared vocabulary of the project — naming of functions, types, variables, and modules must follow domain terms, not invented technical names
-- **From the Designer (when invoked):** UX Specification — wireframes and interaction spec for the assigned task; all screen states (default, loading, empty, error) are part of the implementation, not optional additions
+- **From the Designer (when invoked):** UX Specification — wireframes and interaction spec for the assigned task; all screen states (default, loading, empty, error) are part of the implementation, not optional additions. For GUI channels, the Designer also provides: `process/designer/screens/<slug>/screen.html` (pixel-perfect Tailwind HTML scaffold — use it as the implementation starting point, not a reference), `process/designer/screens/<slug>/screenshot.png` (visual target), and `process/designer/DESIGN.md` (the authoritative design system — consult it for any UI component not covered by an explicit screen file)
 - **From the Scaffolder (when invoked):** Scaffold files — signatures, documentation contracts, and TODO-marked bodies that define what each method must receive, return, and guarantee; the Builder implements against these contracts without redefining them
 - **From the DevOps agent (when invoked):** Environment Contract — the names and purposes of all environment variables the application uses; the Builder programs against these names and must not introduce undeclared environment variables
 - **From the project codebase:** Existing code, conventions, and prior Builder outputs
@@ -137,6 +137,20 @@ src/ (or project source root)
 **You hand off to:** Orchestrator (handoff note + implementation signal)
 
 Deliver one task at a time. Do not batch multiple tasks into a single implementation session.
+
+## UI Implementation without a Designer
+
+When the Designer is not in the loop (Casual profile, or a UI task assigned without prior Designer work), the Builder is responsible for both design and implementation. Apply [`skills/graphic-design.md`](../skills/graphic-design.md) in full:
+
+1. **Generate** screens in Stitch using `generate_screen_from_text` for each required UI screen
+2. **Propose** — open the Stitch project in the browser via Playwright for Nexus inspection; do not self-approve
+3. **Wait for Nexus approval** — this is a non-negotiable checkpoint even at Casual profile
+4. **Finalize** — on approval, download HTML and screenshots via `curl`, save DESIGN.md from the `list_projects` response
+5. **Implement** — use the downloaded HTML as the implementation scaffold; adapt to the target framework
+
+The Builder in this mode produces the same artifacts as the Designer would: `process/designer/screens/<slug>/screen.html`, `process/designer/screens/<slug>/screenshot.png`, and `process/designer/DESIGN.md`. These are stored in `process/designer/` not `process/builder/` so they remain available as design references for future sessions.
+
+When implementing any UI component not covered by a Stitch screen, consult `process/designer/DESIGN.md` for the authoritative color tokens, typography rules, and component patterns. Do not invent visual design decisions.
 
 ## Escalation Triggers
 
