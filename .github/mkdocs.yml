@@ -49,9 +49,16 @@ nav:
   - Rationale: rationale.md
   - References: references.md
   - Test Projects:
-    - NexusScan Report: tests/NexusScan.md
-    - NexusScan Transcript: tests/NexusScan-TRANSCRIPT.md
-    - NexusScan Retrospective: tests/NexusScan-RETROSPECTIVE.md
+    - NexusScan:
+      - Report: tests/NexusScan.md
+      - Transcript: tests/NexusScan-TRANSCRIPT.md
+      - Retrospective: tests/NexusScan-RETROSPECTIVE.md
+    - BrainDump:
+      - Report: tests/BrainDump.md
+      - Transcript: tests/BrainDump-TRANSCRIPT.md
+      - Retrospective: tests/BrainDump-RETROSPECTIVE.md
+    - Explorations:
+      - Designer + Stitch MCP: tests/explorations/Designer-StitchMCP-RETROSPECTIVE.md
   - Process Decisions:
     - Index: process/INDEX.md
     - DEC-0001 Agent Role Taxonomy: process/DEC-0001-agent-role-taxonomy.md

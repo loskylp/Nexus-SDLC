@@ -32,12 +32,13 @@ jobs:
 
       - name: Prepare docs_src
         run: |
-          mkdir -p docs_src/process docs_src/tests
+          mkdir -p docs_src/process docs_src/tests/explorations
           cp README.md    docs_src/index.md
           cp RATIONALE.md docs_src/rationale.md
           cp REFERENCES.md docs_src/references.md
           cp process/*.md  docs_src/process/
           cp tests/*.md    docs_src/tests/
+          cp tests/explorations/*.md docs_src/tests/explorations/
           python3 -c "
           import re, pathlib
           p = pathlib.Path('docs_src/index.md')
