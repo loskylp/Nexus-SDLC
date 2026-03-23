@@ -29,30 +29,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare docs_src
+      - name: Prepare docs content
         run: |
-          mkdir -p docs_src/process docs_src/tests/explorations
+          DOCS=.github/site/src/content/docs
+          mkdir -p "$DOCS/process" "$DOCS/tests/explorations"
 
           # Root pages
-          cp README.md     docs_src/index.md
-          cp RATIONALE.md  docs_src/rationale.md
-          cp REFERENCES.md docs_src/references.md
+          cp README.md     "$DOCS/overview.md"
+          cp RATIONALE.md  "$DOCS/rationale.md"
+          cp REFERENCES.md "$DOCS/references.md"
 
           # Process decisions and open questions
-          cp process/*.md  docs_src/process/
+          cp process/*.md  "$DOCS/process/"
 
           # Test projects
-          cp tests/*.md    docs_src/tests/
+          cp tests/*.md    "$DOCS/tests/"
           if compgen -G "tests/explorations/*.md" > /dev/null; then
-            cp tests/explorations/*.md docs_src/tests/explorations/
+            cp tests/explorations/*.md "$DOCS/tests/explorations/"
           fi
 
-          # Strip HTML license comment blocks from all markdown files
-          # (the <!-- Copyright ... --> header that precedes page content)
+          # Strip HTML license comment blocks (<!-- Copyright ... --> header)
           python3 - <<'PYEOF'
           import re, pathlib
           comment_block = re.compile(r'^\s*<!--.*?-->\s*\n?', re.DOTALL)
-          for p in pathlib.Path('docs_src').rglob('*.md'):
+          docs = pathlib.Path('.github/site/src/content/docs')
+          for p in docs.rglob('*.md'):
               text = p.read_text()
               cleaned = comment_block.sub('', text, count=1)
               if cleaned != text:
@@ -62,14 +63,13 @@ jobs:
           # Add Starlight frontmatter to files that lack it
           python3 - <<'PYEOF'
           import re, pathlib
-          for p in pathlib.Path('docs_src').rglob('*.md'):
+          docs = pathlib.Path('.github/site/src/content/docs')
+          for p in docs.rglob('*.md'):
               text = p.read_text()
               if text.startswith('---'):
-                  continue          # already has frontmatter
-              # Derive title from first h1, fallback to filename
+                  continue
               m = re.search(r'^#\s+(.+)$', text, re.MULTILINE)
               title = m.group(1).strip() if m else p.stem.replace('-', ' ').title()
-              # Escape quotes in title
               title = title.replace('"', '\\"')
               p.write_text(f'---\ntitle: "{title}"\n---\n\n' + text)
           PYEOF
@@ -77,7 +77,7 @@ jobs:
           # Remove dead agent links from the overview page
           python3 -c "
           import re, pathlib
-          p = pathlib.Path('docs_src/index.md')
+          p = pathlib.Path('.github/site/src/content/docs/overview.md')
           p.write_text(re.sub(r'\[([^\]]+)\]\(agents/[^\)]+\)', r'\1', p.read_text()))
           "
 

@@ -1,4 +1,5 @@
 ---
+import '../styles/tailwind.css';
 ---
 <!DOCTYPE html>
 
@@ -6,87 +7,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Nexus SDLC | Agent Swarm</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "surface-dim": "#13121c",
-              "on-surface-variant": "#ccc3d8",
-              "tertiary-container": "#65647c",
-              "on-primary-container": "#ede0ff",
-              "tertiary-fixed": "#e2e0fc",
-              "on-tertiary-fixed": "#1a1a2d",
-              "primary": "#d2bbff",
-              "on-error-container": "#ffdad6",
-              "on-error": "#690005",
-              "primary-fixed-dim": "#d2bbff",
-              "on-primary-fixed-variant": "#5a00c6",
-              "error": "#ffb4ab",
-              "on-secondary-fixed-variant": "#004e5a",
-              "secondary-fixed": "#a2eeff",
-              "tertiary-fixed-dim": "#c6c4df",
-              "secondary": "#5de6ff",
-              "on-secondary": "#00363e",
-              "surface-container-low": "#1b1b24",
-              "surface-container-high": "#292933",
-              "secondary-container": "#00cbe6",
-              "tertiary": "#c6c4df",
-              "surface-container-lowest": "#0d0d16",
-              "surface-bright": "#393843",
-              "on-primary-fixed": "#25005a",
-              "outline": "#958da1",
-              "primary-fixed": "#eaddff",
-              "on-secondary-container": "#00515d",
-              "inverse-primary": "#732ee4",
-              "on-secondary-fixed": "#001f25",
-              "inverse-surface": "#e4e1ee",
-              "inverse-on-surface": "#302f3a",
-              "background": "#13121c",
-              "surface-container-highest": "#34343e",
-              "on-surface": "#e4e1ee",
-              "secondary-fixed-dim": "#2fd9f4",
-              "on-primary": "#3f008e",
-              "error-container": "#93000a",
-              "on-tertiary-fixed-variant": "#45455b",
-              "on-background": "#e4e1ee",
-              "surface-tint": "#d2bbff",
-              "surface-variant": "#34343e",
-              "outline-variant": "#4a4455",
-              "on-tertiary-container": "#e5e2fe",
-              "on-tertiary": "#2f2e43",
-              "surface": "#13121c",
-              "primary-container": "#7c3aed",
-              "surface-container": "#1f1f28"
-            },
-            fontFamily: {
-              "headline": ["Space Grotesk"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-      .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-      }
       body {
         background-color: #0B0B14;
         color: #EEEEFF;
-      }
-      .inner-glow {
-        box-shadow: inset 0 1px 0 rgba(124, 58, 237, 0.15);
-      }
-      .agent-card {
-        background-color: #1C1C30;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
     </style>
 </head>

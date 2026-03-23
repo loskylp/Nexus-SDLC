@@ -1,5 +1,10 @@
-# CI-generated staging directory (content prep before Docker build)
+# CI-generated content (written into site before Docker build, not committed)
 docs_src/
+.github/site/src/content/docs/process/
+.github/site/src/content/docs/tests/
+.github/site/src/content/docs/overview.md
+.github/site/src/content/docs/rationale.md
+.github/site/src/content/docs/references.md
 
 # Astro build output
 .github/site/dist/
