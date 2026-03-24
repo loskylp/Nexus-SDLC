@@ -42,11 +42,11 @@ export default defineConfig({
           content: `
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 mermaid.initialize({ startOnLoad: false, theme: 'dark' });
-document.addEventListener('DOMContentLoaded', async () => {
+
+async function renderMermaidBlocks() {
   const blocks = document.querySelectorAll('pre[data-language="mermaid"]');
   let idx = 0;
   for (const pre of blocks) {
-    // Expressive Code wraps each line in <div class="ec-line">; join them with newlines
     const lines = pre.querySelectorAll('.ec-line');
     const source = lines.length
       ? Array.from(lines).map(l => l.textContent).join('\n')
@@ -63,7 +63,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     figure.replaceWith(wrapper);
   }
-});
+}
+
+// DOMContentLoaded may already have fired by the time the CDN import resolves
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderMermaidBlocks);
+} else {
+  renderMermaidBlocks();
+}
           `,
         },
       ],
