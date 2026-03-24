@@ -61,17 +61,22 @@ jobs:
           PYEOF
 
           # Add Starlight frontmatter to files that lack it
+          # Also strip the first # heading from the body — Starlight renders the
+          # frontmatter title as the page h1, so the markdown heading is a duplicate.
           python3 - <<'PYEOF'
           import re, pathlib
           docs = pathlib.Path('.github/site/src/content/docs')
+          h1_re = re.compile(r'^#[ \t]+.+\n?', re.MULTILINE)
           for p in docs.rglob('*.md'):
               text = p.read_text()
               if text.startswith('---'):
                   continue
-              m = re.search(r'^#\s+(.+)$', text, re.MULTILINE)
-              title = m.group(1).strip() if m else p.stem.replace('-', ' ').title()
+              m = h1_re.search(text)
+              title = m.group(0).lstrip('#').strip() if m else p.stem.replace('-', ' ').title()
               title = title.replace('"', '\\"')
-              p.write_text(f'---\ntitle: "{title}"\n---\n\n' + text)
+              # Remove the first h1 so Starlight's own title doesn't duplicate it
+              body = h1_re.sub('', text, count=1)
+              p.write_text(f'---\ntitle: "{title}"\n---\n\n' + body)
           PYEOF
 
           # Remove dead agent links from the overview page
