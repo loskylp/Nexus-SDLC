@@ -49,7 +49,7 @@ async function renderMermaidBlocks() {
   for (const pre of blocks) {
     const lines = pre.querySelectorAll('.ec-line');
     const source = lines.length
-      ? Array.from(lines).map(l => l.textContent).join('\n')
+      ? Array.from(lines).map(l => l.textContent).join('\\n')
       : pre.querySelector('code')?.textContent;
     if (!source) continue;
     const figure = pre.closest('figure') || pre;
