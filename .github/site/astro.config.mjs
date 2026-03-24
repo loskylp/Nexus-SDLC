@@ -46,7 +46,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const blocks = document.querySelectorAll('pre[data-language="mermaid"]');
   let idx = 0;
   for (const pre of blocks) {
-    const source = pre.querySelector('code')?.textContent;
+    // Expressive Code wraps each line in <div class="ec-line">; join them with newlines
+    const lines = pre.querySelectorAll('.ec-line');
+    const source = lines.length
+      ? Array.from(lines).map(l => l.textContent).join('\n')
+      : pre.querySelector('code')?.textContent;
     if (!source) continue;
     const figure = pre.closest('figure') || pre;
     const wrapper = document.createElement('div');
