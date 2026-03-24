@@ -36,6 +36,32 @@ export default defineConfig({
             href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap',
           },
         },
+        {
+          tag: 'script',
+          attrs: { type: 'module' },
+          content: `
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+document.addEventListener('DOMContentLoaded', async () => {
+  const blocks = document.querySelectorAll('pre[data-language="mermaid"]');
+  let idx = 0;
+  for (const pre of blocks) {
+    const source = pre.querySelector('code')?.textContent;
+    if (!source) continue;
+    const figure = pre.closest('figure') || pre;
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'background:#13121c;border-radius:8px;padding:1.5rem;overflow:auto;margin:1rem 0;text-align:center;';
+    try {
+      const { svg } = await mermaid.render('mermaid-' + idx++, source);
+      wrapper.innerHTML = svg;
+    } catch (e) {
+      wrapper.textContent = 'Mermaid render error: ' + e.message;
+    }
+    figure.replaceWith(wrapper);
+  }
+});
+          `,
+        },
       ],
     }),
   ],
