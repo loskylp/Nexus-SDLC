@@ -16,7 +16,7 @@ limitations under the License.
 
 # Nexus SDLC — Process Architecture Index
 
-Last updated: 2026-03-23
+Last updated: 2026-03-24
 
 ---
 
@@ -51,6 +51,7 @@ Last updated: 2026-03-23
 | DEC-0028 | Convergence Signal Evaluation | **Accepted** | The Orchestrator tracks failing acceptance criterion counts per Builder-Verifier iteration in the Iterate Loop State. If the count has not decreased for the number of consecutive iterations defined as the convergence signal in the Manifest, the Orchestrator escalates to the Nexus before the next Builder iteration — not after the hard limit. Escalation includes the failure count trend. |
 | DEC-0029 | Technical Observations Routing | **Accepted** | Verifier non-blocking observations (architectural concerns, stale docs, fragile patterns) are collected by the Orchestrator at cycle completion and surfaced in the Demo Sign-off Briefing's Technical Observations section. They do not block sign-off. If the Nexus chooses to act on an observation, it enters the normal demo feedback channel through the Analyst. |
 | DEC-0030 | Skills Framework | **Accepted** | A skill is a reusable procedural document in `skills/` that an agent references to execute a specific capability. Skills are LLM-agnostic markdown, loaded into agent context by the Nexus when relevant. Agent definitions reference skills by name in their Responsibilities or Profile Variants sections. Skills are capability-specific and profile-neutral unless the skill itself declares profile restrictions. |
+| [DEC-0031](DEC-0031-post-deployment-smoke-test.md) | Post-Deployment Smoke Test | **Accepted** | After every production deployment, DevOps runs a two-stage verification before the Go-Live gate closes: infrastructure health check (fail-fast, automated rollback on failure) then application-level smoke suite sourced from Verifier's Demo Scripts tagged `smoke: true`. Smoke failure halts without rollback and escalates to the Nexus. Profile-scaled: Casual health-check only; Commercial minimum 1 scenario; Critical/Vital full suite. |
 
 ## Open Questions
 

@@ -89,6 +89,26 @@ flowchart TD
 - Confirm all security automation is active and the build is clean
 - **Release tag ownership:** when the Orchestrator signals Go-Live approval, DevOps pushes the release tag (`release/vN.N`) against the same commit that received the demo tag — this triggers image promotion to prod; no source rebuild; naming follows the convention in the Manifest's Deployment Workflow section
 
+**Post-Deployment Smoke Test (after release tag pipeline completes, before Go-Live gate closes):**
+
+After the release tag pipeline promotes the image to production, run a two-stage post-deployment verification. This is the final step before the Go-Live gate can close.
+
+- **Stage 1 — Infrastructure health check (fail-fast):** confirm the health endpoint returns HTTP 200, the application process is running, and database connectivity is established (if applicable). If Stage 1 fails, do not proceed to Stage 2 — trigger automated rollback to the previous known-good release immediately. After rollback completes, report the failure to the Orchestrator for Nexus escalation as an Incident (Production) per DEC-0006.
+- **Stage 2 — Application smoke suite:** execute the smoke-tagged Demo Scripts (`smoke: true` in frontmatter) against the live production environment. These are the Verifier-maintained scenarios that exercise core user operations — not infrastructure pings. Run each scenario and collect pass/fail per scenario.
+- **Reporting:** report the smoke result to the Orchestrator — pass/fail per scenario, with logs for any failures. The Orchestrator holds the Go-Live gate open until a smoke PASS is received.
+- **On Stage 2 failure — halt, do not rollback automatically.** A smoke failure means the application started but a business operation is broken. The cause may be configuration, data migration, or code — automatic rollback could compound the problem. Instead: report to the Orchestrator with the failing scenario name, expected vs. actual result, and relevant logs. The Orchestrator escalates to the Nexus with the question: "Rollback to previous release, or investigate and fix forward?" Wait for the Nexus decision before taking further action.
+
+**Profile scaling for smoke tests:**
+
+| Profile | Stage 1 | Stage 2 | Notes |
+|---|---|---|---|
+| Casual | Health check only | Not required | No DevOps agent at Casual; Builder handles manually if applicable |
+| Commercial | Required | Minimum 1 smoke scenario (primary user operation) | |
+| Critical | Required | Full smoke suite — all Architect-declared core operations | |
+| Vital | Required | Full smoke suite; results included in formal release package | Smoke failure triggers mandatory incident review |
+
+See DEC-0031 for the full decision, including smoke suite definition, update lifecycle, and failure response rationale.
+
 ## You Must Not
 
 - Expose secret values in the Environment Contract, committed code, or any artifact — names and purposes only
