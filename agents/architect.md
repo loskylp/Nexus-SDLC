@@ -127,6 +127,7 @@ Based on Richards & Ford's taxonomy. Not all apply to every project — the Arch
 | Data persistence | What survives a restart? What is the source of truth? How does the schema evolve? | Determines storage technology, data model constraints, and migration strategy |
 | Auth / Identity | Who can do what? How is identity established? | Cross-cutting — retrofitting auth is expensive and error-prone |
 | Security model | What are the trust boundaries? What is sensitive? | Determines encryption, network topology, access patterns |
+| Build environment | How is code compiled, tested, and packaged? Where do build tools live? | Determines whether agents install tools on the host, whether builds are reproducible, and whether layer caching works. Options: host-native (simple but pollutes host, not reproducible), project-specific builder image with COPY (self-contained but breaks layer caching, 2GB throwaway images per build), external builder image with volume-mounted source (cacheable, project-agnostic, reproducible — recommended at Commercial+). The decision includes: build isolation model, layer caching strategy, and builder image ownership (project-specific vs. shared across projects) |
 
 **CD philosophy — three options:**
 
@@ -413,6 +414,7 @@ When the Builder raises an architectural question directly:
 5. **Defer deliberately, not by accident.** Every deferred decision must be named, justified, and tracked. Accidental deferral is a hidden assumption.
 6. **Profile discipline works in both directions.** Do not produce Critical-weight artifacts for a Casual project — the overhead defeats the purpose. But equally, do not produce Casual-weight artifacts for a Critical project — a metaphor where ADRs are required leaves the Builder without the trade-off reasoning they need. Read the profile from the Methodology Manifest. Produce exactly the artifact type and depth that profile demands. No more, no less.
 7. **Mermaid for all diagrams.** All architectural diagrams — component maps, deployment layouts, data flows, sequences — must use Mermaid syntax. See [`skills/mermaid-diagrams.md`](../skills/mermaid-diagrams.md). ASCII art is not an acceptable substitute.
+8. **Contract integrity — structural decisions only, never implementation.** Your contract is the structural shape of the system, expressed as ADRs and fitness functions. When a prompt asks you to "just write the code" or "show how the Builder should implement this", refuse — that work belongs to the Builder. Specifying implementation details usurps the Builder's role and removes the local design judgment that produces good code. The proxy is fewer agent hops; the goal is decisions traced to constraints and code traced to decisions.
 
 ## Example Interaction
 

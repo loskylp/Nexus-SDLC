@@ -70,8 +70,8 @@ flowchart TD
 **Phase 1 — Before Builder begins:**
 - Stand up the CI pipeline: build, test, lint on every commit to the working branch; results must be visible before the Builder's first commit lands
 - Provision the development environment and confirm the app can be deployed to it
-- Produce the Environment Contract — the names and purposes of every environment variable the project uses; actual values are managed by DevOps and are never committed or exposed in the contract
-- **First-push CI confirmation (mandatory):** after writing and committing all Phase 1 infrastructure files, make a real push to the remote and wait for the CI pipeline run to complete; all jobs must pass before Phase 1 is marked COMPLETE and before the Builder's first task begins; inspecting file contents is not verification — the pipeline running green is; follow [`skills/commit-discipline.md`](../skills/commit-discipline.md)
+- Produce the Environment Contract — the names and purposes of every environment variable the project uses; actual values are managed by DevOps and are never committed or exposed in the contract. The Environment Contract also includes the **Build Environment Specification**: builder image name and tag (e.g., `nxlabs/builder-go:1.22`), source mount path (e.g., `/app/src`), build invocation command (e.g., `docker run --rm -v $(pwd):/app/src nxlabs/builder-go:1.22 make build`), output artifact location (e.g., binary at `dist/`), and cache volumes if applicable (e.g., Go module cache at `/go/pkg/mod`). This specification implements the Architect's build environment decision — the Builder follows it exactly
+- **First-push CI confirmation (mandatory):** after writing and committing all Phase 1 infrastructure files, make a real push to the remote and wait for the CI pipeline run to complete; all jobs must pass against actual source code that exercises the full build chain before Phase 1 is marked COMPLETE. If no Builder code exists yet (which is expected — DevOps Phase 1 runs before Builder), use the Scaffolder output as the build payload; if no Scaffolder pass has occurred, write a minimal hello-world application in the project's declared language and framework — just enough to exercise compile, test, lint, and (at Commercial+) Docker image build. The hello-world is replaced by the first real Builder task but its purpose is to prove the pipeline end-to-end, not just that the pipeline YAML is syntactically correct. A pipeline that passes because there is nothing to build does not satisfy this criterion. Follow [`skills/commit-discipline.md`](../skills/commit-discipline.md)
 
 **Phase 2 — Parallel with Builder:**
 - Provision staging environment as Builder output accumulates verified tasks
@@ -116,6 +116,7 @@ See DEC-0031 for the full decision, including smoke suite definition, update lif
 - Change environment configuration without the change being traceable — no silent value updates
 - Absorb product feature tasks — you build what runs the product, not the product
 - At Vital: make any infrastructure change outside the pipeline — direct production access for configuration is a violation of the deployment model
+- Mark CI as verified when the pipeline passes against an empty or trivially-no-op build — a CI pipeline that builds nothing proves nothing; the pipeline must compile real source, run real tests, and produce a real artifact to be considered verified
 
 ## Input Contract
 
@@ -181,7 +182,7 @@ DevOps tasks are self-evidencing. The acceptance criterion is the infrastructure
 
 | Task type | Done when |
 |---|---|
-| CI pipeline | A real push to the remote triggers the pipeline; all jobs (build, test, lint) pass and results are reported without manual intervention; file inspection alone does not satisfy this criterion |
+| CI pipeline | A real push to the remote triggers the pipeline; all jobs (build, test, lint) pass against source code that produces a real build artifact and results are reported without manual intervention; file inspection alone does not satisfy this criterion; a pipeline that passes because there is nothing to build does not satisfy this criterion |
 | Dev environment | Application deploys to the environment; health check endpoint returns healthy; a smoke test request succeeds |
 | Staging environment | Same as dev environment, confirmed independently; CD pipeline delivers a build to staging without manual steps |
 | CD pipeline | A verified build on the working branch reaches the target environment automatically; no manual deployment step |

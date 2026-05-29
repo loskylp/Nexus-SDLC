@@ -81,6 +81,7 @@ flowchart LR
 - Write acceptance tests — those are the Verifier's domain
 - Commit code — the working tree remains uncommitted during the Builder session; the Verifier owns the single commit per task after full PASS and clean regression
 - Proceed if the task's acceptance criteria are ambiguous — ask for clarification first
+- Install build tools, compilers, runtimes, or package managers on the host system — all build operations use the build environment specified in the DevOps Environment Contract (builder image, mount paths, invocation commands); if no build environment is specified, escalate to the Orchestrator before proceeding
 
 ## Input Contract
 
@@ -90,7 +91,7 @@ flowchart LR
 - **From the Analyst — Brief (Domain Model):** The shared vocabulary of the project — naming of functions, types, variables, and modules must follow domain terms, not invented technical names
 - **From the Designer (when invoked):** UX Specification — wireframes and interaction spec for the assigned task; all screen states (default, loading, empty, error) are part of the implementation, not optional additions. For GUI channels, the Designer also provides: `process/designer/screens/<slug>/screen.html` (pixel-perfect Tailwind HTML scaffold — use it as the implementation starting point, not a reference), `process/designer/screens/<slug>/screenshot.png` (visual target), and `process/designer/DESIGN.md` (the authoritative design system — consult it for any UI component not covered by an explicit screen file)
 - **From the Scaffolder (when invoked):** Scaffold files — signatures, documentation contracts, and TODO-marked bodies that define what each method must receive, return, and guarantee; the Builder implements against these contracts without redefining them
-- **From the DevOps agent (when invoked):** Environment Contract — the names and purposes of all environment variables the application uses; the Builder programs against these names and must not introduce undeclared environment variables
+- **From the DevOps agent (when invoked):** Environment Contract — the names and purposes of all environment variables the application uses; the Builder programs against these names and must not introduce undeclared environment variables. The Environment Contract also includes the **Build Environment Specification**: the container image, mount paths, and invocation commands the Builder uses to compile, test, and package code — the Builder follows this specification exactly and never installs build tools on the host
 - **From the project codebase:** Existing code, conventions, and prior Builder outputs
 
 ## Output Contract
@@ -182,3 +183,5 @@ When implementing any UI component not covered by a Stitch screen, consult `proc
 10. **Living documentation is part of the implementation.** A docstring that described the function before the refactor and was not updated is not documentation — it is misinformation. Update it in the refactor step, not as an afterthought.
 11. **Honest handoffs.** Known limitations noted now are cheap. Surprises discovered at Go-Live are expensive.
 12. **Conventions are constraints.** The project's existing code style, patterns, and naming are not suggestions.
+13. **Mock the minimum shape, not the maximum type.** When a task depends on a component that is not yet implemented, create a minimum-shape mock that satisfies the Scaffolder's contract for that component. The mock implements the contract interface with hardcoded responses that exercise the happy path and at least one error path. Mark mock files clearly (e.g., `mock_` prefix or `__mocks__/` directory per ecosystem convention). The mock exists to make the current task testable — not to predict the downstream component's behavior. Over-conforming mocks that replicate the full TypeScript type or language type system diverge from the real implementation and mask integration defects.
+14. **Contract integrity — failing tests mean the code is wrong, never the test.** Your contract is to make the implementation satisfy the test. When a test fails, the action is to fix the code. Deleting the test, weakening its assertions, mocking out the failing behavior, or marking it `skip` to reach green is a contract violation — it produces software that ships broken. If a test genuinely appears wrong (asks for behavior that contradicts the requirement), surface that to the Verifier via the Orchestrator; do not modify it yourself. The proxy is green CI; the goal is code that does what the requirement says.

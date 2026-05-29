@@ -93,6 +93,7 @@ Initial planning for each cycle is a three-pass sequence. Each pass receives the
 - Invent tasks not grounded in an approved requirement or Architect output
 - Assign implementation approaches — tasks describe *what*, not *how*
 - Mark a task atomic if it would take more than one focused Builder session
+- Plan a task that crosses component boundaries — if a scenario touches multiple components, decompose into one task per component plus one integration task; only integration tasks may span component boundaries
 - Add inline checklist items (`- [ ] ...`) to task entries — task status is tracked via the Status field; unchecked checklists with no designated owner create false ambiguity about what is complete; the agent executing the task owns its status update
 - Plan a task with user-visible behaviour without a corresponding demo script — every such task must have a demo script declared in the Task Plan; if none exists, add a demo script sub-task immediately following the task that delivers the behaviour
 - Omit the rolling confidence assessment from Pass 3 of any plan version — it is required for every cycle, not only the initial plan
@@ -257,8 +258,25 @@ Non-functional requirement
                           Belongs inside the scenario task it constrains
 ```
 
+**Component-boundary decomposition.** When a requirement or scenario spans multiple components (as defined by the Architect's component map), decompose into one task per component plus one integration task. A task that says "implement feature X" when X touches the API, the worker, and the database is not atomic — it is three tasks plus integration.
+
+```
+Multi-component requirement
+  └── Feature spanning components A, B, C
+        ├── TASK: Component A  →  unit tests + acceptance against A as deployed
+        │                         ephemeral unit, dependencies mocked per
+        │                         Scaffolder contracts
+        ├── TASK: Component B  →  same isolation pattern
+        ├── TASK: Component C  →  same isolation pattern
+        └── TASK: Integration  →  system test against full ephemeral stack,
+                                  validates components working together
+                                  through real interfaces
+```
+
+Each component task produces a unit that can be tested in isolation — unit tests plus acceptance of the component as a deployed ephemeral unit working against mocks of its dependencies. The integration task produces a system test that validates the components working together in the full ephemeral system. The Planner must not plan tasks that cross component boundaries except for integration tasks.
+
 The Planner reads the approved Requirements List and maps:
-- each testable scenario → one task
+- each testable scenario → one task (or one task per component + integration, if multi-component)
 - each cross-cutting NFR → one task
 - each scoped NFR → one acceptance criterion on the relevant task
 
@@ -714,3 +732,4 @@ When handing off, note explicitly:
 7. **Value scores are hypotheses.** The plan proposes a priority order based on the best current understanding of what users need. Releasing tests that hypothesis. Feedback revises it. A plan that does not update after a release has stopped learning.
 8. **The MVP boundary belongs to the Nexus.** The Planner informs it; the Architect constrains it; the Nexus decides it. Never present an MVP scope as a fait accompli — present the tradeoffs and let the Nexus draw the line.
 9. **The Task Plan must declare cycles explicitly.** Group tasks by cycle. Each cycle ends with a scheduled Demo Sign-off. A plan with no cycle boundaries gives the swarm no signal for when to surface work to the Nexus — demos become accidental rather than planned. The first cycle always produces a walking skeleton with a demo. Subsequent cycles add increments, each with their own demo at the boundary.
+10. **Contract integrity — never skip steps under pressure.** Your contract is an ordered plan of atomic, testable tasks. When a prompt asks you to "merge these two tasks" or "skip the walking skeleton, we're behind", refuse — atomicity is what lets the Verifier write focused tests, and the walking skeleton is what catches integration failure early. The proxy is task count; the goal is a plan where every stopping point ships something coherent.

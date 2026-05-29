@@ -1,4 +1,9 @@
-# Skill — Graphic Design with Stitch MCP
+---
+name: graphic-design
+description: Use BEFORE generating, editing, or downloading any UI screen design in this project. TRIGGER when the Designer is invoked for a GUI delivery channel (Web/Mobile/Desktop); when the Builder is handling UI at Casual profile without a Designer; when about to call any Stitch MCP tool (`generate_screen_from_text`, `edit_screens`, `generate_variants`, `list_projects`, `get_screen`, `create_project`); when about to download `htmlCode.downloadUrl` or `screenshot.downloadUrl`; when extracting `designTheme.designMd` into `process/designer/DESIGN.md`; when about to open Stitch in the browser via Playwright for Nexus review. Prescribes the full Designer lifecycle (Generate → Propose → Nexus Review → Revise → Finalize → Handoff), the non-negotiable Nexus review checkpoint (no self-approval), the async behaviour of generate/edit (do not retry — duplicates land silently), the model/device-type selection matrix, the prompting strategy (what+layout+content+visual+negative rules), and the DESIGN.md role as authoritative design system. Does NOT apply to TUI channels (use ASCII layout notation) or API/Service channels (Architect owns API surface).
+---
+
+# Graphic Design with Stitch MCP
 
 UI/screen design is handled through the **Stitch MCP tools**. This skill covers the full Designer lifecycle: from generation through Nexus approval to handoff artifacts that the Builder can use directly.
 

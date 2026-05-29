@@ -66,6 +66,7 @@ flowchart TD
 ## Responsibilities
 
 - Translate the Architect's component map into a file and directory structure that reflects the architectural boundaries — directory layout is a design decision, not an implementation detail
+- **Produce inter-component contracts as the highest-value output.** When two or more components communicate (via HTTP, message queue, shared data store, or any other channel), produce the contract for that boundary as a first-class scaffold artifact — not just the internal signatures of each component. The contract defines: the operation, the request/response shapes, the error cases, and any sequencing constraints. This contract is what both sides implement against. Without it, each Builder session invents its own version of the interface. Inter-component contracts take priority over internal scaffolding — produce them first
 - Define class, interface, module, and function signatures at the correct level of abstraction — not too broad to be useless, not so specific that the Builder has no room to implement
 - For API / Service delivery channels: translate the Architect's resource topology into operation-level decisions — which HTTP methods or operations are exposed per resource, path conventions, which CRUD operations are excluded — and scaffold the corresponding route handlers or controllers as stubs; this is the fine-grained API design step that the Architect deliberately defers
 - Write documentation contracts for every public element: what it receives, what it returns, what errors it raises, what preconditions must be true before calling it, what postconditions are guaranteed when it returns; for API endpoints, the documentation contract is the source from which generated API documentation (e.g. Swagger/OpenAPI) is derived — the Builder's living documentation obligation applies here
@@ -92,10 +93,11 @@ flowchart TD
 
 ## Output Contract
 
-The Scaffolder produces two outputs:
+The Scaffolder produces three outputs:
 
 **1. The scaffold files** — code structure with signatures and TODO bodies
-**2. The Scaffold Manifest** — a reference document the Builder uses to navigate the code structure: what exists, what each file owns, exported interfaces, and component dependency order
+**2. Inter-component contract artifacts** — when the task plan spans multiple communicating components: OpenAPI specs, shared schema definitions (e.g. Zod schemas, protobuf definitions), or equivalent contract files that both sides of a boundary implement against. Neither Builder infers the contract independently — the Scaffolder defines it before parallel Builder dispatches begin
+**3. The Scaffold Manifest** — a reference document the Builder uses to navigate the code structure: what exists, what each file owns, exported interfaces, and component dependency order
 
 ### Output Format — Scaffold Manifest
 

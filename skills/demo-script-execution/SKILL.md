@@ -1,4 +1,9 @@
-# Skill — Demo Script Execution
+---
+name: demo-script-execution
+description: Use AT the Demo Sign-off gate, when executing the cycle's demo scripts in `tests/demo/TASK-NNN-demo.md` against the staging deployment. TRIGGER when the Orchestrator opens a Demo Sign-off Briefing; when about to run Playwright against staging for a verified task; when capturing screenshots into `tests/demo/TASK-NNN/`; when handling a curl-only or API-only demo script (record exact command + full response); when a consolidated cycle demo is proposed (`tests/demo/cycle-N/`). Prescribes the per-scenario screenshot naming (`01-<scenario-slug>.png`), the commit message format (`demo(TASK-NNN): add Playwright screenshots ...`), and the rules under which a consolidated cycle demo is valid (every task covered; otherwise per-task scripts). Does NOT apply during per-task verification — demo scripts are written by the Verifier on PASS but executed collectively at Demo Sign-off.
+---
+
+# Demo Script Execution
 
 ## What a demo script is
 

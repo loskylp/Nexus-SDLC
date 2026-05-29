@@ -41,7 +41,7 @@ Three-layer model:
 
 ## Current State
 
-This repository is in the **design/architecture phase** — no implementation exists yet. No build system, test runner, or language stack has been chosen. Before writing any code, align on the technology stack and scaffold accordingly.
+This repository **is the product** — an installable framework that defines a methodology for software development using agent swarms. The agents, their roles, protocols, and workflows are the implementation. The repo contains the result of research into development methodologies and is ready to install and use for developing systems.
 
 ## Key Design Constraints
 

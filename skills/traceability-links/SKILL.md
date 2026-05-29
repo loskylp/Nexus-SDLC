@@ -1,4 +1,9 @@
-# Skill — Traceability Links
+---
+name: traceability-links
+description: Use BEFORE writing an Orchestrator routing instruction, a Builder task brief, or any inter-agent artifact that references requirements, ADRs, task plans, or scaffold manifests. TRIGGER when about to type a "Documents required", "References", or "See also" section; when a routing prompt mentions REQ-NNN, ADR-NNN, TASK-NNN, or "the requirements list"; when instructing an agent to "find" or "search for" a document; when about to type an absolute filesystem path like `/Users/pablo/projects/...` into an artifact. Mandates project-root-relative markdown links to specific anchors (e.g. `[REQ-005 — Note editor autosave](../../analyst/requirements-v2.md#req-005)`), the per-receiving-agent required-links table, and anchor conventions (`{#req-005}`, `{#task-014}`, ADR per-file). Forbids absolute filesystem paths, "find this document" instructions, and stale-version links.
+---
+
+# Traceability Links
 
 ## Rule
 

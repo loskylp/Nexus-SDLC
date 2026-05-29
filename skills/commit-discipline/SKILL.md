@@ -1,4 +1,9 @@
-# Skill — Commit Discipline
+---
+name: commit-discipline
+description: Use BEFORE any agent stages, commits, or pushes anything in this project. TRIGGER when about to run `git add`, `git commit`, `git push`, `gh pr create`, or when an agent prompt mentions "commit", "push", "verify PASS", "task COMPLETE", "after CI green", "stage files", or "CI regression". Defines who-commits-what (Builder=nothing; Verifier=source+tests after PASS+CI green; Orchestrator=process artefacts; DevOps=infra after real CI green) and the exact Verifier/Orchestrator/DevOps commit protocols including the wait-for-CI-green step. Prevents the most common process failure: the Builder being told to commit or push, or any agent pushing without waiting for the CI gate.
+---
+
+# Commit Discipline
 
 ## Who commits what
 
