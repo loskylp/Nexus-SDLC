@@ -48,3 +48,69 @@ This repository **is the product** — an installable framework that defines a m
 - **Safety by Design:** Agents must not execute high-risk operations without explicit Nexus approval
 - **Traceable Reasoning:** All agent decisions must be logged for audit trails
 - **Human checkpoints are non-negotiable** — the Nexus Check (step 3) and final PR merge (step 5) must remain human-gated
+
+## Working Guidelines
+
+These are universal disciplines that apply to any work in this project — exploring a problem, making a decision, producing an artifact, modifying an existing one. They apply equally to the dispatcher routing work, to a subagent executing work, and to a human reviewing the result. Adapted from [Andrej Karpathy's CLAUDE.md](https://github.com/multica-ai/andrej-karpathy-skills). They bias toward caution over speed; for trivial actions, use judgment.
+
+### Think before acting
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+- State assumptions explicitly. If uncertain, ask.
+- If multiple interpretations of a request exist, present them — don't pick silently.
+- If a simpler path exists, name it. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+### Solve the problem in front of you
+
+**Minimum work that solves the problem. Nothing speculative.**
+
+- No scope beyond what was asked.
+- No abstractions, options, or flexibility for use cases that don't exist yet.
+- No safeguards for scenarios that can't happen.
+- If your output is twice as long as it needed to be, rewrite it shorter.
+
+Test: "Would a senior practitioner say this is overdone?" If yes, cut.
+
+### Surgical changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When modifying something that already exists — an artifact, a section of code, a routing instruction, a plan:
+
+- Don't "improve" adjacent content that wasn't part of the request.
+- Don't restructure what isn't broken.
+- Match the existing style and tone, even if you'd write it differently.
+- If you notice unrelated problems, surface them — don't fix them silently.
+
+When your changes leave orphans (broken references, dangling pointers, unused content):
+
+- Fix what YOUR changes broke.
+- Don't remove pre-existing dead content unless explicitly asked.
+
+Test: every changed line should trace directly to the request.
+
+### Goal-driven execution
+
+**Define success criteria. Loop until verified.**
+
+Transform any task into a verifiable goal before acting:
+
+- "Add X" → "Add X and verify it doesn't contradict existing constraints."
+- "Fix Y" → "Reproduce the failure, fix it, confirm the fix from a clean starting state."
+- "Reorganize Z" → "Verify all references still resolve and downstream consumers still work."
+
+For multi-step work, state the plan with explicit verify steps:
+
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you proceed independently. Weak criteria ("make it better") guarantee rework.
+
+---
+
+**These guidelines are working if:** fewer unnecessary changes in outputs, fewer rewrites due to overdoing it, and clarifying questions come before action rather than after the wrong action.

@@ -114,6 +114,29 @@ agent_meta() {
     esac
 }
 
+# Returns comma-separated skill names to PRELOAD for a given agent filename.
+# Preload = injected into context at startup. Other skills remain available via
+# auto-discovery / Skill tool when their TRIGGER descriptions match.
+# Rule of thumb: only preload skills the agent uses on EVERY invocation.
+agent_skills() {
+    case "$1" in
+        analyst.md)       echo 'handoff-hygiene, traceability-links' ;;
+        architect.md)     echo 'handoff-hygiene, mermaid-diagrams, traceability-links' ;;
+        auditor.md)       echo 'handoff-hygiene, traceability-links' ;;
+        builder.md)       echo 'handoff-hygiene, commit-discipline, bash-execution' ;;
+        designer.md)      echo 'handoff-hygiene, graphic-design, mermaid-diagrams, traceability-links' ;;
+        devops.md)        echo 'handoff-hygiene, bash-execution, ci-push-discipline, commit-discipline' ;;
+        methodologist.md) echo 'handoff-hygiene' ;;
+        orchestrator.md)  echo 'handoff-hygiene, traceability-links, commit-discipline' ;;
+        planner.md)       echo 'handoff-hygiene, traceability-links, mermaid-diagrams' ;;
+        scaffolder.md)    echo 'handoff-hygiene, traceability-links' ;;
+        scribe.md)        echo 'handoff-hygiene, bash-execution' ;;
+        sentinel.md)      echo 'handoff-hygiene, bash-execution, ci-push-discipline' ;;
+        verifier.md)      echo 'handoff-hygiene, commit-discipline, ci-push-discipline, bash-execution, traceability-links' ;;
+        *)                echo '' ;;
+    esac
+}
+
 translate_model() {
     local internal_model="$1"
     local mode="$2"
@@ -181,12 +204,15 @@ install_agent() {
     
     target_model="$(translate_model "$internal_model" "$mode" "$filename")"
 
+    local skills
+    skills="$(agent_skills "$filename")"
+
     {
         printf -- '---\n'
         printf 'name: %s\n' "$name"
         printf 'description: "%s"\n' "$description"
         printf 'model: %s\n' "$target_model"
-        
+
         if [[ "$mode" == "opencode" ]]; then
             printf 'mode: subagent\n'
             local hex_color
@@ -201,8 +227,11 @@ install_agent() {
             printf '    "grep*": allow\n'
         else
             printf 'color: %s\n' "$color"
+            if [[ -n "$skills" ]]; then
+                printf 'skills: %s\n' "$skills"
+            fi
         fi
-        
+
         printf 'author: Pablo Ochendrowitsch\n'
         printf 'license: Apache-2.0\n'
         printf -- '---\n\n'
@@ -564,6 +593,78 @@ Never approve any of these on the Nexus's behalf. When a gate needs approval,
 surface it. When the Orchestrator escalates, route the question to the Nexus
 verbatim. When credentials or infrastructure are blocking, report the blocker
 and stop — do not invent workarounds.
+
+## Working Guidelines
+
+Universal disciplines that apply to any work in this project — exploring a
+problem, making a decision, producing an artifact, modifying an existing one.
+They apply equally to the Dispatcher routing work, to a Nexus agent executing
+work, and to the Nexus reviewing the result. They bias toward caution over
+speed; for trivial actions, use judgment.
+
+### Think before acting
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+- State assumptions explicitly. If uncertain, ask.
+- If multiple interpretations of a request exist, present them — don't pick
+  silently.
+- If a simpler path exists, name it. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+### Solve the problem in front of you
+
+**Minimum work that solves the problem. Nothing speculative.**
+
+- No scope beyond what was asked.
+- No abstractions, options, or flexibility for use cases that don't exist yet.
+- No safeguards for scenarios that can't happen.
+- If your output is twice as long as it needed to be, rewrite it shorter.
+
+Test: "Would a senior practitioner say this is overdone?" If yes, cut.
+
+### Surgical changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When modifying something that already exists — an artifact, a section of code,
+a routing instruction, a plan:
+
+- Don't "improve" adjacent content that wasn't part of the request.
+- Don't restructure what isn't broken.
+- Match the existing style and tone, even if you'd write it differently.
+- If you notice unrelated problems, surface them — don't fix them silently.
+
+When your changes leave orphans (broken references, dangling pointers, unused
+content):
+
+- Fix what YOUR changes broke.
+- Don't remove pre-existing dead content unless explicitly asked.
+
+Test: every changed line should trace directly to the request.
+
+### Goal-driven execution
+
+**Define success criteria. Loop until verified.**
+
+Transform any task into a verifiable goal before acting:
+
+- "Add X" → "Add X and verify it doesn't contradict existing constraints."
+- "Fix Y" → "Reproduce the failure, fix it, confirm the fix from a clean
+  starting state."
+- "Reorganize Z" → "Verify all references still resolve and downstream
+  consumers still work."
+
+For multi-step work, state the plan with explicit verify steps:
+
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you proceed independently. Weak criteria ("make it
+better") guarantee rework.
 EOF_RULES
     echo "  ✓ $(basename "$RULE_FILE") written (project root)"
 fi
