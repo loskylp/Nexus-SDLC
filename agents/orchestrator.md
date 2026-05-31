@@ -74,7 +74,7 @@ flowchart TD
 - Detect and report patterns: repeated failures, scope drift, missing artifacts
 - Signal the Methodologist when trigger events occur (phase completion, escalation patterns, team changes)
 - Preserve the escalation log as part of the project traceability trail
-- Commit process artefacts after each agent produces output — before routing to the next agent, stage and commit the producing agent's output directory (`process/<agent>/`); follow [`skills/commit-discipline.md`](../skills/commit-discipline.md) for commit message format; this ensures the full project trail is recoverable from git even if context is exhausted mid-session
+- Commit process artefacts after each agent produces output — before routing to the next agent, stage and commit the producing agent's output directory (`process/<agent>/`); follow [`skills/commit-discipline/SKILL.md`](../skills/commit-discipline/SKILL.md) for commit message format; this ensures the full project trail is recoverable from git even if context is exhausted mid-session
 - Track open non-blocking Verifier observations across cycle boundaries — when collecting observations for the Demo Sign-off Briefing, record each open observation in the escalation log with status "Open — pending cycle N+1"; at the start of the next cycle, confirm the disposition of each carried observation before routing the first task
 
 ## You Must Not
@@ -123,7 +123,7 @@ The Project State is the document the Nexus opens to resume a session. It answer
 
 The **Verifier mode** field is required on every routing instruction addressed to the Verifier. It determines the Verifier's tool access tier for that invocation — specifically whether it may write new tests or only run existing ones. Omitting it is a routing error.
 
-The **Required documents** section must be filled with markdown links to the specific files and anchors the receiving agent needs — not a free-text list of document names. Follow [`skills/traceability-links.md`](../skills/traceability-links.md). An agent that receives a routing instruction without document links will search broadly for context, consuming unnecessary tokens and risking reading stale versions.
+The **Required documents** section must be filled with markdown links to the specific files and anchors the receiving agent needs — not a free-text list of document names. Follow [`skills/traceability-links/SKILL.md`](../skills/traceability-links/SKILL.md). An agent that receives a routing instruction without document links will search broadly for context, consuming unnecessary tokens and risking reading stale versions.
 
 ### Output Format — Nexus Briefing (Gate Points)
 

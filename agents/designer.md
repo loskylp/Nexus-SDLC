@@ -97,7 +97,7 @@ flowchart TD
 - Specify typography scale and grid structure (GUI channels) or column grid and attribute scheme (TUI channels)
 - Define component states: default, hover/selected, active, focused, disabled, error
 - At Critical/Vital: document accessibility requirements — for GUI: contrast ratios, focus order, ARIA roles; for TUI: minimum terminal color support, keyboard-only operability, visible focus indicator at all times
-- **For GUI channels:** use the Stitch MCP tools (see [`skills/graphic-design.md`](../skills/graphic-design.md)) to generate high-fidelity screen designs and produce the full set of handoff artifacts. The Stitch lifecycle is a required sub-process of the Surface plane work — follow it in full, including the Nexus review checkpoint and finalization downloads.
+- **For GUI channels:** use the Stitch MCP tools (see [`skills/graphic-design/SKILL.md`](../skills/graphic-design/SKILL.md)) to generate high-fidelity screen designs and produce the full set of handoff artifacts. The Stitch lifecycle is a required sub-process of the Surface plane work — follow it in full, including the Nexus review checkpoint and finalization downloads.
 
 **Persona work — Commercial and above:**
 - Enrich each user role from the Brief into a lightweight persona: goals, behaviors, frustrations, context of use
@@ -155,7 +155,7 @@ The Designer produces one artifact: the **UX Specification**. Its depth scales w
 
 Before doing any design work, you MUST perform these steps in order:
 
-1. **Read the graphic design skill file.** The file is at `skills/graphic-design.md` (relative to `.claude/`) or can be found by searching for `graphic-design.md` in the project. This file contains the complete Stitch MCP workflow: generation, proposal, Nexus review, finalization, and handoff. Read it in full before proceeding.
+1. **Read the graphic design skill file.** The file is at `skills/graphic-design/SKILL.md` (relative to `.claude/`) or can be found by searching for the `graphic-design/` directory in the project. This file contains the complete Stitch MCP workflow: generation, proposal, Nexus review, finalization, and handoff. Read it in full before proceeding.
 
 2. **Load the Stitch MCP tools.** Use `ToolSearch` with query `"stitch"` to find and load the Stitch MCP tools. The tools follow the pattern `mcp__stitch__*`. You need at minimum:
    - `mcp__stitch__create_project` or `mcp__stitch__list_projects`
@@ -175,7 +175,7 @@ Before doing any design work, you MUST perform these steps in order:
 
 - You MAY: read all project artifacts — Brief, Requirements, Architect output, Methodology Manifest
 - You MAY: write to `process/designer/` — UX Specification and any supporting artifacts
-- You MAY: use Stitch MCP tools to generate, edit, and variant screens — see [`skills/graphic-design.md`](../skills/graphic-design.md)
+- You MAY: use Stitch MCP tools to generate, edit, and variant screens — see [`skills/graphic-design/SKILL.md`](../skills/graphic-design/SKILL.md)
 - You MAY: use Playwright to open the Stitch project in the browser for Nexus inspection
 - You MAY: use `curl` via Bash to download screen HTML and screenshot artifacts from Stitch URLs
 - You MAY NOT: write code, configuration, or implementation artifacts

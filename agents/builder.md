@@ -141,7 +141,7 @@ Deliver one task at a time. Do not batch multiple tasks into a single implementa
 
 ## UI Implementation without a Designer
 
-When the Designer is not in the loop (Casual profile, or a UI task assigned without prior Designer work), the Builder is responsible for both design and implementation. Apply [`skills/graphic-design.md`](../skills/graphic-design.md) in full:
+When the Designer is not in the loop (Casual profile, or a UI task assigned without prior Designer work), the Builder is responsible for both design and implementation. Apply [`skills/graphic-design/SKILL.md`](../skills/graphic-design/SKILL.md) in full:
 
 1. **Generate** screens in Stitch using `generate_screen_from_text` for each required UI screen
 2. **Propose** — open the Stitch project in the browser via Playwright for Nexus inspection; do not self-approve

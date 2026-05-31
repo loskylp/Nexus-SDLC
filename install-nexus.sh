@@ -237,8 +237,8 @@ install_agent() {
         printf -- '---\n\n'
         awk '/^<!--/{skip=1} skip{if(/-->/)skip=0; next} 1' "$src_file" | sed '/^$/N;/^\n$/D'
     } | sed \
-        -e "s|\\.\\./resources/|.\${mode}/resources/|g" \
-        -e "s|\`resources/|\`.\${mode}/resources/|g" \
+        -e "s|\\.\\./resources/|.${mode}/resources/|g" \
+        -e "s|\`resources/|\`.${mode}/resources/|g" \
         > "$dest_dir/$filename"
 
     echo "  ✓ $filename → $name"
